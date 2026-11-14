@@ -16,3 +16,9 @@
   -webkit-text-fill-color:var(--hi);
   border:1.5px solid color-mix(in srgb,var(--c,var(--gold)) 70%,var(--hi));
 }
+
+/* t97：子节离屏时跳过排版，避免 hct 等长页在首屏一次排完全部主日 */
+main section.l3{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 240px;
+}

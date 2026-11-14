@@ -3,8 +3,8 @@ var d=document,b=d.body,rm=matchMedia('(prefers-reduced-motion: reduce)').matche
 var T=window.TEC||{pages:[]},PG=b.dataset.page,KEY='tfu1.read',QK='tfu1.quiz';
 function ld(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v==null?def:v}catch(e){return def}}
 function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-/* reveal */ /* v8 perf */
-if(!rm&&'IntersectionObserver'in window){d.documentElement.classList.add('js');var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});$$('.reveal').forEach(function(el){io.observe(el)})}
+/* reveal: t97 把观察器放到下一个任务，避免和解析挤成一次长任务 */
+if(!rm&&'IntersectionObserver'in window){d.documentElement.classList.add('js');setTimeout(function(){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});$$('.reveal').forEach(function(el){io.observe(el)})},0)}
 /* toc */
 var wide=function(){return innerWidth>=1100};
 function tog(){if(wide())b.classList.toggle('tochide');else b.classList.toggle('tocopen')}
@@ -21,10 +21,10 @@ function upd(){var c=$('#pgread');if(c)c.textContent=mine.length}
 mine.forEach(function(id){var a=links[id];if(a)a.classList.add('done')});
 var cur=null,band=new Set(),order=new Map();secs.forEach(function(x,i){order.set(x,i)});
 function setAct(id){if(id===cur)return;$$('#toc a.on').forEach(function(a){a.classList.remove('on')});var a=links[id];if(a){a.classList.add('on');/* t88：滚动时不再自动展开/收起目录分组（消除目录内的布局位移），只高亮可见的上级 */$$('#toc .onp').forEach(function(x){x.classList.remove('onp')});var vis=a,t2=a.closest('.t2.has');if(t2&&t2.classList.contains('closed')){var pa=$('.t2r>a',t2);if(pa){pa.classList.add('onp');vis=pa}}var l1=a.closest('.t1');if(l1&&l1.classList.contains('closed')){var pb=$('.t1r>a',l1);if(pb){pb.classList.add('onp');vis=pb}}a=vis;if(wide()&&!b.classList.contains('tochide')){var t=$('#toc');requestAnimationFrame(function(){var r2=a.getBoundingClientRect();if(r2.top<60||r2.bottom>innerHeight-40)t.scrollTop+=r2.top-innerHeight/2})}}cur=id}
-if('IntersectionObserver'in window){
+if('IntersectionObserver'in window){setTimeout(function(){
  var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;band.forEach(function(x){var i=order.get(x);if(i>bi){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
- secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})}
+ secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})},0)}
 var p=$('#prog'),H=0,de=d.documentElement;
 var SDA=!rm&&window.CSS&&CSS.supports&&CSS.supports('animation-timeline: scroll()');
 function measure(){if(SDA)return;H=Math.max(1,de.scrollHeight-innerHeight)}
@@ -42,7 +42,7 @@ function cur(){return Math.round(toc.getBoundingClientRect().width)}
 function set(v,save){v=cl(v);root.style.setProperty(wide()?'--tw':'--twm',v+'px');if(!dragging)root.style.setProperty('--tw-hold',v+'px');aria(v);if(save)sv(wide()?KD:KM,v);return v}
 function reset(){root.style.removeProperty(wide()?'--tw':'--twm');root.style.removeProperty('--tw-hold');try{localStorage.removeItem(wide()?KD:KM)}catch(e){}aria(cur())}
 var raf=0,pending=null;
-var saved=ld(wide()?KD:KM,null);if(typeof saved==='number')set(saved,false);else{aria(cur());root.style.setProperty('--tw-hold',cur()+'px')}
+var saved=ld(wide()?KD:KM,null);if(typeof saved==='number')set(saved,false);else{var fb=dflt();aria(fb);root.style.setProperty('--tw-hold',fb+'px')}
 g.addEventListener('pointerdown',function(e){if(e.button>0)return;dragging=true;sx=e.clientX;sw=cur();root.style.setProperty('--tw-hold',sw+'px');try{g.setPointerCapture(e.pointerId)}catch(x){}b.classList.add('tocdrag');e.preventDefault()});
 g.addEventListener('pointermove',function(e){if(!dragging)return;pending=sw+e.clientX-sx;if(!raf)raf=requestAnimationFrame(function(){raf=0;if(pending!=null)set(pending,false)})});
 function end(e){if(!dragging)return;dragging=false;b.classList.remove('tocdrag');var v=set(pending!=null?pending:cur(),true);pending=null;root.style.setProperty('--tw-hold',v+'px');try{g.releasePointerCapture(e.pointerId)}catch(x){}}
@@ -56,7 +56,7 @@ addEventListener('resize',function(){var v=cur(),c=cl(v);if(c!==v)set(c,false);e
 /* counters (t93: start on idle so load long-task stays short) */
 var cs=$$('[data-count]');if(!rm&&cs.length){(window.requestIdleCallback||function(f){return setTimeout(f,1)})(function(){cs.forEach(function(c){var n=+c.dataset.count,t0=null;c.textContent='0';function st(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1400);c.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st);else c.textContent=n}requestAnimationFrame(st);setTimeout(function(){c.textContent=n},2500)})},{timeout:400})}
 /* tabs: scroll active into view */
-var ta=$('.ptabs a.on');if(ta&&ta.parentNode)ta.parentNode.scrollLeft=Math.max(0,ta.offsetLeft-20);
+var ta=$('.ptabs a.on');if(ta&&ta.parentNode)(window.requestIdleCallback||function(f){return setTimeout(f,200)})(function(){ta.parentNode.scrollLeft=Math.max(0,ta.offsetLeft-20)},{timeout:800});
 /* exegesis open/close */
 $$('[data-open]').forEach(function(x){x.onclick=function(){x.parentNode.previousElementSibling.querySelectorAll('details').forEach(function(e){e.open=true})}});
 $$('[data-close]').forEach(function(x){x.onclick=function(){x.parentNode.previousElementSibling.querySelectorAll('details').forEach(function(e){e.open=false})}});
