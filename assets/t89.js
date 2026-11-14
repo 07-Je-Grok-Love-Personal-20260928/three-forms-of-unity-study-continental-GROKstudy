@@ -38,7 +38,7 @@ d.addEventListener('click',function(e){var b;
 d.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.matches&&e.target.matches('.rm-leg li')){e.target.click()}if(e.key==='Escape'){var n=d.getElementById('navc');if(n&&n.classList.contains('open')){n.classList.remove('open');n.querySelector('.nv-t').setAttribute('aria-expanded','false')}}});
 w.addEventListener('resize',function(){if(act)ap(act)},{passive:true});
 })();
-;(function(){var L=document.querySelectorAll('.hx');if(!L.length)return;L.forEach(function(x){x.querySelectorAll('.hxl li').forEach(function(li,i){li.style.setProperty('--d',i)})});
+;(function(){var L=document.querySelectorAll('.hx');if(!L.length)return;(window.requestIdleCallback||function(f){return setTimeout(f,1)})(function(){L.forEach(function(x){x.querySelectorAll('.hxl li').forEach(function(li,i){li.style.setProperty('--d',i)})})},{timeout:400});
 if(!('IntersectionObserver'in window)){L.forEach(function(x){x.classList.add('hxon')});return}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('hxon');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px'});L.forEach(function(x){io.observe(x)})})();
 ;(function(){var de=document.documentElement,t=document.querySelector('[data-mktog]'),b=document.querySelector('#navc [data-nv=mk]'),g=document.querySelector('#navc [data-nv=leg]'),L=document.querySelector('.mklegend');if(!t||!b)return;

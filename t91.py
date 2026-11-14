@@ -95,4 +95,5 @@ def apply(h, page, site):
         h = _insert_in_section(h, 'bi-cov', FLOW_COV)
     if site == 'tec' and page in ('bible', 'bible.html'):
         h = _insert_in_section(h, 'bible-cov', FLOW_COV)
+    import t93; h = t93.apply(h, page, site)
     return h
