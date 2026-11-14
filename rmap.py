@@ -26,7 +26,7 @@ def tw(s, fs):
         elif c.isdigit(): w += fs * .62
         elif c.isupper(): w += fs * .7
         else: w += fs * .56
-    return w + 4
+    return w + 8
 def _ring(coords, P, tol):
     out = []; lx = ly = None
     for lon, lat in coords:
@@ -88,13 +88,13 @@ def spread(mk, P, rh, rn):
 # ---------- 标签避让 ----------
 class Placer:
     def __init__(s, W, H): s.W, s.H, s.boxes = W, H, []
-    def free(s, b, m=3):
+    def free(s, b, m=6):
         x0, y0, x1, y1 = b
         if x0 < 4 or y0 < 4 or x1 > s.W - 4 or y1 > s.H - 4: return False
         return all(x1 + m <= a[0] or a[2] + m <= x0 or y1 + m <= a[1] or a[3] + m <= y0 for a in s.boxes)
     def add(s, b): s.boxes.append(b)
     def label(s, x, y, r, text, fs):
-        w = tw(text, fs); asc, dsc = fs * .88, fs * .24
+        w = tw(text, fs); asc, dsc = fs * .92, fs * .28
         for d in (r + 5, r + 16, r + 30, r + 46):
             for an, dx, dy in (("start", d, fs * .34), ("end", -d, fs * .34), ("middle", 0, -d * .8), ("middle", 0, d * .8 + fs * .7),
                                ("start", d * .75, -d * .62), ("end", -d * .75, -d * .62), ("start", d * .75, d * .62 + fs * .5), ("end", -d * .75, d * .62 + fs * .5)):
