@@ -1,5 +1,5 @@
 /* t94：目录层级折叠、横向拖宽不抖、长标题齐行换行 */
-:root{--tw:360px;--twm:min(94vw,420px);--tw-hold:360px}
+:root{--tw:400px;--twm:min(94vw,420px);--tw-hold:400px}
 /* ---- 标题：图标一列、文字一列，换行悬挂对齐，不从序号中间截断 ---- */
 #toc a{min-width:0;overflow-wrap:break-word;word-break:normal;hyphens:manual}
 #toc a[data-e]{display:grid;grid-template-columns:1.55em minmax(0,1fr);column-gap:.2em;align-items:start}
@@ -34,4 +34,11 @@ body.tocdrag #toc{will-change:width}
 }
 @media (prefers-reduced-motion:reduce){
   #tocgrip::before,#toc .tocctl,#toc a{transition:none!important}
+}
+
+/* 手机/平板目录打开时，避开右下「目录」按钮与导航簇叠在目录文字上 */
+@media (max-width:1099px){
+  body.tocopen #tocbtn, body.tocopen #navc{
+    opacity:0;pointer-events:none;visibility:hidden;
+  }
 }

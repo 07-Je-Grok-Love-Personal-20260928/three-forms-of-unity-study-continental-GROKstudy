@@ -75,12 +75,10 @@ function onActive(){
 var mo=new MutationObserver(function(muts){
   for(var i=0;i<muts.length;i++){
     var t=muts[i].target;
-    if(t && t.matches && t.matches('#toc a') && (t.classList.contains('on')||muts[i].attributeName==='class')){
-      onActive(); return;
-    }
+    if(t && t.classList && t.classList.contains('on') && t.tagName==='A'){ onActive(); return; }
   }
 });
-$$('#toc a').forEach(function(a){ mo.observe(a,{attributes:true,attributeFilter:['class']}); });
+mo.observe(toc,{subtree:true,attributes:true,attributeFilter:['class']});
 w.addEventListener('hashchange', function(){
   var hash=(location.hash||'').replace('#','');
   if(!hash) return;

@@ -25,15 +25,17 @@ if('IntersectionObserver'in window){
  var ioA=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)band.add(e.target);else band.delete(e.target)});var best=null,bi=-1;band.forEach(function(x){var i=order.get(x);if(i>bi){bi=i;best=x}});if(best)setAct(best.id)},{rootMargin:'0px 0px -75% 0px'});
  var ioR=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){markRead(e.target.id);ioR.unobserve(e.target)}})},{rootMargin:'0px 0px -40% 0px'});
  secs.forEach(function(x){ioA.observe(x);if(x.classList.contains('l2'))ioR.observe(x)})}
-var p=$('#prog'),H=0,de=d.documentElement;function measure(){H=Math.max(1,de.scrollHeight-innerHeight)}measure();
-if('ResizeObserver'in window)new ResizeObserver(function(){measure();prog()}).observe(b);addEventListener('resize',measure,{passive:true});
-var SDA=!rm&&window.CSS&&CSS.supports&&CSS.supports('animation-timeline: scroll()');function prog(){if(SDA)return;if(p)p.style.transform='scaleX('+Math.min(1,scrollY/H).toFixed(4)+')'}
-var tk=0;addEventListener('scroll',function(){if(!tk){tk=1;requestAnimationFrame(function(){prog();tk=0})}},{passive:true});prog();upd();
+var p=$('#prog'),H=0,de=d.documentElement;
+var SDA=!rm&&window.CSS&&CSS.supports&&CSS.supports('animation-timeline: scroll()');
+function measure(){if(SDA)return;H=Math.max(1,de.scrollHeight-innerHeight)}
+function prog(){if(SDA)return;if(p)p.style.transform='scaleX('+Math.min(1,scrollY/H).toFixed(4)+')'}
+if(!SDA){measure();if('ResizeObserver'in window)new ResizeObserver(function(){measure();prog()}).observe(b);addEventListener('resize',measure,{passive:true});var tk=0;addEventListener('scroll',function(){if(!tk){tk=1;requestAnimationFrame(function(){prog();tk=0})}},{passive:true});prog()}
+upd();
 
 /* toc resize */
 (function(){var g=$('#tocgrip'),toc=$('#toc');if(!g||!toc)return;var root=d.documentElement,KD='tfu1.tw',KM='tfu1.twm',sx=0,sw=0,dragging=false;
 function lim(){return wide()?[240,Math.min(760,Math.round(innerWidth*.72))]:[200,Math.max(280,Math.round(innerWidth*.98))]}
-function dflt(){return wide()?360:Math.min(420,Math.round(innerWidth*.94))}
+function dflt(){return wide()?400:Math.min(420,Math.round(innerWidth*.94))}
 function cl(v){var l=lim();return Math.max(l[0],Math.min(l[1],Math.round(v)))}
 function aria(v){var l=lim();g.setAttribute('aria-valuemin',l[0]);g.setAttribute('aria-valuemax',l[1]);g.setAttribute('aria-valuenow',v)}
 function cur(){return Math.round(toc.getBoundingClientRect().width)}
