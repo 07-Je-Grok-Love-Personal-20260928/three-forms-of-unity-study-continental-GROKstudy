@@ -58,7 +58,7 @@ html:not(.mkoff) .core1 .mk-core{box-shadow:inset 0 -.42em 0 var(--c-hl)}
 
 /* ---- 性能：卡片合成层、长列表遏制 ---- */
 .pc4,.core1,.t90viz,.t91flow{contain:content}
-#toc,#navc,.fab,.fab2,#thm{transform:translateZ(0)}
+#navc,.fab,.fab2,#thm{transform:translateZ(0)}
 @media (prefers-reduced-motion:no-preference){
   .t91steps li{animation:t90in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*.08s)}
 }
