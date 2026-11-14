@@ -1,0 +1,18 @@
+/* t97：对比度 — 首页标题不用 transparent + background-clip（对比度为 1）；故事线图标底与字达到 AA */
+.hero h1{
+  background:none;
+  -webkit-background-clip:unset;
+  background-clip:unset;
+  color:var(--hi);
+  -webkit-text-fill-color:var(--hi);
+}
+.hero h1 span{
+  color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));
+  -webkit-text-fill-color:currentColor;
+}
+.sl-ic{
+  background:var(--pnl);
+  color:var(--hi);
+  -webkit-text-fill-color:var(--hi);
+  border:1.5px solid color-mix(in srgb,var(--c,var(--gold)) 70%,var(--hi));
+}
