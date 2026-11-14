@@ -25,7 +25,7 @@
 
 | 标签 | 说明 | 链接 |
 |---|---|---|
-| `v20261114-16` | v16 当前版本（2026-11-14 台北）：对比度与尼西亚概念图标签重叠修复 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-16 |
+| `v20261114-16` | v16 当前版本（2026-11-14 台北）：对比度 AA、尼西亚标签避让、原文库页首屏长任务、说明再收紧、首页史地地图、目录润色 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-16 |
 | `v20261114-15` | v15（恢复点：t97 前的线上版本 44d6592）（2026-11-14 台北）：目录三级折叠并可拖宽；本站说明再收紧；目录页签与按需展开 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-15 |
 | `v20261114-14` | v14（恢复点：t94 前的线上版本 7d4f94b）（2026-11-14 台北）：本站说明收紧、手机导航不挡字、性能 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-14 |
 | `v20261114-13` | v13（恢复点：t93 前的线上版本 dba1246）（2026-11-14 台北）：多源地图、新圣约／西敏地图与历史块、重叠修复、标记加强 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-13 |
@@ -41,7 +41,7 @@
 
 | 版本 | 更新内容 | 仍可访问的链接 |
 |---|---|---|
-| **v16 · v20261114-16**（当前，2026-11-14 台北） | 对比度：首页主标题改为实色（不再用透明填色），故事线步骤图标达到 WCAG AA；尼西亚概念图标签避让加宽，去掉「西尔米乌姆」与「下多瑙河哥特人」的重叠。域名 three-forms-of-unity-study-continental-20261114-v16-grokstudy。本轮其余项将继续完成。 |
+| **v16 · v20261114-16**（当前，2026-11-14 台北） | 对比度：首页主标题改为实色，故事线步骤图标达到 WCAG AA；尼西亚概念图标签避让加宽，去掉「西尔米乌姆」与「下多瑙河哥特人」的重叠。性能：增强脚本错开为短任务，载入时不再强制读取目录宽度；原文库页 390px 首屏长任务多次实测为 0。说明再收紧导语重复句（CCI 原文不动）。首页补上改革宗欧洲概念图与多源真实地图；目录当前一级加粗，收起项更安静。域名 three-forms-of-unity-study-continental-20261114-v16-grokstudy。 |
 | **v15 · v20261114-15**（恢复点 44d6592，2026-11-14 台北） | 目录：一级「一、二、」编号，二、三级可折叠，进入页面只展开当前部分，并提供全开/全收；打开后可左右拖宽（桌面与平板，宽度记在本机，拖动不重排正文）；长标题悬挂换行。海德堡「六个角度」调到 2.0、排在 2.1 之前。再收紧本站说明（CCI 不动）；桌面收起目录后左侧保留「目录」页签；非当前一级目录按需展开以缩短首屏长任务。 | 旧版本：[Netlify](https://three-forms-of-unity-study-continental-20261114-v15-grokstudy.netlify.app/) · [Surge](https://three-forms-of-unity-study-continental-20261114-v15-grokstudy.surge.sh/) |
 | **v14 · v20261114-14**（恢复点 7d4f94b，2026-11-14 台北） | 内容：海德堡、比利时信条、比较与信经附录页逐句收紧本站说明（CCI 原文不动，verify_exact 核对）。导航：手机 🧭 改小，适配安全区，正文左右留白；向下滚动时自动隐藏，上滚或点按再显示，避免挡住文字。性能：推迟非首屏观察器与计数动画，收紧长列表预留高度。 | 见上表 |
 | **v13 · v20261114-13**（恢复点 dba1246，2026-11-14 台北） | 地图：每张真实地图增加可切换在线底图（OpenStreetMap、CARTO、Esri 卫星影像与地形图、高德），仅在点选后才加载自托管 Leaflet（不走 CDN）；8 秒无响应自动回到本地 Natural Earth 底图，无需网络时仍可看图。新增圣约地理图、威斯敏斯特与欧陆对照图，以及圣经／比较／西敏页的历史与文化背景块（本站概述，出处列于块尾）。重叠：修掉比较页时间轴与 TULIP 示意图上原有的 17 处文字重叠；手机上将 🧭 导航簇移到左下，并为图表右侧留白，避免挡住数字。标记：加强荧光底、实线与虚线，新增重点区块样式。桌面端增加轻量飘动（仅 transform，减少动态时关闭）。域名后缀改回 -grokstudy。 | 见上表 |

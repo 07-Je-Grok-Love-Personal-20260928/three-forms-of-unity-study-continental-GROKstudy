@@ -127,7 +127,7 @@ WMS = dict(sid="wm-time", t0=1550, t1=1660, title="从苏格兰信条到西敏�
   src="通行史实；会议文件见威斯敏斯特会议记录与准则文本。")
 
 TFU = {"hc.html": HC, "bc.html": BC, "dort.html": DT, "bible.html": BIB, "compare.html": CMP, "westminster.html": WMS}
-TEC = {"apostles.html": AP, "nicene.html": NI, "athanasian.html": AT, "bible.html": BIB_TEC, "compare.html": CMP_TEC, "westminster.html": WMS}
+TEC = {"apostles.html": AP, "nicene.html": NI, "athanasian.html": AT, "bible.html": BIB_TEC, "compare.html": CMP_TEC, "westminster.html": WMS, "hc.html": {**HC, "sid": "hc-intro"}, "bc.html": {**BC, "sid": "bc-intro"}, "dort.html": {**DT, "sid": "dt-intro"}}
 
 def html(s):
     t0, t1 = s["t0"], s["t1"]; span = t1 - t0

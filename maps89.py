@@ -223,6 +223,6 @@ WM = dict(id="wm", title="威斯敏斯特与欧陆改革宗：从日内瓦、海
   water=[("北海",3.2,55.0)], rcap="箭头为神学影响的示意方向，不代表精确行程",
   steps=[("日内瓦","加尔文与欧陆改革宗的教义资源（1536 起）","green"),("海德堡","要理问答传统（1563）","blue"),("多德雷赫特","拣选与恩典的裁决（1618–19）","orange"),("爱丁堡","苏格兰信条与长老制（1560）","gold"),("威斯敏斯特","信仰告白与大小要理问答（1643–47）","red")])
 TFU = {"eu":EU,"hc":HC,"bc":BC,"dt":DT,"na":NA,"cr3":CR3,"cov":COV,"wm":WM}
-TFU_NEW = [("bc.html","bcd-geo",NLR),("creedsx.html","cr3-map",COUNCILS),("bible.html","bi-geo",COV),("westminster.html","wm-time",WM)]
+TFU_NEW = [("bc.html","bcd-geo",NLR),("creedsx.html","cr3-map",COUNCILS),("bible.html","bi-geo",COV),("westminster.html","wm-time",WM),("index.html","idx-vis",EU)]
 TEC = {"ap":AP,"ni":NI,"at":AT,"na":NA,"cov":COV,"wm":WM,"cr3":CR3}
-TEC_NEW = [("bible.html","bible-map",COUNCILS),("nicene.html","ni-geo",ARIAN),("athanasian.html","at-geo",ATH),("bible.html","bible-cov",COV),("westminster.html","wm-time",WM),("compare.html","cmp-dev",CR3)]
+TEC_NEW = [("bible.html","bible-map",COUNCILS),("nicene.html","ni-geo",ARIAN),("athanasian.html","at-geo",ATH),("bible.html","bible-cov",COV),("westminster.html","wm-time",WM),("compare.html","cmp-dev",CR3),("hc.html","hc-intro",HC),("bc.html","bc-intro",BC),("dort.html","dt-intro",DT),("creeds.html","cr-intro",CR3)]

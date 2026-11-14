@@ -22,3 +22,11 @@ main section.l3{
   content-visibility:auto;
   contain-intrinsic-size:auto 240px;
 }
+
+/* t97：目录——当前一级更清楚，收起的项更安静；尊重减少动态 */
+#toc{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){#toc{scroll-behavior:auto}}
+#toc .t1.cur > .t1r > a{font-weight:650}
+#toc .t1:not(.cur) > .t1r{opacity:.88}
+#toc .t2.closed > .t2r{opacity:.9}
+#toc .tocbtns{white-space:nowrap}
