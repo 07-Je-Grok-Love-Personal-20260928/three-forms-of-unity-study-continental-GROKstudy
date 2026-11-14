@@ -1,0 +1,37 @@
+/* t94：目录层级折叠、横向拖宽不抖、长标题齐行换行 */
+:root{--tw:360px;--twm:min(94vw,420px);--tw-hold:360px}
+/* ---- 标题：图标一列、文字一列，换行悬挂对齐，不从序号中间截断 ---- */
+#toc a{min-width:0;overflow-wrap:break-word;word-break:normal;hyphens:manual}
+#toc a[data-e]{display:grid;grid-template-columns:1.55em minmax(0,1fr);column-gap:.2em;align-items:start}
+#toc a[data-e]::before{grid-column:1;grid-row:1;margin-right:0;margin-top:.2em;min-width:1.45em}
+#toc .t1r,#toc .t2r{min-width:0}
+#toc .t1r a,#toc .t2r a{min-width:0}
+#toc{overflow-x:hidden}
+/* ---- 头栏：全开 / 全收 ---- */
+#toc .tochead{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+#toc .tochead b{flex:1;min-width:0}
+#toc .tocbtns{display:flex;align-items:center;gap:4px;flex-shrink:0}
+#toc .tocctl{padding:2px 7px;font-size:.72rem;line-height:1.2;border-radius:8px;min-height:26px;letter-spacing:0}
+/* ---- 拖拽期间只改目录宽度，正文左边距用 --tw-hold，避免每帧重排正文 ---- */
+body.tocdrag{cursor:col-resize}
+body.tocdrag #toc,body.tocdrag #main,body.tocdrag #tocgrip{transition:none!important}
+body.tocdrag #toc{will-change:width}
+@media (min-width:1100px){
+  body.tocdrag #main{margin-left:var(--tw-hold,var(--tw))!important}
+  #tocgrip{left:calc(var(--tw) - 7px)}
+}
+/* ---- 平板 / 手机：可拉近满宽，长标题可读 ---- */
+@media (max-width:1099px){
+  :root{--twm:min(94vw,480px)}
+  #toc{width:var(--twm);max-width:100vw}
+  #tocgrip{left:calc(var(--twm) - 7px)}
+  body.tocopen #tocgrip{display:flex}
+}
+@media (max-width:700px){
+  :root{--twm:96vw}
+  body.tocopen #toc{width:var(--twm);max-width:100vw}
+  #toc .t3 a,#toc .t1 ol a{font-size:.86rem;line-height:1.45}
+}
+@media (prefers-reduced-motion:reduce){
+  #tocgrip::before,#toc .tocctl,#toc a{transition:none!important}
+}

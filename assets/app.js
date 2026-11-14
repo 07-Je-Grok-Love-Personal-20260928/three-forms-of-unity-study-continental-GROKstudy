@@ -32,17 +32,18 @@ var tk=0;addEventListener('scroll',function(){if(!tk){tk=1;requestAnimationFrame
 
 /* toc resize */
 (function(){var g=$('#tocgrip'),toc=$('#toc');if(!g||!toc)return;var root=d.documentElement,KD='tfu1.tw',KM='tfu1.twm',sx=0,sw=0,dragging=false;
-function lim(){return wide()?[220,Math.min(680,Math.round(innerWidth*.6))]:[240,Math.min(560,Math.round(innerWidth*.94))]}
-function dflt(){return wide()?300:Math.min(330,Math.round(innerWidth*.86))}
+function lim(){return wide()?[240,Math.min(760,Math.round(innerWidth*.72))]:[200,Math.max(280,Math.round(innerWidth*.98))]}
+function dflt(){return wide()?360:Math.min(420,Math.round(innerWidth*.94))}
 function cl(v){var l=lim();return Math.max(l[0],Math.min(l[1],Math.round(v)))}
 function aria(v){var l=lim();g.setAttribute('aria-valuemin',l[0]);g.setAttribute('aria-valuemax',l[1]);g.setAttribute('aria-valuenow',v)}
 function cur(){return Math.round(toc.getBoundingClientRect().width)}
-function set(v,save){v=cl(v);root.style.setProperty(wide()?'--tw':'--twm',v+'px');aria(v);if(save)sv(wide()?KD:KM,v);return v}
-function reset(){root.style.removeProperty(wide()?'--tw':'--twm');try{localStorage.removeItem(wide()?KD:KM)}catch(e){}aria(cur())}
-aria(cur());
-g.addEventListener('pointerdown',function(e){if(e.button>0)return;dragging=true;sx=e.clientX;sw=cur();try{g.setPointerCapture(e.pointerId)}catch(x){}b.classList.add('tocdrag');e.preventDefault()});
-g.addEventListener('pointermove',function(e){if(!dragging)return;set(sw+e.clientX-sx,false)});
-function end(e){if(!dragging)return;dragging=false;b.classList.remove('tocdrag');set(cur(),true);try{g.releasePointerCapture(e.pointerId)}catch(x){}}
+function set(v,save){v=cl(v);root.style.setProperty(wide()?'--tw':'--twm',v+'px');if(!dragging)root.style.setProperty('--tw-hold',v+'px');aria(v);if(save)sv(wide()?KD:KM,v);return v}
+function reset(){root.style.removeProperty(wide()?'--tw':'--twm');root.style.removeProperty('--tw-hold');try{localStorage.removeItem(wide()?KD:KM)}catch(e){}aria(cur())}
+var raf=0,pending=null;
+var saved=ld(wide()?KD:KM,null);if(typeof saved==='number')set(saved,false);else{aria(cur());root.style.setProperty('--tw-hold',cur()+'px')}
+g.addEventListener('pointerdown',function(e){if(e.button>0)return;dragging=true;sx=e.clientX;sw=cur();root.style.setProperty('--tw-hold',sw+'px');try{g.setPointerCapture(e.pointerId)}catch(x){}b.classList.add('tocdrag');e.preventDefault()});
+g.addEventListener('pointermove',function(e){if(!dragging)return;pending=sw+e.clientX-sx;if(!raf)raf=requestAnimationFrame(function(){raf=0;if(pending!=null)set(pending,false)})});
+function end(e){if(!dragging)return;dragging=false;b.classList.remove('tocdrag');var v=set(pending!=null?pending:cur(),true);pending=null;root.style.setProperty('--tw-hold',v+'px');try{g.releasePointerCapture(e.pointerId)}catch(x){}}
 g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);
 g.addEventListener('dblclick',reset);
 g.addEventListener('keydown',function(e){var st=e.shiftKey?64:16,v=cur(),l=lim();
