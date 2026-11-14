@@ -200,7 +200,29 @@ AT = dict(id="at", title="亚他那修信经的地理：亚历山大的名字，
     R("eph","431","以弗所：反聂斯托利，基督一位。","purple"), R("cha","451","迦克墩：一位二性，信经第 30–37 点与之呼应（本站概括）。","purple"),
     R("con","381","君士坦丁堡：圣灵的神性。","purple")],
   regions=[("南高卢",5.2,44.2,2.0,1.1,"green")], water=[("地中海",17.0,35.2)], rcap="高卢起源为学界推测（非定论）；箭头省略")
-TFU = {"eu":EU,"hc":HC,"bc":BC,"dt":DT,"na":NA,"cr3":CR3}
-TFU_NEW = [("bc.html","bcd-geo",NLR),("creedsx.html","cr3-map",COUNCILS)]
-TEC = {"ap":AP,"ni":NI,"at":AT,"na":NA}
-TEC_NEW = [("bible.html","bible-map",COUNCILS),("nicene.html","ni-geo",ARIAN),("athanasian.html","at-geo",ATH)]
+
+# ---------------- t91 新增：圣约地理、威斯敏斯特与欧陆 ----------------
+COV = dict(id="cov", title="圣约地理：从吾珥、西奈、耶路撒冷到安提阿与罗马", bbox=(8.0, 50.0, 24.0, 46.0),
+  markers=[M("ur","吾珥","Ur",46.10,30.96,"先祖蒙召（约）","亚伯拉罕从吾珥蒙召（创世记）；吾珥为传统地点，在两河流域南部。","gold",True),
+    M("egy","埃及三角洲","Nile Delta",31.23,30.04,"寄居与出埃及（约）","以色列人在埃及寄居，后来被领出（出埃及记）；地点为尼罗河三角洲一带的传统说法。","orange"),
+    M("sin","西奈山","Sinai (trad.)",34.33,28.54,"西奈之约（约）","十诫与西奈之约在此颁布（出埃及记）。西奈山的精确位置是传统认定，不是考古学定论。","red",True),
+    M("jer","耶路撒冷","Jerusalem",35.23,31.78,"大卫之约·圣殿·基督","大卫之约与圣殿之地；福音记载基督在此受难与复活。","gold",True),
+    M("bab","巴比伦","Babylon",44.42,32.54,"被掳（前 586）","犹大王国亡、圣殿被毁、百姓被掳之地（通行史实）。","purple"),
+    M("ant","安提阿","Antioch",36.20,36.20,"门徒称为基督徒","门徒称为基督徒是从安提阿起（使徒行传 11:26）。","green"),
+    M("rom","罗马","Roma",12.50,41.90,"帝国中心","罗马帝国的都城，也是保罗书信的目的地之一；西方洗礼信经后来在拉丁世界定型（本站概括）。","blue",True)],
+  routes=[("ur","jer","gold",.12),("egy","sin","orange",.1),("sin","jer","red",-.12),("jer","bab","purple",.15),("jer","ant","green",-.1),("ant","rom","blue",.12)],
+  water=[("地中海",20.0,34.0)], rcap="路线为救赎历史的示意方向，不是一次行程；西奈、吾珥为传统地点",
+  steps=[("吾珥","蒙召与应许之约（创世记；年代约）","gold"),("西奈","律法之约：十诫颁布（出埃及记；地点与年代约）","red"),("耶路撒冷","大卫之约、圣殿，并在基督里成全","gold"),("巴比伦","被掳与管教（前 586）","purple"),("安提阿／罗马","福音传到万国（使徒行传）","green")])
+WM = dict(id="wm", title="威斯敏斯特与欧陆改革宗：从日内瓦、海德堡、多德雷赫特到西敏与爱丁堡", bbox=(-8.5, 12.5, 44.0, 58.5),
+  markers=[M("wes","威斯敏斯特","Westminster",-0.13,51.50,"1643–53","威斯敏斯特会议在西敏寺召开，写成信仰告白与大小要理问答（通行史实）。","red",True),
+    M("edi","爱丁堡","Edinburgh",-3.19,55.95,"1560","苏格兰信条在此背景下产生；后来苏格兰委员也参与西敏会议（通行史实）。","gold",True),
+    M("dor","多德雷赫特","Dordrecht",4.67,51.81,"1618–19","多特大会的教义裁决，为后来改革宗（含长老会）的拣选论提供了重要参照（本站概括）。","orange"),
+    M("gen","日内瓦","Genève",6.14,46.20,"1536 起","加尔文的城市；西敏神学大量吸收欧陆改革宗的资源（本站概括）。","green",True),
+    M("hei","海德堡","Heidelberg",8.69,49.41,"1563","《海德堡要理问答》与西敏小要理问答同为要理传统，体裁相近而措辞不同（本站概括）。","blue")],
+  routes=[("gen","hei","green",.12),("gen","dor","green",-.12),("dor","wes","orange",.1),("hei","wes","blue",-.15),("edi","wes","gold",.2)],
+  water=[("北海",3.2,55.0)], rcap="箭头为神学影响的示意方向，不代表精确行程",
+  steps=[("日内瓦","加尔文与欧陆改革宗的教义资源（1536 起）","green"),("海德堡","要理问答传统（1563）","blue"),("多德雷赫特","拣选与恩典的裁决（1618–19）","orange"),("爱丁堡","苏格兰信条与长老制（1560）","gold"),("威斯敏斯特","信仰告白与大小要理问答（1643–47）","red")])
+TFU = {"eu":EU,"hc":HC,"bc":BC,"dt":DT,"na":NA,"cr3":CR3,"cov":COV,"wm":WM}
+TFU_NEW = [("bc.html","bcd-geo",NLR),("creedsx.html","cr3-map",COUNCILS),("bible.html","bi-geo",COV),("westminster.html","wm-time",WM)]
+TEC = {"ap":AP,"ni":NI,"at":AT,"na":NA,"cov":COV,"wm":WM,"cr3":CR3}
+TEC_NEW = [("bible.html","bible-map",COUNCILS),("nicene.html","ni-geo",ARIAN),("athanasian.html","at-geo",ATH),("bible.html","bible-cov",COV),("westminster.html","wm-time",WM),("compare.html","cmp-dev",CR3)]

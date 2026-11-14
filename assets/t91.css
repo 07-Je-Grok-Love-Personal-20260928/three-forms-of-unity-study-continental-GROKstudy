@@ -1,0 +1,74 @@
+/* t91：多源地图、标记加强、导航避让、轻量飘动、示意图 */
+/* ---- 地图源切换 ---- */
+.rm-src{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;padding:0;align-items:center}
+.rm-src b{font-size:.78rem;color:var(--mut);font-weight:600;margin-right:4px}
+.rm-src button{appearance:none;font:inherit;font-size:.8rem;line-height:1.2;padding:5px 10px;border-radius:999px;border:1px solid var(--gb);background:rgba(var(--W),.06);color:var(--tx);cursor:pointer}
+.rm-src button.on,.rm-src button[aria-selected=true]{background:var(--gold);color:#1a1206;border-color:transparent;font-weight:700}
+html:is([data-theme=night],[data-theme=jade],[data-theme=grape],[data-theme=ocean],[data-theme=amber]) .rm-src button.on,
+html:is([data-theme=night],[data-theme=jade],[data-theme=grape],[data-theme=ocean],[data-theme=amber]) .rm-src button[aria-selected=true]{color:#1a1206}
+.rm-st{font-size:.8rem;color:var(--mut);margin:6px 0 0;min-height:1.2em}
+.rm-st.wait{color:var(--gold)}
+.rm-st.err{color:var(--c-x,#c04545)}
+.rm-ol{position:relative;width:100%;aspect-ratio:inherit;min-height:240px;border-radius:12px;overflow:hidden;background:rgba(var(--W),.06);z-index:1}
+.rmap[data-src]:not([data-src=local]) .rmw{display:none}
+.rmap[data-src]:not([data-src=local]) .rm-go,.rmap[data-src]:not([data-src=local]) .rm-ctl{display:none}
+.rm-ol-go{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:500;font:inherit;font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid var(--gb);background:rgba(var(--D),.92);color:var(--tx);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.t91pin{background:none;border:none}
+.t91pin b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--c,#3b8fd9);color:#fff;font-size:12px;font-weight:800;box-shadow:0 0 0 2px #fff,0 2px 6px rgba(0,0,0,.35)}
+html:not(.jsok) .rm-src{display:none}
+/* Leaflet 主题微调，避免控件溢出 */
+.rm-ol .leaflet-control-attribution{font-size:10px;line-height:1.3;max-width:100%;background:rgba(255,255,255,.8)}
+.rm-ol .leaflet-control-zoom a{width:28px;height:28px;line-height:28px}
+@media (max-width:700px){.rm-src button{font-size:.74rem;padding:4px 8px}.rm-ol{min-height:200px}}
+
+/* ---- 手机：🧭 移到左侧，避开右下角主题/目录按钮；图表右侧留白 ---- */
+@media (max-width:700px){
+  #navc{right:auto;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  #navc .nv-l{align-items:flex-start}
+  .t90viz,.hx,figure.metro,figure.tulipf,.t90bars{padding-right:56px;box-sizing:border-box}
+  .t90bars em{padding-right:0}
+}
+
+/* ---- 标记加强 ---- */
+html:not(.mkoff) .mk-hl{background:linear-gradient(100deg,transparent .15em,var(--c-hl) .2em calc(100% - .2em),transparent calc(100% - .15em)) 0 92%/100% 48% no-repeat;border-radius:.28em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+html:not(.mkoff) .mk-u{text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:2.5px;text-decoration-color:var(--mk-u,var(--gold));text-underline-offset:.28em}
+html:not(.mkoff) .mk-d{text-decoration-line:underline;text-decoration-style:dashed;text-decoration-thickness:2px;text-decoration-color:var(--f,#2a64b0);text-underline-offset:.3em}
+html:not(.mkoff) .mk-x{text-decoration-line:underline;text-decoration-style:wavy;text-decoration-thickness:2px;text-decoration-color:var(--c-x,#c04545);text-underline-offset:.32em}
+html:not(.mkoff) .mk-sol{text-decoration:none;border-bottom:3px solid var(--gold);padding-bottom:.02em}
+html:not(.mkoff) .mk-box{display:inline;background:rgba(var(--A),.14);border-left:3px solid var(--gold);padding:.05em .35em .08em;border-radius:0 .35em .35em 0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+html:not(.mkoff) .mk-chip{display:inline-block;padding:.05em .45em;margin:0 .08em;border-radius:999px;background:var(--gold);color:#1a1206;font-weight:700;font-size:.92em;line-height:1.5}
+html:is([data-theme=dawn],[data-theme=sakura],[data-theme=paper],[data-theme=eye]):not(.mkoff) .mk-chip{color:#1a1206}
+html:not(.mkoff) .core1 .mk-core{box-shadow:inset 0 -.42em 0 var(--c-hl)}
+.mklegend .lgc i.mk-box,.mklegend .lg-box{border-left:3px solid var(--gold);background:rgba(var(--A),.14);padding:0 .35em}
+.mklegend .lg-chip{background:var(--gold);color:#1a1206;border-radius:999px;padding:0 .45em;font-weight:700}
+
+/* ---- 新示意图 / 流程图 ---- */
+.t91flow{margin:16px 0;padding:14px clamp(10px,2vw,20px);border-radius:18px;border:1px solid var(--gb);background:linear-gradient(140deg,rgba(var(--A),.1),rgba(var(--W),.03) 70%)}
+.t91flow h3{margin:0 0 8px;font-size:1.05rem}
+.t91flow .sub{margin:0 0 12px;color:var(--mut);font-size:.86rem}
+.t91steps{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none;align-items:stretch}
+.t91steps li{flex:1 1 120px;min-width:120px;padding:10px 12px;border-radius:14px;background:rgba(var(--W),.06);border:1px solid rgba(var(--W),.1);position:relative}
+.t91steps li b{display:block;color:var(--gtx,var(--gold2));font-size:.82rem;margin-bottom:4px}
+.t91steps li::after{content:"→";position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--gold);font-weight:800;pointer-events:none}
+.t91steps li:last-child::after{content:none}
+@media (max-width:560px){.t91steps li{flex:1 1 46%} .t91steps li:nth-child(2n)::after{content:none}}
+.t91exp{margin:0 0 8px}
+.t91exp svg{width:100%;height:auto;display:block}
+.cmap-x figcaption{font-size:.82rem;color:var(--mut);margin-top:6px}
+
+/* ---- 轻量「云飘」：仅桌面、仅 transform/opacity，减少动态时关闭 ---- */
+@media (prefers-reduced-motion:no-preference) and (min-width:1100px){
+  body::before,body::after{content:"";position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(40px);opacity:.22;will-change:transform;animation:t91cloud 22s ease-in-out infinite alternate}
+  body::before{width:420px;height:280px;left:-80px;top:12%;background:radial-gradient(circle at 30% 40%,rgba(var(--A),.55),transparent 70%)}
+  body::after{width:360px;height:260px;right:-60px;bottom:18%;background:radial-gradient(circle at 60% 40%,rgba(var(--W),.45),transparent 70%);animation-duration:28s;animation-delay:-8s}
+  #main{position:relative;z-index:1}
+  @keyframes t91cloud{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(24px,-18px,0) scale(1.06)}}
+}
+@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none!important;display:none}}
+
+/* ---- 性能：卡片合成层、长列表遏制 ---- */
+.pc4,.core1,.t90viz,.t91flow{contain:content}
+#toc,#navc,.fab,.fab2,#thm{transform:translateZ(0)}
+@media (prefers-reduced-motion:no-preference){
+  .t91steps li{animation:t90in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*.08s)}
+}

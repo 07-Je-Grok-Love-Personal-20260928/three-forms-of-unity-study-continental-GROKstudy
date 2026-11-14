@@ -41,6 +41,7 @@ def apply(h, page, site, viz=None):
     if page in ('index', 'index.html') and os.path.exists('data/creeds.json') and 't90viz' not in h:
         m = re.search(r'<div class="stats">(?:<div>.*?</div>)+</div>', h, re.S)
         if m: h = h[:m.end()] + viz_index('data', creeds=(site != 'tfu')) + h[m.end():]
+    import t91; h = t91.apply(h, page, site)
     return h
 
 # ---------- 首页「一图看全」：由 CCI 数据实时统计（本站统计） ----------

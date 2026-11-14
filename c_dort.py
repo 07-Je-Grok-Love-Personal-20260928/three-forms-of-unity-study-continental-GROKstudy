@@ -20,18 +20,18 @@ ERR={h["num"]:errors_of(h) for h in _dt["heads"]}
 def tulip_svg():
     L=[("T","#e07a5f","全然败坏","Total depravity"),("U","#d4af37","无条件拣选","Unconditional election"),("L","#5aa9e6","有限／特定救赎","Limited atonement"),("I","#a78bfa","不可抗拒的恩典","Irresistible grace"),("P","#81b29a","圣徒蒙保守","Perseverance of the saints")]
     R=[("第三、四项教义","3-4 人的败坏与归正","#e07a5f"),("第一项教义","1 拣选与弃绝","#d4af37"),("第二项教义","2 基督之死与救赎","#5aa9e6"),("第三、四项教义","3-4 归正的恩典","#a78bfa"),("第五项教义","5 圣徒蒙保守","#81b29a")]
-    s='<figure class="tulipf reveal"><svg viewBox="0 0 760 356" role="img" aria-label="通称 TULIP 的五个字母与多特信经四项教义的对应关系"><defs></defs>'
+    s='<figure class="tulipf reveal"><svg viewBox="0 0 760 430" role="img" aria-label="通称 TULIP 的五个字母与多特信经四项教义的对应关系"><defs></defs>'
     for i,(l,c,zh,en) in enumerate(L):
-        y=40+i*62
-        s+=f'<g class="tl-l"><circle cx="60" cy="{y}" r="22" fill="{c}" fill-opacity=".25" stroke="{c}" stroke-width="2"/><text x="60" y="{y+7}" text-anchor="middle" class="tl-let">{l}</text><text x="96" y="{y-5}" class="tl-zh">{zh}</text><text x="96" y="{y+17}" class="tl-en">{en}</text></g>'
+        y=48+i*74
+        s+=f'<g class="tl-l"><circle cx="60" cy="{y}" r="22" fill="{c}" fill-opacity=".25" stroke="{c}" stroke-width="2"/><text x="60" y="{y+7}" text-anchor="middle" class="tl-let">{l}</text><text x="96" y="{y-14}" class="tl-zh">{zh}</text><text x="96" y="{y+22}" class="tl-en">{en}</text></g>'
     order=[1,0,2,3,4]
     for i,(h,sub,c) in enumerate(R):
-        y=40+i*62
-        s+=f'<g class="tl-r"><rect x="520" y="{y-24}" width="220" height="48" rx="12" fill="{c}" fill-opacity=".16" stroke="{c}"/><text x="630" y="{y-6}" text-anchor="middle" class="tl-h">{h}</text><text x="630" y="{y+16}" text-anchor="middle" class="tl-s">{sub}</text></g>'
+        y=48+i*74
+        s+=f'<g class="tl-r"><rect x="520" y="{y-28}" width="220" height="56" rx="12" fill="{c}" fill-opacity=".16" stroke="{c}"/><text x="630" y="{y-8}" text-anchor="middle" class="tl-h">{h}</text><text x="630" y="{y+18}" text-anchor="middle" class="tl-s">{sub}</text></g>'
     # 线：字母 i → 右侧 box i（T→3-4，U→1，L→2，I→3-4，P→5）。右侧顺序已与字母顺序一致，但对应的 Dort 顺序是 1,2,3-4,5 → 交叉说明
     for i,(l,c,zh,en) in enumerate(L):
-        y=40+i*62; s+=f'<path d="M236,{y} C 360,{y} 400,{y} 518,{y}" class="tl-ln" style="stroke:{c};--d:{i*.18:.2f}s"/>'
-    s+='<text x="380" y="344" text-anchor="middle" class="tl-note">T、I 同属 Dort 第三、四项（合为一项）；U 对应第一项；L 对应第二项；P 对应第五项。</text></svg><figcaption>通称 TULIP 的五个字母与多特信经四项教义的对应（本站示意图）。字母顺序是后来的英文口诀，不是多特信经的结构。</figcaption></figure>'
+        y=48+i*74; s+=f'<path d="M236,{y} C 360,{y} 400,{y} 518,{y}" class="tl-ln" style="stroke:{c};--d:{i*.18:.2f}s"/>'
+    s+='<text x="380" y="414" text-anchor="middle" class="tl-note">T、I 同属 Dort 第三、四项（合为一项）；U 对应第一项；L 对应第二项；P 对应第五项。</text></svg><figcaption>通称 TULIP 的五个字母与多特信经四项教义的对应（本站示意图）。字母顺序是后来的英文口诀，不是多特信经的结构。</figcaption></figure>'
     return s
 
 def layers():

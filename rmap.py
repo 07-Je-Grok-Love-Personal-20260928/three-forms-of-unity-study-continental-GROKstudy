@@ -4,6 +4,7 @@
 地理底图数据：Natural Earth（公有领域，naturalearthdata.com），构建时从 ../ne/*.geojson 读取并裁剪简化。
 投影：等距圆柱，经度按图幅中纬度余弦修正（与旧示意图相同）。"""
 import json, math, os, html as _h
+# t91: real_html emits source switcher + data-rm for lazy Leaflet
 NE = os.environ.get("NE_DIR", "/workspace/ne")
 PAL = {"gold":"#e9b949","blue":"#3b8fd9","green":"#2fa36b","purple":"#8b5cf6","red":"#e0573e","orange":"#f08a24","teal":"#14a3a3","pink":"#d6457a","gray":"#7c8796"}
 RIVERS = {"Rhine","Rhein","Rhin","Nederrijn","Lek","Waal","Neckar","Main","Maas","Meuse","Schelde","Escaut","Scheldt","Danube","Donau","Duna","Dunav","Dunărea","Rhône","Rhone","Nile","Rosetta Branch","Damietta Branch","Tiber","Tevere","Po","Elbe","Thames","Jordan","Orontes","Seine","Loire","Ebro","Tajo","Tejo","Moselle","Mosel","Weser","Ems","Saône","Garonne","Euphrates","Firat","Al Furat","Tigris","Dicle","Sava","Drava","Tisza","Tisa"}
@@ -255,12 +256,31 @@ def real_html(spec, svgW, svgH, hs, ver, hsm=None):
     t = _h.escape(spec["title"])
     hsm = hsm or hs
     b = "".join(f'<button type="button" class="rm-hs" style="--x:{x:.2f}%;--y:{y:.2f}%;--mx:{mx:.2f}%;--my:{my:.2f}%" data-i="{i}" aria-label="{i + 1} {_h.escape(m["n"])}"></button>' for i, ((m, (x, y)), (_, (mx, my))) in enumerate(zip(hs, hsm)))
-    return (f'<figure class="rmap"><div class="rmw"><div class="rmv"><div class="rm-in" style="aspect-ratio:{svgW}/{svgH}">'
+    meta = json.dumps({
+        "bbox": list(spec["bbox"]),
+        "title": spec["title"],
+        "markers": [{"i": i + 1, "n": m["n"], "en": m.get("en") or "", "ll": [m["ll"][0], m["ll"][1]], "c": PAL[m.get("c", "blue")], "y": m["y"]} for i, m in enumerate(spec["markers"])]
+    }, ensure_ascii=False, separators=(",", ":"))
+    src = (
+        '<div class="rm-src" role="tablist" aria-label="真实地图来源">'
+        '<b>底图来源</b>'
+        '<button type="button" role="tab" data-src="local" aria-selected="true" class="on">本地底图（Natural Earth）</button>'
+        '<button type="button" role="tab" data-src="osm" aria-selected="false">OpenStreetMap</button>'
+        '<button type="button" role="tab" data-src="carto" aria-selected="false">CARTO</button>'
+        '<button type="button" role="tab" data-src="esri-img" aria-selected="false">Esri 卫星影像</button>'
+        '<button type="button" role="tab" data-src="esri-topo" aria-selected="false">Esri 地形图</button>'
+        '<button type="button" role="tab" data-src="amap" aria-selected="false">高德（内地可达）</button>'
+        '</div>'
+        '<p class="rm-st" role="status" aria-live="polite">当前：本地静态底图（Natural Earth 公有领域），无需网络，始终可用。在线源仅在点选后加载，8 秒无响应则自动返回本地。</p>'
+    )
+    return (f'<figure class="rmap" data-src="local" data-rm="{_h.escape(meta, quote=True)}"><div class="rmw"><div class="rmv"><div class="rm-in" style="aspect-ratio:{svgW}/{svgH}">'
             f'<picture><source media="(max-width:700px)" srcset="assets/geo/{spec["id"]}-m.svg?v={ver}"><img src="assets/geo/{spec["id"]}.svg?v={ver}" width="{svgW}" height="{svgH}" loading="lazy" decoding="async" alt="{t}（真实地图：Natural Earth 海岸线与河流，标注 {len(hs)} 个地点）"></picture>{b}</div></div>'
             f'<button type="button" class="rm-go" aria-label="开启地图缩放与拖动">🔍 点按开启缩放 / 拖动</button>'
             f'<div class="rm-ctl"><button type="button" data-z="1" aria-label="放大">＋</button><button type="button" data-z="-1" aria-label="缩小">－</button><button type="button" data-z="0" aria-label="复位">⟲</button><button type="button" data-z="x" aria-label="结束缩放，恢复页面滚动">✕</button></div>'
             f'<div class="rm-tip" role="status" aria-live="polite"></div></div>'
-            f'<figcaption>{t}（真实地图：Natural Earth 公有领域底图，本地静态文件，无第三方瓦片；编号见下表；{spec.get("rcap", "路线为示意方向，不代表精确行程")}）</figcaption>{legend(spec)}</figure>')
+            f'<div class="rm-ol" hidden style="aspect-ratio:{svgW}/{svgH}" aria-label="在线瓦片地图"></div>'
+            f'{src}'
+            f'<figcaption>{t}（真实地图默认：Natural Earth 公有领域底图，本地静态文件，无需网络；也可改选 OpenStreetMap、CARTO、Esri 卫星／地形或高德，点选后才加载自托管 Leaflet 与瓦片，超时自动返回本地。编号见下表；{spec.get("rcap", "路线为示意方向，不代表精确行程")}）</figcaption>{legend(spec)}</figure>')
 def pair(mid, concept_html, real, title):
     return (f'<div class="mapx" id="mx-{mid}" data-l="c"><div class="mx-tabs" role="tablist" aria-label="{_h.escape(title)}：地图图层">'
             f'<button type="button" role="tab" aria-selected="true" data-l="c">🎨 概念图</button><button type="button" role="tab" aria-selected="false" data-l="r">🗺️ 真实地图 · 可缩放</button></div>'
