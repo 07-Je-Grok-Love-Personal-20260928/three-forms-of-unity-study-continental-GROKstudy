@@ -42,3 +42,46 @@ body.tocdrag #toc{will-change:width}
     opacity:0;pointer-events:none;visibility:hidden;
   }
 }
+
+/* #tocx 提到 #toc 之外：桌面收起后仍是左缘可点的「目录」页签（不受 #toc 的 transform 影响） */
+#tocx{
+  position:fixed;
+  z-index:61;
+  top:14px;
+  left:calc(var(--tw) - 46px);
+  min-width:36px;
+  min-height:32px;
+}
+@media (min-width:1100px){
+  body.tochide #tocx{
+    left:0;
+    top:88px;
+    min-width:28px;
+    padding:16px 7px;
+    writing-mode:vertical-rl;
+    letter-spacing:.18em;
+    border-radius:0 10px 10px 0;
+    box-shadow:2px 4px 16px rgba(0,0,0,.28);
+    background:rgba(var(--D),.94);
+    border:1px solid var(--gb);
+    border-left:none;
+    pointer-events:auto;
+  }
+}
+@media (max-width:1099px){
+  #tocx{
+    left:calc(var(--twm) - 46px);
+    top:12px;
+    opacity:0;
+    pointer-events:none;
+    visibility:hidden;
+  }
+  body.tocopen #tocx{
+    opacity:1;
+    pointer-events:auto;
+    visibility:visible;
+  }
+}
+
+/* 廉价视觉：当前一级左边一条更清晰的强调线 */
+#toc .t1.cur > .t1r > a{box-shadow:inset 3px 0 0 var(--gold, #d4af37)}
