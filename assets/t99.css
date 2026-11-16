@@ -11,12 +11,11 @@ html.jsok .mapx[data-ready] .mx-r{box-sizing:border-box}
 }
 .hx{border-radius:14px;padding:.2rem 0 .4rem}
 .hx .hxc{font-size:1.02em;line-height:1.55}
-.hx .hxc b{color:color-mix(in srgb,var(--gold,#d4af37) 70%,var(--dkc,#fff) 30%)}
 .hxu{display:grid;gap:.45rem .8rem;margin:.6rem 0 0}
 @media (min-width:760px){.hxu{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}}
-.hxu li{background:color-mix(in srgb,var(--card,#fff) 88%,transparent);border-radius:10px;padding:.45rem .65rem}
+.hxu li{border-radius:10px;padding:.45rem .65rem;border:1px solid color-mix(in srgb,currentColor 18%,transparent)}
 .hxl .hxe{line-height:1.45}
-.hxs{opacity:.82;font-size:.92em}
+.hxs{font-size:.92em}
 
 /* 记忆标记：核心更醒目，不改对比度体系 */
 .call.key{box-shadow:inset 3px 0 0 var(--gold,#d4af37)}
