@@ -60,3 +60,42 @@ html.jsok .mapx[data-l=r]>.mx-r{
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
 }
+
+/* 手机真实地图：用专用画幅比例，避免桌面比例把加边距的图裁切或拉伸 */
+@media (max-width:700px){
+  .rm-in{
+    aspect-ratio:var(--rm-ar-m, auto)!important;
+    padding:0;
+  }
+  .rm-in img,.rm-in picture{
+    overflow:visible;
+  }
+}
+
+/* 历史文化块：年份与卡片稍加透气 */
+.hx .hxc{letter-spacing:.01em}
+.hxu li{padding:.5rem .72rem}
+.hxs,.hxl .hxe{line-height:1.5}
+.hx time,.hxy{font-variant-numeric:tabular-nums}
+
+/* 记忆标记：荧光底略增高，实线稍离开字形 */
+html:not(.mkoff) .mk-hl{
+  background-size:100% 54%;
+}
+html:not(.mkoff) .mk-u{
+  text-decoration-thickness:2.75px;
+  text-underline-offset:.3em;
+}
+
+/* 导航簇：按钮间距略松，窄屏再让出 2px */
+#navc .nv-dock{gap:8px}
+#navc .nv-l{row-gap:6px}
+@media (max-width:700px){
+  #navc{
+    right:calc(12px + env(safe-area-inset-right,0px));
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  }
+  #tocbtn.fab{
+    right:calc(18px + env(safe-area-inset-right,0px));
+  }
+}

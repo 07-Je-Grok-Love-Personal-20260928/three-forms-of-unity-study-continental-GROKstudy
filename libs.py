@@ -51,7 +51,7 @@ def part_bct():
     intro="".join(f'<p class="ex">{fn(p)}</p>' for p in D["intro"])
     b = L2("bc-intro","8.1","导言与说明（CCI 原文）", exact_note("第8–11条（三位一体）与第9条（接受三信经）是本站讲解的核心。")+intro+f'<p class="src">{src_link(D["url"],"CCI 比利时信条总页")}</p>'
         + chips([(f"bc-{a['n']}",str(a['n']),a['title']) for a in D["articles"]])
-        + note("八个分节标题（神与启示、三位一体等）为本站为导航所加；CCI 页面本身只按条列出。"))
+        + note("八个分节标题（神与启示、三位一体等）为本站导航所加；CCI 页面本身只按条列出。"))
     for gid,num,gt,lo,hi in BCG:
         x=""
         for a in D["articles"][lo-1:hi]:
@@ -71,7 +71,7 @@ def part_hct():
     intro="".join(f'<p class="ex">{H.escape(p)}</p>' for p in D["intro"])
     b = L2("hc-intro","7.1","导言与结构（CCI 原文）",exact_note("共 52 个主日、129 问；使徒信经由主日7–22（问22–58）讲解。")+intro+f'<p class="src">{src_link(D["url"],"CCI 海德堡要理问答总页")}</p>'
         + chips([(f"ld{l['n']}",str(l['n']),f"主日{l['n']}：问{rng[l['n']][0]}–{rng[l['n']][1]}") for l in lds])
-        + note('上方数字＝主日；悬停可见问号范围。每个主日下附 CCI“我属于”（I Belong）系列对应课程链接 ccifellowship.org/books/i-belong/N（该系列把几个主日合并的有主日26–27、28–30、36–37）。'))
+        + note('上方数字＝主日；悬停可见问号范围。各主日附 CCI《我属于》课程链接（主日26–27、28–30、36–37 为合并课）。'))
     groups=[("hc-g1","7.2","第一部 论人的罪和愁苦（主日1–4）",1,4),("hc-g2","7.3","第二部 论我们的得救：中保、信心与信经（主日5–10）",5,10),
       ("hc-g3","7.4","子神和我们的得赎（主日11–19）",11,19),("hc-g4","7.5","圣灵神和我们的成圣（主日20–22）",20,22),("hc-g5","7.6","我们得称为义（主日23–24）",23,24),
       ("hc-g6","7.7","圣言与圣礼（主日25）",25,25),("hc-g7","7.8","圣洗礼（主日26–27）",26,27),("hc-g8","7.9","圣餐（主日28–31）",28,31),
@@ -117,7 +117,7 @@ def part_creedsx():
     b = L2("cr-intro","10.1","说明：背诵版与原文的关系",
       f'<p class="ex">{H.escape(C["index_intro"])}</p><p class="src">{src_link(C["index_url"],"CCI《赞美手册》普世信经总目")}</p>'
       + exact_note('上面这一段同为 CCI 原文。')
-      + key('每部信经分两层：<b>背诵版</b>（按条或按主题分组，一行一句，带编号与背诵工具）与<b>CCI 整段原文</b>（每条下的最后一个小节）。背诵版只切分、不改字；两者逐字相同（tools/verify_recite.py 核对）。')
+      + key('每部信经分两层：<b>背诵版</b>（一行一句，带编号与背诵工具）与<b>CCI 整段原文</b>。背诵版只切分、不改字；两者逐字相同（tools/verify_recite.py 核对）。')
       + note('三项联合信条（BC 9）接受这三份古代信经。逐句讲解、诵读与记忆工具在姊妹站<a href="'+CREEDS_SITE+'" target="_blank" rel="noopener">《三大公教会信经 · 欧陆改革宗深读》</a>。'))
     def block(key_,ztitle):
         d=C[key_]

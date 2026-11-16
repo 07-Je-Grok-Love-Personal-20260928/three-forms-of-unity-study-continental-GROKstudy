@@ -105,16 +105,20 @@ class Placer:
         return None
 # ---------- 真实地图（静态 SVG 文件） ----------
 def real_svg(spec, W=1000, fs=None):
-    """W=1000 桌面版；W=520 手机版（同一投影与纵横比，字号与标记按像素不变，缩到屏宽后仍可读）。"""
+    """W=1000 桌面版；W=520 手机版（同一投影与纵横比，字号与标记按像素不变，缩到屏宽后仍可读）。手机版在画布外加边距，避免标注贴边被裁。"""
     P, sx, sy, H, land, lakes, riv = base(spec["bbox"], W, spec.get("fine", False))
     fs = fs or spec.get("fs", 19)
-    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" font-family="\'Noto Sans CJK SC\',\'PingFang SC\',\'Microsoft YaHei\',\'Source Han Sans SC\',sans-serif">',
+    pad = 24 if W <= 520 else 0
+    VW, VH = W + 2 * pad, H + 2 * pad
+    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VW} {VH}" width="{VW}" height="{VH}" font-family="\'Noto Sans CJK SC\',\'PingFang SC\',\'Microsoft YaHei\',\'Source Han Sans SC\',sans-serif">',
          '<defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe6f5"/><stop offset="1" stop-color="#a9d0ea"/></linearGradient>',
          '<linearGradient id="ld" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf4e2"/><stop offset="1" stop-color="#efe2c0"/></linearGradient>']
     cols = sorted({PAL[r[2]] for r in spec.get("routes", ())})
     for c in cols: o.append(f'<marker id="a{c[1:]}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="{c}"/></marker>')
     o.append('</defs>')
-    o.append(f'<rect width="{W}" height="{H}" fill="url(#sea)"/>')
+    o.append(f'<rect width="{VW}" height="{VH}" fill="url(#sea)"/>')
+    if pad:
+        o.append(f'<g transform="translate({pad},{pad})">')
     st = 1 if (spec["bbox"][1] - spec["bbox"][0]) <= 10 else 5 if (spec["bbox"][1] - spec["bbox"][0]) <= 40 else 10
     g = []
     lo0, lo1, la0, la1 = spec["bbox"]
@@ -187,9 +191,11 @@ def real_svg(spec, W=1000, fs=None):
     o.append(f'<g transform="translate(18,{H - 18})"><rect x="-8" y="-24" width="{bl + 70:.0f}" height="34" rx="8" fill="#fffaf0" opacity=".8"/><path d="M0,0H{bl:.0f}" stroke="#2a2118" stroke-width="3"/><path d="M0,-6V4M{bl:.0f},-6V4" stroke="#2a2118" stroke-width="2"/><text x="{bl + 8:.0f}" y="4" font-size="14" fill="#2a2118">{nice} km</text></g>')
     o.append(f'<g transform="translate({W - 29},34)"><circle r="20" fill="#fffaf0" opacity=".85"/><path d="M0,-15L6,6L0,2L-6,6z" fill="#c0392b"/><text y="15" text-anchor="middle" font-size="11" font-weight="800" fill="#2a2118">N</text></g>')
     o.append(f'<text x="{cred[0]:.0f}" y="{cred[1]:.0f}" text-anchor="{cred[2]}" font-size="12" fill="#3d4a57" {halo.replace("stroke-width=\"4\"", "stroke-width=\"3\"")}>Natural Earth 底图 · 等距圆柱投影 · 本站绘制</text>')
+    if pad:
+        o.append('</g>')
     o.append('</svg>')
-    hs = [(m, (pos[m["k"]][0] / W * 100, pos[m["k"]][1] / H * 100)) for m in mk]
-    return "".join(o), W, H, hs
+    hs = [(m, ((pos[m["k"]][0] + pad) / VW * 100, (pos[m["k"]][1] + pad) / VH * 100)) for m in mk]
+    return "".join(o), VW, VH, hs
 def ink(c):
     r, g, b = (int(c[i:i + 2], 16) / 255 for i in (1, 3, 5))
     f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
@@ -252,9 +258,10 @@ def legend(spec):
     for i, m in enumerate(spec["markers"]):
         li.append(f'<li style="--c:{PAL[m.get("c", "blue")]};--t:{ink(PAL[m.get("c", "blue")])}" data-i="{i}" tabindex="0"><b class="rn">{i + 1}</b><span class="rmt"><b>{_h.escape(m["n"])}</b>{(" <i>" + _h.escape(m["en"]) + "</i>") if m.get("en") else ""} · <em>{_h.escape(m["y"])}</em>：{m["t"]}</span></li>')
     return f'<ol class="rm-leg">{"".join(li)}</ol>'
-def real_html(spec, svgW, svgH, hs, ver, hsm=None):
+def real_html(spec, svgW, svgH, hs, ver, hsm=None, ar_m=None):
     t = _h.escape(spec["title"])
     hsm = hsm or hs
+    Wm, Hm = ar_m or (svgW, svgH)
     b = "".join(f'<button type="button" class="rm-hs" style="--x:{x:.2f}%;--y:{y:.2f}%;--mx:{mx:.2f}%;--my:{my:.2f}%" data-i="{i}" aria-label="{i + 1} {_h.escape(m["n"])}"></button>' for i, ((m, (x, y)), (_, (mx, my))) in enumerate(zip(hs, hsm)))
     meta = json.dumps({
         "bbox": list(spec["bbox"]),
@@ -273,7 +280,7 @@ def real_html(spec, svgW, svgH, hs, ver, hsm=None):
         '</div>'
         '<p class="rm-st" role="status" aria-live="polite">当前：本地静态底图（Natural Earth 公有领域），无需网络，始终可用。在线源仅在点选后加载，8 秒无响应则自动返回本地。</p>'
     )
-    return (f'<figure class="rmap" data-src="local" data-rm="{_h.escape(meta, quote=True)}"><div class="rmw"><div class="rmv"><div class="rm-in" style="aspect-ratio:{svgW}/{svgH}">'
+    return (f'<figure class="rmap" data-src="local" data-rm="{_h.escape(meta, quote=True)}"><div class="rmw"><div class="rmv"><div class="rm-in" style="aspect-ratio:{svgW}/{svgH};--rm-ar-m:{Wm}/{Hm}">'
             f'<picture><source media="(max-width:700px)" srcset="assets/geo/{spec["id"]}-m.svg?v={ver}"><img src="assets/geo/{spec["id"]}.svg?v={ver}" width="{svgW}" height="{svgH}" loading="lazy" decoding="async" alt="{t}（真实地图：Natural Earth 海岸线与河流，标注 {len(hs)} 个地点）"></picture>{b}</div></div>'
             f'<button type="button" class="rm-go" aria-label="开启地图缩放与拖动">🔍 点按开启缩放 / 拖动</button>'
             f'<div class="rm-ctl"><button type="button" data-z="1" aria-label="放大">＋</button><button type="button" data-z="-1" aria-label="缩小">－</button><button type="button" data-z="0" aria-label="复位">⟲</button><button type="button" data-z="x" aria-label="结束缩放，恢复页面滚动">✕</button></div>'
@@ -293,10 +300,10 @@ def new_concept(spec):
 def build(spec, outdir, ver, concept_html=None):
     svg, W, H, hs = real_svg(spec)
     for m in spec["markers"]: m.pop("_nolab", None)
-    svgm, _, _, hsm = real_svg(spec, 520, 16)
+    svgm, Wm, Hm, hsm = real_svg(spec, 520, 16)
     for m in spec["markers"]: m.pop("_nolab", None)
     os.makedirs(outdir, exist_ok=True)
     open(os.path.join(outdir, spec["id"] + ".svg"), "w").write(svg)
     open(os.path.join(outdir, spec["id"] + "-m.svg"), "w").write(svgm)
     c = concept_html if concept_html is not None else new_concept(spec)
-    return pair(spec["id"], c, real_html(spec, W, H, hs, ver, hsm), spec["title"])
+    return pair(spec["id"], c, real_html(spec, W, H, hs, ver, hsm, (Wm, Hm)), spec["title"])
