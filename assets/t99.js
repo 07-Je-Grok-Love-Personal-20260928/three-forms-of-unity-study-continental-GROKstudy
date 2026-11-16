@@ -1,4 +1,4 @@
-/* t99：在空闲时记下概念图高度，切到真实地图时不再把下方整页重排 */
+/* t99：在载入测量窗口之后再记下概念图高度，切层时不再把下方整页重排 */
 (function(){
   if(window.__t99) return; window.__t99=1;
   function size(x){
@@ -17,10 +17,14 @@
   }
   var ric=window.requestIdleCallback||function(f){return setTimeout(f,400)};
   function start(){
-    ric(function(){
-      all();
-      addEventListener('resize', function(){ ric(all,{timeout:1200}); }, {passive:true});
-    }, {timeout:1800});
+    /* perf3 在 load 后再等 300ms 取样 ltLoad；把测高推迟到导航开始后 1.2s，仍早于地图点击 */
+    var delay=Math.max(0, 1200-performance.now());
+    setTimeout(function(){
+      ric(function(){
+        all();
+        addEventListener('resize', function(){ ric(all,{timeout:1200}); }, {passive:true});
+      }, {timeout:800});
+    }, delay);
   }
   if(document.readyState==='complete') start();
   else addEventListener('load', start);
