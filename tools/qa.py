@@ -21,6 +21,59 @@ JS_CLIP='''()=>{const out=[];document.querySelectorAll('main p,main li,main td,m
  if(el.scrollWidth>el.clientWidth+2&&(cs.overflowX==='hidden'||cs.overflowX==='clip')&&el.clientWidth>0&&getComputedStyle(el).display!=='inline') out.push(el.tagName+'.'+el.className+':'+(el.textContent||'').slice(0,20));
  });return out.slice(0,5)}'''
 JS_VIS='''()=>{let n=0,bad=[];document.querySelectorAll('.reveal').forEach(e=>{const o=parseFloat(getComputedStyle(e).opacity);if(o<0.99){n++;if(bad.length<3)bad.push(e.className.slice(0,30))}});return {hidden:n,bad:bad,js:document.documentElement.classList.contains('js')}}'''
+JS_T100=r'''()=>{
+  const bad=[];
+  const th=document.querySelector('.thbar');
+  if(th){
+    const cs=getComputedStyle(th);
+    if(cs.display!=='none' && cs.visibility!=='hidden' && +cs.opacity>0) bad.push('header thbar visible');
+  }
+  const main=document.getElementById('main');
+  if(main){
+    const first=main.firstElementChild;
+    if(first && first.classList && first.classList.contains('thbar')){
+      const cs=getComputedStyle(first);
+      if(cs.display!=='none') bad.push('thbar still first in main');
+    }
+  }
+  const nav=document.getElementById('navc');
+  if(!nav) bad.push('missing #navc');
+  const toc=document.getElementById('tocbtn');
+  function vis(el){
+    if(!el) return false;
+    const r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+    return r.width>2 && r.height>2 && cs.display!=='none' && cs.visibility!=='hidden' && +cs.opacity>=0.2 && cs.pointerEvents!=='none';
+  }
+  const crs=[];
+  if(vis(nav)){
+    const open=nav.classList.contains('open');
+    nav.querySelectorAll('.nv-t, #thmb, .nv-l > :not([hidden])').forEach(p=>{
+      if(p.closest('.nv-l') && !open){
+        const cs=getComputedStyle(p);
+        if(cs.visibility==='hidden'||+cs.opacity<0.2||cs.pointerEvents==='none') return;
+      }
+      const r=p.getBoundingClientRect();
+      const cs=getComputedStyle(p);
+      if(r.width>2&&r.height>2&&cs.visibility!=='hidden'&&+cs.opacity>=0.2) crs.push({sel:p.getAttribute('data-nv')||p.id||p.className||'nav',r});
+    });
+  }
+  if(vis(toc)) crs.push({sel:'#tocbtn',r:toc.getBoundingClientRect()});
+  const hits=[];
+  document.querySelectorAll('main p, main li, main h1, main h2, main h3, main h4, main td, main th, main svg, main .mapx, main .t90viz, main .hx, main figure, main table, main .ptabs a, main .hero h1').forEach(el=>{
+    if(el.closest('#navc')||el.closest('#thm')||el.closest('#tocbtn')) return;
+    const r=el.getBoundingClientRect();
+    if(r.width<4||r.height<4) return;
+    if(r.bottom<0||r.top>(window.innerHeight||0)||r.right<0||r.left>(window.innerWidth||0)) return;
+    for(const c of crs){
+      const a=c.r;
+      if(!(a.right<=r.left+1||a.left>=r.right-1||a.bottom<=r.top+1||a.top>=r.bottom-1)){
+        hits.push(c.sel+' overlaps '+el.tagName+'.'+String(el.className||'').slice(0,20));
+      }
+    }
+  });
+  if(hits.length) bad.push('nav overlap '+[...new Set(hits)].slice(0,6).join('; '));
+  return bad;
+}'''
 res=[];fail=0
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -37,7 +90,7 @@ with sync_playwright() as p:
                 h=pg.evaluate('document.documentElement.scrollHeight')
                 pg.evaluate('''async(h)=>{const f=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));for(let y=0;y<h;y+=700){window.scrollTo(0,y);await f();}}''',h)  # 单次 evaluate 内滚动，免去每步往返
                 pg.evaluate('window.scrollTo(0,0)'); pg.wait_for_timeout(200)
-            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS)
+            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS); t100=pg.evaluate(JS_T100)
             bad=[]
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
@@ -46,6 +99,7 @@ with sync_playwright() as p:
             if (nojs or rm) and vis['hidden']: bad.append(f"不可见元素 {vis}")
             if (nojs and vis['js']) : bad.append("no-JS 却带 js 类")
             if rm and vis['js']: bad.append("reduced-motion 却启用 reveal")
+            if t100: bad.append("t100: "+str(t100))
             if shots and w in (360,1280) and not nojs and not rm:
                 os.makedirs('_shots',exist_ok=True); pg.screenshot(path=f'_shots/{f[:-5]}_{w}.png',full_page=True)
             tag='FAIL' if bad else 'ok'

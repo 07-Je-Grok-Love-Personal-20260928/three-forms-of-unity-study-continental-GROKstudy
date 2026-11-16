@@ -1,0 +1,279 @@
+/* t100：去掉页首主题文字条；右下角统一半透明导航簇（后退/前进/到顶/到底/首页 + 主题） */
+/* 页首主题名选择器移除后，页签条回到主栏顶部，保持左右均衡 */
+.thbar{display:none!important}
+#main>.ptabs{margin-top:2px;padding-top:14px}
+
+/* 簇本体只包住 🎨+🧭，展开项绝对定位到左侧，避免隐形列表把玻璃面板撑高挡住正文 */
+#navc{
+  pointer-events:none;
+  position:fixed;
+  right:calc(12px + env(safe-area-inset-right,0px));
+  left:auto;
+  bottom:calc(66px + env(safe-area-inset-bottom,0px));
+  z-index:56;
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:flex-end;
+  gap:0;
+  padding:0;
+  margin:0;
+  border:none;
+  background:transparent;
+  box-shadow:none;
+  opacity:1;
+  transform:translateZ(0);
+  transition:transform .2s,opacity .2s,visibility .2s;
+}
+#navc .nv-dock{
+  pointer-events:auto;
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:center;
+  gap:6px;
+  padding:5px;
+  border-radius:16px;
+  border:1px solid rgba(var(--W),.14);
+  background:rgba(var(--D),.42);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  opacity:.62;
+  transition:opacity .2s,background .2s,border-color .2s;
+}
+#navc:hover .nv-dock,
+#navc:focus-within .nv-dock,
+#navc.open .nv-dock{
+  opacity:1;
+  background:rgba(var(--D),.78);
+  border-color:rgba(var(--A),.4);
+}
+#navc .nv-l{
+  position:absolute;
+  right:0;
+  bottom:100%;
+  left:auto;
+  top:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  margin:0 0 6px 0;
+  padding:5px;
+  border-radius:16px;
+  border:1px solid rgba(var(--W),.14);
+  background:rgba(var(--D),.72);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity .18s,transform .18s,visibility 0s .18s;
+  z-index:1;
+}
+#navc.open .nv-l,
+#navc:hover .nv-l,
+#navc:focus-within .nv-l{
+  visibility:visible;
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+  transition:opacity .18s,transform .18s;
+}
+#navc button,#navc a{
+  width:36px;height:36px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(var(--W),.18);
+  background:rgba(var(--D),.72);
+  color:var(--gtx,var(--gold2));
+  font:inherit;font-size:.98rem;line-height:1;
+  cursor:pointer;text-decoration:none;padding:0;
+  box-shadow:0 2px 10px rgba(0,0,0,.18);
+  transition:background .15s,border-color .15s,opacity .15s,transform .15s;
+  flex:none;
+}
+#navc button:hover,#navc a:hover,
+#navc button:focus-visible,#navc a:focus-visible{
+  background:rgba(var(--D),.96);
+  border-color:var(--gold);
+  opacity:1;
+  transform:translateY(-1px);
+}
+#navc button:focus-visible,#navc a:focus-visible,#thmb:focus-visible{
+  outline:3px solid #f08a24;outline-offset:2px;
+}
+#navc [disabled],#navc [aria-disabled=true]{
+  opacity:.38;cursor:not-allowed;transform:none;
+  background:rgba(var(--D),.55);
+}
+
+/* 主题按钮并入簇，不再单独占一个悬浮位 */
+#navc #thm{
+  position:relative;
+  right:auto;bottom:auto;left:auto;top:auto;
+  z-index:auto;
+  transform:none;
+}
+#navc #thmb.fab2{
+  width:36px;height:36px;
+  padding:0;gap:0;
+  display:grid;place-items:center;
+  font-size:1.05rem;
+  box-shadow:0 2px 10px rgba(0,0,0,.18);
+  background:rgba(var(--D),.72);
+}
+#navc #thmb.fab2:hover,#navc #thmb.fab2:focus-visible{
+  background:rgba(var(--D),.96);
+  border-color:var(--gold);
+  transform:translateY(-1px);
+}
+#navc #thmm{
+  right:0;
+  bottom:calc(100% + 8px);
+  left:auto;
+  z-index:57;
+}
+
+/* 目录按钮收成小圆，避免与簇抢宽、挡住正文 */
+#tocbtn.fab{
+  width:36px;height:36px;
+  padding:0;
+  display:grid;place-items:center;
+  font-size:1.05rem;
+  right:calc(18px + env(safe-area-inset-right,0px));
+  bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  z-index:55;
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+/* 正文为右下角簇与横向展开条留白 */
+#main{
+  padding-bottom:calc(108px + env(safe-area-inset-bottom,0px));
+  padding-right:max(clamp(14px,3vw,48px), calc(72px + env(safe-area-inset-right,0px)));
+}
+
+/* 打开目录抽屉时整簇（含主题）与目录按钮一起让开 */
+@media (max-width:1099px){
+  body.tocopen #navc,
+  body.tocopen #thm,
+  body.tocopen #tocbtn{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+@media (min-width:1100px){
+  body.tocopen #navc{z-index:48}
+}
+
+/* 手机：簇仍在右下，更小；展开改为两行以免过宽；滚动下藏 */
+@media (max-width:700px){
+  #main{
+    padding-left:max(12px, calc(12px + env(safe-area-inset-left,0px)));
+    padding-right:calc(52px + env(safe-area-inset-right,0px));
+    padding-bottom:calc(108px + env(safe-area-inset-bottom,0px));
+  }
+  #navc{
+    right:calc(8px + env(safe-area-inset-right,0px))!important;
+    left:auto!important;
+    bottom:calc(54px + env(safe-area-inset-bottom,0px));
+  }
+  #navc button,#navc a,#navc #thmb.fab2{
+    width:32px;height:32px;font-size:.9rem;
+  }
+  #navc .nv-l{
+    flex-wrap:nowrap;
+    width:auto;
+    flex-direction:column;
+  }
+  #tocbtn.fab{
+    width:32px;height:32px;
+    right:calc(14px + env(safe-area-inset-right,0px));
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  }
+  #navc.away{
+    opacity:0;
+    transform:translateY(calc(100% + 18px)) translateZ(0);
+    pointer-events:none;
+  }
+  #navc.open,#navc:focus-within{
+    opacity:1;transform:none;pointer-events:auto;
+  }
+  #navc.away::before{
+    content:"";
+    position:fixed;
+    left:auto!important;
+    right:0;
+    bottom:52px;
+    width:56px;height:64px;
+    pointer-events:auto;
+  }
+}
+@media (max-width:700px) and (prefers-reduced-motion:reduce){
+  #navc{transition:none}
+  #navc.away{transform:none;opacity:0}
+}
+
+/* 无脚本：至少保留到顶、到底、首页锚点（静态横向条） */
+html:not(.jsok) #navc{
+  display:flex!important;
+  opacity:1;
+  pointer-events:auto;
+  padding:5px;
+  border-radius:16px;
+  border:1px solid rgba(var(--W),.14);
+  background:rgba(var(--D),.6);
+}
+html:not(.jsok) #navc .nv-l{
+  position:static!important;
+  visibility:visible!important;
+  opacity:1!important;
+  transform:none!important;
+  pointer-events:auto!important;
+  flex-direction:column;
+  width:auto;
+  margin:0;
+  padding:0;
+  border:none;
+  background:transparent;
+  box-shadow:none;
+}
+html:not(.jsok) #navc [data-nv=back],
+html:not(.jsok) #navc [data-nv=fwd],
+html:not(.jsok) #navc .nv-t,
+html:not(.jsok) #navc #thm,
+html:not(.jsok) #navc .nv-dock,
+html:not(.jsok) #navc [data-nv=mk],
+html:not(.jsok) #navc [data-nv=leg]{
+  display:none!important;
+}
+
+@media print{
+  #navc,#thm,#tocbtn.fab{display:none!important}
+}
+
+/* 地图：屏外按需布局，隐藏层不再参与排版，减轻使徒信经页首屏长任务 */
+html.jsok .mapx{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 520px;
+  position:relative;
+}
+html.jsok .mapx[data-l=c]>.mx-r,
+html.jsok .mapx[data-l=r]>.mx-c{
+  content-visibility:hidden;
+  position:absolute;
+  width:100%;
+  height:0;
+  overflow:hidden;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+/* 1280 滚动：固定壳隔离，继续用浏览器原生平滑 */
+@media (min-width:1100px){
+  #navc,#tocbtn,#prog,#tocx{contain:layout style}
+  html{scroll-behavior:smooth}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #navc,#navc button,#navc a,#thmb.fab2,.nv-l,.nv-dock{transition:none}
+}
