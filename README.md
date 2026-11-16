@@ -25,7 +25,7 @@
 
 | 标签 | 说明 | 链接 |
 |---|---|---|
-| `v20261116-19` | v19 当前版本（2026-11-16 台北）：地图切层改回同格 visibility 切换以去掉点击长任务，屏外地图仍按需布局；导航与目录再让位 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261116-19 |
+| `v20261116-19` | v19 当前版本（2026-11-16 台北）：讲解再收紧（CCI 原文不动）；地图切层改回同格 visibility 切换以去掉点击长任务；手机真实地图加边距，避免贴边裁切；导航与目录再让位 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261116-19 |
 | `v20261116-18` | v18（恢复点：t101 前的线上版本 d7c22da）（2026-11-16 台北）：去掉页首主题文字选择，右下角统一导航簇（后退／前进／到顶／到底／首页／主题），手机滚动隐藏，无脚本保留到顶与首页；使徒信经页首屏长任务与 1280 滚动再优化 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261116-18 |
 | `v20261116-17` | v17（恢复点：t100 前的线上版本 d5fddcf）（2026-11-16 台北）：讲解再收紧（与历史块／地图重复的时间线与地理卡片删去，核心加记忆标记；CCI 原文不动）、地图切层预留高度、目录路径与 1280 滚动 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261116-17 |
 | `v20261114-16` | v16（恢复点：t99 前的线上版本 33d0050）（2026-11-14 台北）：对比度 AA、尼西亚标签避让、原文库页首屏长任务、说明再收紧、首页史地地图、目录润色 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261114-16 |
@@ -44,7 +44,7 @@
 
 | 版本 | 更新内容 | 仍可访问的链接 |
 |---|---|---|
-| **v19 · v20261116-19**（当前，2026-11-16 台北） | 地图切层改回同一格叠放、用 visibility 切换，避免点到真实地图时整页重排；屏外地图仍按需布局，使徒信经页首屏长任务保持缩短。导航簇与目录再让出右下角空隙。域名 three-forms-of-unity-study-continental-20261116-v19-grokstudy。 | 旧版本：[Netlify](https://three-forms-of-unity-study-continental-20261116-v18-grokstudy.netlify.app/) · [Surge](https://three-forms-of-unity-study-continental-20261116-v18-grokstudy.surge.sh/) |
+| **v19 · v20261116-19**（当前，2026-11-16 台北） | 讲解再收紧（CCI 原文不动）。地图切层改回同一格叠放、用 visibility 切换，避免点到真实地图时整页重排；屏外地图仍按需布局。手机真实地图加边距，避免贴边裁切标注。导航簇与目录再让出右下角空隙。域名 three-forms-of-unity-study-continental-20261116-v19-grokstudy。 | 旧版本：[Netlify](https://three-forms-of-unity-study-continental-20261116-v18-grokstudy.netlify.app/) · [Surge](https://three-forms-of-unity-study-continental-20261116-v18-grokstudy.surge.sh/) |
 | **v18 · v20261116-18**（恢复点 d7c22da，2026-11-16 台北） | 去掉页首「🎨 主题」名称选择条，主题只由右下角按钮挑选并记在本机；把后退、前进、到顶、到底、首页与主题收成同一组半透明玻璃导航簇（无重复控件；无脚本时仍可用到顶与首页锚点）。手机上簇更小，向下滚动自动隐藏、上滚或点按再显示，打开目录抽屉时让开，不挡住正文与图表。使徒信经姊妹站同类页的屏外地图改为按需布局；桌面 1280 继续用浏览器原生平滑滚动。域名 three-forms-of-unity-study-continental-20261116-v18-grokstudy。 | 旧版本：[Netlify](https://three-forms-of-unity-study-continental-20261116-v17-grokstudy.netlify.app/) · [Surge](https://three-forms-of-unity-study-continental-20261116-v17-grokstudy.surge.sh/) |
 | **v17 · v20261116-17**（恢复点 d5fddcf，2026-11-16 台北） | 讲解再收紧：删去与历史块、地图图例重复的时间线条目与地理卡片，突出教义核心并加强记忆标记（CCI 原文不动）。地图切层预留概念图高度，减轻首页地图点击长任务；历史文化块与目录当前路径更清晰；桌面 1280 滚动继续用浏览器原生平滑。域名 three-forms-of-unity-study-continental-20261116-v17-grokstudy。 | 旧版本：[Netlify](https://three-forms-of-unity-study-continental-20261114-v16-grokstudy.netlify.app/) · [Surge](https://three-forms-of-unity-study-continental-20261114-v16-grokstudy.surge.sh/) |
 | **v16 · v20261114-16**（恢复点 33d0050，2026-11-14 台北） | 对比度：首页主标题改为实色，故事线步骤图标达到 WCAG AA；尼西亚概念图标签避让加宽，去掉「西尔米乌姆」与「下多瑙河哥特人」的重叠。性能：增强脚本错开为短任务，载入时不再强制读取目录宽度；原文库页 390px 首屏长任务多次实测为 0。说明再收紧导语重复句（CCI 原文不动）。首页补上改革宗欧洲概念图与多源真实地图；目录当前一级加粗，收起项更安静。域名 three-forms-of-unity-study-continental-20261114-v16-grokstudy。 |
