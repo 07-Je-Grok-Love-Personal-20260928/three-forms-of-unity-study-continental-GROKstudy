@@ -1,9 +1,28 @@
 /* t99：地图切层隔离、1280 滚动隔离、目录路径与记忆标记、史地块观感 */
-html.jsok .mapx{contain:layout style;content-visibility:visible}
-html.jsok .mapx .mx-c,
-html.jsok .mapx .mx-r{min-height:var(--mxh,0px);contain:layout style}
-html.jsok .mapx[data-ready] .mx-c,
-html.jsok .mapx[data-ready] .mx-r{box-sizing:border-box}
+/* 两层叠在同一格，用 visibility 切换，避免 display:none 把下方整页重排；无需在载入或滚动时测高 */
+html.jsok .mapx{
+  contain:layout style;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+}
+html.jsok .mapx>.mx-tabs{grid-row:1;grid-column:1}
+html.jsok .mapx>.mx-c,
+html.jsok .mapx>.mx-r{
+  grid-row:2;grid-column:1;
+  contain:layout style;
+  display:block!important;
+}
+html.jsok .mapx[data-l=c]>.mx-r,
+html.jsok .mapx[data-l=r]>.mx-c{
+  visibility:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+html.jsok .mapx[data-l=c]>.mx-c,
+html.jsok .mapx[data-l=r]>.mx-r{
+  visibility:visible;
+  z-index:1;
+}
 .mapx .mxh{line-height:1.35;text-wrap:pretty;font-size:1.05em}
 .mapx .mx-tabs{gap:.4rem;flex-wrap:wrap}
 .mapx .mx-tabs [aria-selected=true]{
