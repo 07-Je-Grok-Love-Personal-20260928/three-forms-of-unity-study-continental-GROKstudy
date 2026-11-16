@@ -90,12 +90,14 @@ html:not(.mkoff) .mk-u{
 /* 导航簇：按钮间距略松，窄屏再让出 2px */
 #navc .nv-dock{gap:8px}
 #navc .nv-l{row-gap:6px}
+/* 窄屏：导航簇必须叠在目录按钮之上，不能盖住 ☰ */
 @media (max-width:700px){
   #navc{
-    right:calc(12px + env(safe-area-inset-right,0px));
-    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    right:calc(10px + env(safe-area-inset-right,0px));
+    bottom:calc(56px + env(safe-area-inset-bottom,0px));
   }
   #tocbtn.fab{
-    right:calc(18px + env(safe-area-inset-right,0px));
+    right:calc(16px + env(safe-area-inset-right,0px));
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
   }
 }

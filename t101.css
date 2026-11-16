@@ -1,0 +1,103 @@
+/* t101：恢复地图切层不重排（修回点击长任务），屏外地图仍按需布局；轻微导航/目录让位 */
+/* 覆盖 t100 对隐藏层 height:0 / content-visibility:hidden，避免切到真实地图时整页重排 */
+html.jsok .mapx{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 520px;
+  position:relative;
+  contain:layout style;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+}
+html.jsok .mapx>.mx-tabs{grid-row:1;grid-column:1}
+html.jsok .mapx>.mx-c,
+html.jsok .mapx>.mx-r{
+  grid-row:2;grid-column:1;
+  contain:layout style;
+  display:block!important;
+  position:static;
+  width:auto;
+  height:auto;
+  overflow:visible;
+  content-visibility:visible;
+}
+html.jsok .mapx[data-l=c]>.mx-r,
+html.jsok .mapx[data-l=r]>.mx-c{
+  visibility:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+html.jsok .mapx[data-l=c]>.mx-c,
+html.jsok .mapx[data-l=r]>.mx-r{
+  visibility:visible;
+  z-index:1;
+}
+
+/* 手机真实地图：避免贴边裁切标注 */
+@media (max-width:700px){
+  .rm-in{
+    padding:6px 8px;
+    box-sizing:border-box;
+  }
+  .mapx .cmap svg, .mx-c svg{
+    overflow:visible;
+  }
+}
+
+/* 导航簇与目录：右下角再让出 4px，避免贴图表 */
+#navc{
+  right:calc(14px + env(safe-area-inset-right,0px));
+}
+#tocbtn.fab{
+  right:calc(20px + env(safe-area-inset-right,0px));
+}
+@media (min-width:1100px){
+  #main{
+    padding-right:max(clamp(14px,3vw,48px), calc(76px + env(safe-area-inset-right,0px)));
+  }
+  #navc,#tocbtn,#prog,#tocx{contain:layout style}
+  html{scroll-behavior:smooth}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+
+/* 手机真实地图：用专用画幅比例，避免桌面比例把加边距的图裁切或拉伸 */
+@media (max-width:700px){
+  .rm-in{
+    aspect-ratio:var(--rm-ar-m, auto)!important;
+    padding:0;
+  }
+  .rm-in img,.rm-in picture{
+    overflow:visible;
+  }
+}
+
+/* 历史文化块：年份与卡片稍加透气 */
+.hx .hxc{letter-spacing:.01em}
+.hxu li{padding:.5rem .72rem}
+.hxs,.hxl .hxe{line-height:1.5}
+.hx time,.hxy{font-variant-numeric:tabular-nums}
+
+/* 记忆标记：荧光底略增高，实线稍离开字形 */
+html:not(.mkoff) .mk-hl{
+  background-size:100% 54%;
+}
+html:not(.mkoff) .mk-u{
+  text-decoration-thickness:2.75px;
+  text-underline-offset:.3em;
+}
+
+/* 导航簇：按钮间距略松，窄屏再让出 2px */
+#navc .nv-dock{gap:8px}
+#navc .nv-l{row-gap:6px}
+/* 窄屏：导航簇必须叠在目录按钮之上，不能盖住 ☰ */
+@media (max-width:700px){
+  #navc{
+    right:calc(10px + env(safe-area-inset-right,0px));
+    bottom:calc(56px + env(safe-area-inset-bottom,0px));
+  }
+  #tocbtn.fab{
+    right:calc(16px + env(safe-area-inset-right,0px));
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  }
+}
