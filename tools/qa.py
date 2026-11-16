@@ -58,10 +58,23 @@ JS_T100=r'''()=>{
     });
   }
   if(vis(toc)) crs.push({sel:'#tocbtn',r:toc.getBoundingClientRect()});
+  function visRect(el){
+    let r=el.getBoundingClientRect();
+    let L=r.left,T=r.top,R=r.right,B=r.bottom;
+    for(let p=el.parentElement;p&&p!==document.body;p=p.parentElement){
+      const cs=getComputedStyle(p);
+      const ox=cs.overflowX, oy=cs.overflowY;
+      if(ox==='auto'||ox==='scroll'||ox==='hidden'||ox==='clip'||oy==='auto'||oy==='scroll'||oy==='hidden'||oy==='clip'){
+        const pr=p.getBoundingClientRect();
+        L=Math.max(L,pr.left); T=Math.max(T,pr.top); R=Math.min(R,pr.right); B=Math.min(B,pr.bottom);
+      }
+    }
+    return {left:L,top:T,right:R,bottom:B,width:R-L,height:B-T};
+  }
   const hits=[];
   document.querySelectorAll('main p, main li, main h1, main h2, main h3, main h4, main td, main th, main svg, main .mapx, main .t90viz, main .hx, main figure, main table, main .ptabs a, main .hero h1').forEach(el=>{
     if(el.closest('#navc')||el.closest('#thm')||el.closest('#tocbtn')) return;
-    const r=el.getBoundingClientRect();
+    const r=visRect(el);
     if(r.width<4||r.height<4) return;
     if(r.bottom<0||r.top>(window.innerHeight||0)||r.right<0||r.left>(window.innerWidth||0)) return;
     for(const c of crs){
