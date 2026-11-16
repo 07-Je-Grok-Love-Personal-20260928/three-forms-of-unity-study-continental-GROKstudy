@@ -1,0 +1,53 @@
+/* t99：地图切层隔离、1280 滚动隔离、目录路径与记忆标记、史地块观感 */
+html.jsok .mapx{contain:layout style;content-visibility:visible}
+html.jsok .mapx .mx-c,
+html.jsok .mapx .mx-r{min-height:var(--mxh,0px);contain:layout style}
+html.jsok .mapx[data-ready] .mx-c,
+html.jsok .mapx[data-ready] .mx-r{box-sizing:border-box}
+.mapx .mxh{line-height:1.35;text-wrap:pretty;font-size:1.05em}
+.mapx .mx-tabs{gap:.4rem;flex-wrap:wrap}
+.mapx .mx-tabs [aria-selected=true]{
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--gold,#d4af37) 55%,transparent)
+}
+.hx{border-radius:14px;padding:.2rem 0 .4rem}
+.hx .hxc{font-size:1.02em;line-height:1.55}
+.hx .hxc b{color:color-mix(in srgb,var(--gold,#d4af37) 70%,var(--dkc,#fff) 30%)}
+.hxu{display:grid;gap:.45rem .8rem;margin:.6rem 0 0}
+@media (min-width:760px){.hxu{grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}}
+.hxu li{background:color-mix(in srgb,var(--card,#fff) 88%,transparent);border-radius:10px;padding:.45rem .65rem}
+.hxl .hxe{line-height:1.45}
+.hxs{opacity:.82;font-size:.92em}
+
+/* 记忆标记：核心更醒目，不改对比度体系 */
+.call.key{box-shadow:inset 3px 0 0 var(--gold,#d4af37)}
+.mk-hl{
+  background-image:linear-gradient(transparent 46%,color-mix(in srgb,var(--c-hl,#ffe08a) 90%,transparent) 46%);
+  padding:0 .08em
+}
+span.memn,.mk-pin{
+  font-variant-numeric:tabular-nums;
+  font-weight:700
+}
+
+/* 目录：当前路径更清楚，编号对齐；已背项保持标记 */
+#toc .t1.cur>.t1r{font-weight:800}
+#toc .t1.cur .t2.cur>.t2r,
+#toc .t2.cur>.t2r{
+  background:color-mix(in srgb,var(--gold,#d4af37) 12%,transparent)
+}
+#toc .t1r .n,#toc .t2r .n,#toc .n3,#toc .n{
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum";opacity:.88
+}
+#toc .done>a,#toc a.done,#toc .t3.done .t3r{
+  box-shadow:inset 2px 0 0 color-mix(in srgb,var(--c-sp,#6fd3a0) 80%,transparent)
+}
+
+/* 1280 滚动：隔离页眉与目录，不关掉原生平滑 */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html,#toc,.tocx{scroll-behavior:auto}
+}
+@media (min-width:1100px){
+  #navc,#prog,#tocx,aside#toc,#toc{contain:layout style}
+  main>section.l1,.mapx,.hx,.t91flow{contain:layout style}
+}

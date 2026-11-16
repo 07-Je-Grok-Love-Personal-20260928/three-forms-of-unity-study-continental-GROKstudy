@@ -35,7 +35,7 @@ def apply(h, page, site):
     for pg, sid, spec in NEW:
         if pg != page + ".html": continue
         e = sec_end(h, sid)
-        blk = f'<h4 class="mxh">🗺️ 史地补充：{spec["title"]}</h4>' + rmap.build(spec, out, ver)
+        blk = f'<h4 class="mxh">🗺️ {spec["title"]}</h4>' + rmap.build(spec, out, ver)
         h = h[:e] + blk + h[e:]; n += 1
     HX = (hist89.TFU if site == "tfu" else hist89.TEC).get(page + ".html")
     if HX:
