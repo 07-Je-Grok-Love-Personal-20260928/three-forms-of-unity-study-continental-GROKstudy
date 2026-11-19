@@ -19,7 +19,7 @@ def apply(h, page, site):
             return h
         ver = h[i + len(needle):j]
         old = f'<link rel="stylesheet" href="assets/t101.css?v={ver}">'
-        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r3">'
+        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r4">'
         if old in h:
             h = h.replace(old, new, 1)
         else:

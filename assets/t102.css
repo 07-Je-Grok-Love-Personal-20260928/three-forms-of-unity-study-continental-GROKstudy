@@ -104,3 +104,16 @@ html:not(.mkoff) .mk-u{
 #navc[data-t102ico] a:focus-visible svg{
   transform:none;
 }
+
+/* t103 lecture/commentary pages — distinct from CCI text */
+.lec-banner{margin:0 0 1rem;max-width:72ch}
+.lec-cite{margin-left:.35em;font-size:.78em;font-style:normal;opacity:.72;white-space:nowrap}
+.lec-cite::before{content:"〔"}
+.lec-cite::after{content:"〕"}
+.lec-struct{font-size:.92em;opacity:.9}
+.lec-k{margin:.8rem 0 .25rem;font-weight:700}
+.lec-pts,.lec-ov,.lec-q{margin:.2rem 0 .8rem;padding-left:1.2em}
+.lec-pts li,.lec-ov li,.lec-q li{margin:.28rem 0;max-width:72ch}
+.lec-ov li{list-style:disc}
+.lec-src{font-size:.86em;opacity:.8;margin-top:.6rem}
+.lec-banner b{margin-right:.35em}
