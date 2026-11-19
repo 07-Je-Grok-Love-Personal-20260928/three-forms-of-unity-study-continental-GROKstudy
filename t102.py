@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-"""t102 后处理：接入本轮样式，并把 t102.js 接进既有错开加载链。"""
+"""t102 后处理：接入本轮样式，并把 t102.js 提前加载（独立查询串，避免旧缓存）。"""
+import re
+
+_T97 = re.compile(
+    r'(<script src="assets/t97\.js\?v=([^"]+)" defer data-t97-chain[^>]*>\s*</script>)'
+)
+
 def apply(h, page, site):
     if "assets/t101.css" not in h:
         print("t102 MISS t101.css", site, page)
@@ -13,7 +19,7 @@ def apply(h, page, site):
             return h
         ver = h[i + len(needle):j]
         old = f'<link rel="stylesheet" href="assets/t101.css?v={ver}">'
-        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}">'
+        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r2">'
         if old in h:
             h = h.replace(old, new, 1)
         else:
@@ -24,4 +30,11 @@ def apply(h, page, site):
         h = h.replace(oldc, newc, 1)
     elif "t101,t102" not in h:
         print("t102 MISS chain", site, page)
+    if "assets/t102.js?v=" not in h:
+        m = _T97.search(h)
+        if m:
+            ver = m.group(2)
+            h = h[:m.end()] + f'<script src="assets/t102.js?v={ver}.r2" defer></script>' + h[m.end():]
+        else:
+            print("t102 MISS early script", site, page)
     return h
