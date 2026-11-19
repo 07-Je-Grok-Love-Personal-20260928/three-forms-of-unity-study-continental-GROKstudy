@@ -6,6 +6,8 @@ html.jsok .mapx.is-warm>.mx-c,
 html.jsok .mapx.is-warm>.mx-r{
   visibility:visible;
   will-change:opacity;
+  transform:translateZ(0);
+  contain:layout style paint;
 }
 html.jsok .mapx.is-warm[data-l=c]>.mx-r,
 html.jsok .mapx.is-warm[data-l=r]>.mx-c{
