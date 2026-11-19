@@ -19,7 +19,7 @@ def apply(h, page, site):
             return h
         ver = h[i + len(needle):j]
         old = f'<link rel="stylesheet" href="assets/t101.css?v={ver}">'
-        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r2">'
+        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r3">'
         if old in h:
             h = h.replace(old, new, 1)
         else:
@@ -34,7 +34,7 @@ def apply(h, page, site):
         m = _T97.search(h)
         if m:
             ver = m.group(2)
-            h = h[:m.end()] + f'<script src="assets/t102.js?v={ver}.r2" defer></script>' + h[m.end():]
+            h = h[:m.end()] + f'<script src="assets/t102.js?v={ver}.r3" defer></script>' + h[m.end():]
         else:
             print("t102 MISS early script", site, page)
     return h
