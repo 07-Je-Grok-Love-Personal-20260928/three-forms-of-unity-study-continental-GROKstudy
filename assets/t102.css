@@ -1,0 +1,46 @@
+/* t102：已接近视口的地图预绘真实图层，切层只改透明度，避免整页重排与长任务 */
+html.jsok .mapx.is-warm{
+  content-visibility:visible;
+}
+html.jsok .mapx.is-warm>.mx-c,
+html.jsok .mapx.is-warm>.mx-r{
+  visibility:visible;
+  will-change:opacity;
+}
+html.jsok .mapx.is-warm[data-l=c]>.mx-r,
+html.jsok .mapx.is-warm[data-l=r]>.mx-c{
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+}
+html.jsok .mapx.is-warm[data-l=c]>.mx-c,
+html.jsok .mapx.is-warm[data-l=r]>.mx-r{
+  opacity:1;
+  pointer-events:auto;
+  z-index:1;
+}
+
+/* 历史文化块：年份与卡片层次略清晰 */
+.hx .hxc{font-feature-settings:"tnum";letter-spacing:.02em}
+.hxu li{border-radius:10px}
+.hxl li{border-left-width:3px}
+
+/* 记忆标记：荧光底略升高，实线稍离开字形，便于扫读 */
+html:not(.mkoff) .mk-hl{
+  background-size:100% 56%;
+  background-position:0 92%;
+}
+html:not(.mkoff) .mk-u{
+  text-underline-offset:.32em;
+}
+
+/* 导航簇与目录：焦点环更清楚；窄屏簇与目录按钮再隔开 2px */
+#navc button:focus-visible,#navc a:focus-visible,#tocbtn.fab:focus-visible{
+  outline:2px solid var(--accent,#d4af37);
+  outline-offset:2px;
+}
+@media (max-width:700px){
+  #navc{
+    bottom:calc(58px + env(safe-area-inset-bottom,0px));
+  }
+}
