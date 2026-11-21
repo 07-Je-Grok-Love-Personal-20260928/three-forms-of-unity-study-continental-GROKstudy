@@ -202,8 +202,11 @@ main .bt b{font-size:10px!important}
    Margin, not padding, so the border box itself does not overlap the button.
    This is not a page-wide right gutter. */
 @media (max-width:800px){
-  main .icm-n, main p.ex, main p.exn, main p.lead{
-    margin-right:52px;
+  main .icm-n, main p.ex, main p.exn, main p.lead,
+  main h2, main h3, main h4{
+    margin-right:52px!important;
+    max-width:calc(100% - 52px)!important;
+    box-sizing:border-box;
   }
   /* Wide comparison tables overflow their column; make the table itself
      the scrollport so its border box stays left of the fixed nav cluster. */
