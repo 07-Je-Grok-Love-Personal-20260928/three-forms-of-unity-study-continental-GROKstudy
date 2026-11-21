@@ -196,3 +196,24 @@ main .bt b{font-size:10px!important}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto!important}
 }
+
+/* When a footnote, example block, or sources table sits in the bottom-right
+   of the viewport, keep its box clear of the fixed #tocbtn / nav cluster.
+   Margin, not padding, so the border box itself does not overlap the button.
+   This is not a page-wide right gutter. */
+@media (max-width:800px){
+  main .icm-n, main p.ex, main p.exn, main p.lead{
+    margin-right:52px;
+  }
+  /* Wide comparison tables overflow their column; make the table itself
+     the scrollport so its border box stays left of the fixed nav cluster. */
+  main table.cmp, main table{
+    display:block;
+    overflow-x:auto;
+    box-sizing:border-box;
+    min-width:0!important;
+    width:calc(100% - 52px)!important;
+    max-width:calc(100% - 52px)!important;
+    margin-right:52px!important;
+  }
+}
