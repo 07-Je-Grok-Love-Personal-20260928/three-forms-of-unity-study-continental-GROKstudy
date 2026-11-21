@@ -41,3 +41,90 @@ html{overflow-x:hidden;scrollbar-gutter:auto}
 @media (max-width:700px){
   .map figcaption{max-width:100%}
 }
+
+/* ---- Compact card/tile grids (HC 52, BC 37, creed articles, memory maps) ----
+   4–5 columns on a 390px phone, more via auto-fill minmax on tablet/desktop.
+   ~11–12px type, tight padding, smaller icons, titles clamped to 2 lines,
+   tap height at least 32px. Icons and colours unchanged. */
+
+.icm,.qac{
+  margin:8px 0 10px;
+  padding:8px 6px;
+  border-radius:12px;
+}
+.icm-h,.qac-h{margin-bottom:6px;gap:4px 8px}
+.icm-h>b,.qac-h>b{font-size:.9rem}
+.icm-k{gap:4px 8px;font-size:.72rem}
+.icm-s{margin:8px 0 4px;font-size:.8rem}
+.icm-g{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(68px,1fr));
+  gap:4px;
+}
+.icm-t{
+  padding:3px 4px 4px;
+  border-radius:8px;
+  border-top-width:2px;
+  column-gap:4px;
+  min-height:32px;
+  align-items:center;
+}
+.icm-t::before{
+  font-size:12px;
+  line-height:1;
+}
+.icm-t b{
+  font-size:10px;
+  line-height:1.1;
+}
+.icm-t small{
+  font-size:11px;
+  line-height:1.2;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  overflow:hidden;
+}
+.icm-t:hover,
+.js .icm.reveal.in .icm-t:hover{
+  transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(0,0,0,.16);
+}
+.icm-n{margin:6px 0 0;font-size:.75rem}
+
+@media (min-width:520px){
+  .icm-g{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:5px}
+  .icm,.qac{padding:10px 8px}
+}
+@media (min-width:760px){
+  .icm-g{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+  .icm-t{padding:4px 6px}
+  .icm-t::before{font-size:14px}
+  .icm-t small{font-size:12px}
+}
+@media (min-width:1100px){
+  .icm-g{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+}
+
+/* Q-A structure chips: tighter, still tappable */
+.qac-s{padding:6px 8px;column-gap:6px;min-height:32px}
+.qac-s i{width:22px;height:22px;font-size:.72rem}
+.qac-s small{font-size:.7rem}
+
+/* Index / section stat tiles */
+@media (max-width:700px){
+  .vst{gap:6px;margin:8px 0;grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .vst>div{padding:8px 8px;border-radius:10px;column-gap:6px;border-top-width:2px}
+  .vst i{font-size:1.15rem}
+  .vst b{font-size:1.25rem}
+  .vst small{font-size:.7rem}
+}
+
+/* People / myth / visit-style tiles: less inset on phones */
+@media (max-width:700px){
+  .people,.myths{gap:6px}
+  .pp,.my{padding:8px 8px;border-radius:10px}
+  .stats{gap:6px;margin:0 0 12px}
+  .stats div{padding:8px;border-radius:10px}
+}
