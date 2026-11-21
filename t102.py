@@ -19,7 +19,7 @@ def apply(h, page, site):
             return h
         ver = h[i + len(needle):j]
         old = f'<link rel="stylesheet" href="assets/t101.css?v={ver}">'
-        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r4">'
+        new = old + f'<link rel="stylesheet" href="assets/t102.css?v={ver}.r5">'
         if old in h:
             h = h.replace(old, new, 1)
         else:
@@ -37,4 +37,6 @@ def apply(h, page, site):
             h = h[:m.end()] + f'<script src="assets/t102.js?v={ver}.r3" defer></script>' + h[m.end():]
         else:
             print("t102 MISS early script", site, page)
+    # cache-bust badge-contrast stylesheet (r4 → r5)
+    h = re.sub(r'(assets/t102\.css\?v=[^"\']*?)\.r4(["\'])', r'\1.r5\2', h)
     return h

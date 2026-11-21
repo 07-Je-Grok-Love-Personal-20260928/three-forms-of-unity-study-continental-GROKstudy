@@ -1,0 +1,43 @@
+/* t106: phone/tablet main column goes edge-to-edge.
+   Do not reserve a right strip for the floating nav cluster (it overlays).
+   Keep CCI text unchanged — stylesheet only. */
+
+html{overflow-x:hidden;scrollbar-gutter:auto}
+
+/* Closed TOC was translated -102% but still painted a 20px box-shadow sliver
+   on the left edge of the phone screen. Hide it until the drawer is open. */
+@media (max-width:1099px){
+  body:not(.tocopen) #toc,
+  body:not(.tocopen) #tocgrip{
+    box-shadow:none;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  body.tocopen #toc,
+  body.tocopen #tocgrip{
+    visibility:visible;
+    pointer-events:auto;
+  }
+}
+
+/* Tablets included (820): drop large clamp() gutters and the 52–76px
+   right pad that t100 reserved for #navc. Safe-area is still honoured. */
+@media (max-width:1099px){
+  #main{
+    margin-left:0;
+    padding-left:max(8px, env(safe-area-inset-left,0px));
+    padding-right:max(8px, env(safe-area-inset-right,0px));
+  }
+}
+
+@media (max-width:700px){
+  #main{
+    padding-left:max(6px, env(safe-area-inset-left,0px));
+    padding-right:max(6px, env(safe-area-inset-right,0px));
+  }
+}
+
+/* Don't let 100vw (scrollbar-inclusive) inflate captions past the column. */
+@media (max-width:700px){
+  .map figcaption{max-width:100%}
+}

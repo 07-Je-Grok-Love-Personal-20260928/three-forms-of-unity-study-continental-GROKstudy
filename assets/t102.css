@@ -117,3 +117,15 @@ html:not(.mkoff) .mk-u{
 .lec-ov li{list-style:disc}
 .lec-src{font-size:.86em;opacity:.8;margin-top:.6rem}
 .lec-banner b{margin-right:.35em}
+
+/* t103: .rm-leg number badges. Purple #8b5cf6 / pink #d6457a cannot reach
+   WCAG AA (4.5) with either white or #1a1206 (they measure 4.23 / 4.21).
+   Darken only the badge fill and use white numbers. Map colours stay --c. */
+.rm-leg li[style*="--c:#8b5cf6"] .rn{
+  background:#8558ec;
+  color:#fff;
+}
+.rm-leg li[style*="--c:#d6457a"] .rn{
+  background:#cb4274;
+  color:#fff;
+}

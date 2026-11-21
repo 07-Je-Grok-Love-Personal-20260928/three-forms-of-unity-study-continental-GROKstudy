@@ -102,4 +102,5 @@ def apply(h, page, site):
     import t100; h = t100.apply(h, page, site)
     import t101; h = t101.apply(h, page, site)
     import t102; h = t102.apply(h, page, site)
+    import t106; h = t106.apply(h, page, site)
     return h
