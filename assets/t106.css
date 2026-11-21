@@ -128,3 +128,66 @@ html{overflow-x:hidden;scrollbar-gutter:auto}
   .stats{gap:6px;margin:0 0 12px}
   .stats div{padding:8px;border-radius:10px}
 }
+
+/* styles.css floors main small at 14.2px !important (body text). Card titles
+   must beat that so the dense 52-grid can use ~11–12px as requested. */
+main .icm-t small,
+main .icm-t b,
+main .bt small,
+main .bt b,
+main .dh4 a small,
+main .qac-s small,
+main .vst small{
+  font-size:11px!important;
+  line-height:1.2!important;
+}
+main .icm-t b,
+main .bt b{font-size:10px!important}
+@media (min-width:760px){
+  main .icm-t small,
+  main .bt small,
+  main .dh4 a small{font-size:12px!important}
+}
+
+/* Belgic .bct/.bt jump tiles (37 articles on tfu bc.html) */
+.bct{
+  grid-template-columns:repeat(auto-fill,minmax(62px,1fr))!important;
+  gap:4px;
+}
+.bt{
+  padding:3px 3px 4px;
+  border-radius:8px;
+  min-height:32px;
+  gap:0;
+}
+.bt b{font-size:10px;line-height:1.1}
+.bt small{
+  font-size:11px;
+  line-height:1.2;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  overflow:hidden;
+  width:100%;
+}
+@media (min-width:520px){
+  .bct{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:5px}
+}
+@media (min-width:760px){
+  .bct{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+}
+@media (min-width:1100px){
+  .bct{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:7px}
+}
+
+/* Dort head jump cards */
+@media (max-width:700px){
+  .dh4{gap:6px;grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .dh4 a{padding:6px 8px;border-radius:8px;border-top-width:2px;min-height:32px}
+}
+
+/* Keep the 52-grid heading compact so the map itself can fill a phone screen */
+@media (max-width:700px){
+  .icm-h>b{font-size:.8rem;line-height:1.25}
+}
