@@ -1,10 +1,10 @@
-"""Playwright QA：每页 × 5 个宽度。检查水平溢出、被裁切的文字、JS 错误、no-JS 与 reduced-motion 下内容可见。
+"""Playwright QA：每页 × 6 个宽度。检查水平溢出、被裁切的文字、JS 错误、no-JS 与 reduced-motion 下内容可见。
 用法：python3 tools/qa.py [--shots] [--nojs] [--rm] [页面...]  （file:// 打开）"""
 import sys,os,glob,json
 from playwright.sync_api import sync_playwright
 args=sys.argv[1:]; shots='--shots' in args; nojs='--nojs' in args; rm='--rm' in args; opn='--open' in args
 pages=[a for a in args if a.endswith('.html')] or sorted(glob.glob('*.html'))
-W=[360,390,768,1280,1440]
+W=[360,390,430,768,1280,1440]
 JS_OVER='''()=>{
  const vw=document.documentElement.clientWidth, out=[];
  const sc=(el)=>{for(let p=el;p&&p!==document.body;p=p.parentElement){const o=getComputedStyle(p).overflowX; if((o==='auto'||o==='scroll')&&p.scrollWidth>p.clientWidth) return true;} return false};
