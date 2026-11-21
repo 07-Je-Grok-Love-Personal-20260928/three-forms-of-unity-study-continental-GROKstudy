@@ -193,6 +193,16 @@ main .bt b{font-size:10px!important}
 }
 
 /* Reduced motion: no smooth-scroll lag, and QA can measure overlap at the real top. */
+/* No-JS only: the nav dock stays fully expanded, so body copy must
+   clear the taller stack. JS phones keep edge-to-edge paragraphs. */
+@media (max-width:800px){
+  html:not(.jsok) main p, html:not(.jsok) main li{
+    margin-right:52px!important;
+    max-width:calc(100% - 52px)!important;
+    box-sizing:border-box;
+  }
+}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto!important}
 }
