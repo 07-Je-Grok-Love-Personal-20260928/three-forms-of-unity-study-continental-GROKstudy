@@ -1,23 +1,23 @@
 # 三项联合信条 · 欧陆改革宗深读
 
-**版本标签：three-forms-of-unity-study-continental-20261122-v25-GROKstudy**（页脚版本 v20261122-25）
+**版本标签：three-forms-of-unity-study-continental-20261123-v26-GROKstudy**（页脚版本 v20261123-26）
 
 比利时信条（BC）、海德堡要理问答（HC）、多特信经（Dort）的中文多页学习站：先从整本圣经与圣约看，再逐条深读，并附比较、签署书、威斯敏斯特对照、背诵与自测。
 
 **三项联合信条与三大信经原文，以及全站中文引号引文，均逐字取自 [CCI《赞美手册》中文版](https://ccifellowship.org/books/book-of-praise)**（构建时由程序核对）。CCI 没有的内容，用《中国改革宗教会敬拜手册》2015 版（用户提供的 PDF）补充，逐字摘引并标明“出自《中国改革宗教会敬拜手册》2015 版 第 N 页”（tools/verify_pdf.py 核对）；两者都没有的（如多特信经的序言与结语）本站不补，见“来源”页。
 
-## 当前版本链接（v25）
+## 当前版本链接（v26）
 
 | 部署 | 地址 |
 |---|---|
 | GitHub Pages | https://07-je-grok-love-personal-20260928.github.io/three-forms-of-unity-study-continental-GROKstudy/ |
-| Netlify | https://three-forms-of-unity-study-continental-20261122-v25-grokstudy.netlify.app/ |
-| Surge | https://three-forms-of-unity-study-continental-20261122-v25-grokstudy.surge.sh/ |
+| Netlify | https://three-forms-of-unity-study-continental-20261123-v26-grokstudy.netlify.app/ |
+| Surge | https://three-forms-of-unity-study-continental-20261123-v26-grokstudy.surge.sh/ |
 | 代码仓库 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy |
 
 命名：仓库名只含主题（…-GROKstudy，以后不再改名）；Netlify / Surge 域名为“主题-日期-版本-grokstudy”（小写；t91 起后缀改回 grokstudy），每个版本一个新域名，旧域名继续在线。
 
-姊妹站（三大公教会信经）：https://three-ecumenical-creeds-continental-20261122-v28-grokstudy.surge.sh/
+姊妹站（三大公教会信经）：https://three-ecumenical-creeds-continental-20261123-v29-grokstudy.surge.sh/
 
 ## 发布（Releases）——随时恢复
 
@@ -25,6 +25,7 @@
 
 | 标签 | 说明 | 链接 |
 |---|---|---|
+| `v20261123-26` | v26 当前版本（2026-11-23 台北）：修正顶栏目录图标与抽屉、横向页签的重叠——☰ 纳入顶栏流式布局，抽屉打开时隐藏（抽屉自带关闭钮）；层级按钮行在最小拖拽宽度也会换行并避开 ×。几何矩阵新增抽屉开合时的铬件重叠检查。六套产品风主题与两点启动器、呼吸发丝线沿用。几何矩阵 16/16、六主题对比度 AA 0 项不及格、svg_overlap 0、verify_exact 513/0。不移动标签 v20261122-25 / v24 / v23 / v22 / v22a。域名 three-forms-of-unity-study-continental-20261123-v26-grokstudy。旧站 v25 及更早的域保留为恢复点。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261123-26 |
 | `v20261122-25` | v25 当前版本（2026-11-22 台北）：全部更换六套产品风主题：墨灰（默认，Linear 石墨）、夜幕、暗蓝灰、雅白、素纸、素净；配色取自常见产品界面的中性色与强调色，不使用其商标名称。右下角改为两点启动器，目录按钮常驻其旁，图标不再附中文标签（保留 aria-label／title）；左上角目录图标找回，与右下角打开同一抽屉。顶栏隐藏后的发丝线改为主题强调色多段渐变，带缓慢漂移与呼吸，并尊重减少动态效果。几何矩阵 16/16、六主题对比度 AA 0 项不及格、svg_overlap 0、verify_exact 513/0。不移动标签 v20261122-24 / v20261122-23 / v20261122-22 / v20261122-22a。域名 three-forms-of-unity-study-continental-20261122-v25-grokstudy。旧站 v24、v23、v22 与 v22a 的域保留为恢复点。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-25 |
 | `v20261122-24` | v24（2026-11-22 台北）：六个主题（墨玉、午夜藏蓝金、宫廷纸本、青瓷、紫藤晨雾、炭灰玫瑰金）；可隐藏顶栏目录。第十六、十七部分（救恩教义专题与儿童要理 130 问）自此纳入。域名 three-forms-of-unity-study-continental-20261122-v24-grokstudy。旧站域保留为恢复点。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-24 |
 | `v20261122-23` | v23 当前版本（2026-11-22 台北）：右下角三个悬浮按钮收成一枚低调的「⋯」启动器（约 36px，静止半透明，点开后在弹出层里保留后退／前进／到顶／到底／首页／主题／目录；无脚本时 details/summary 仍可到目录与首页）。取消为旧导航簇预留的右侧空条，手机正文左右贴边通栏（目标约 6–9px，≤12px）。全站（含讲座页）重叠／溢出复查：海德堡 52 主日罗盘中心「52」与「主日 · 129 问」不再重叠；启动器弹出层在 360px 仍完整落在屏内。CCI 原文不动（verify_exact 513/0）。不移动标签 v20261122-22 / v20261122-22a。域名 three-forms-of-unity-study-continental-20261122-v23-grokstudy。旧站 v22 与 v22a 的域保留为恢复点。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-23 |
