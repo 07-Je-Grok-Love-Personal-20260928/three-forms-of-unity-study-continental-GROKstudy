@@ -57,7 +57,7 @@ def ibl(n,t=None):
 def ibsum(n):
     s=IB[ibk(n)]; return s[0] if s else ""
 def oa(u,t): return A(u,t)
-CREEDS_SITE="https://three-ecumenical-creeds-continental-20261122-v27-grokstudy.surge.sh/"
+CREEDS_SITE="https://three-ecumenical-creeds-continental-20261122-v28-grokstudy.surge.sh/"
 MISC=J("cci_misc")
 def M(key,phrase):
     t=MISC[key]["text"]; assert phrase in t, f"M 未找到：{key}｜{phrase}"

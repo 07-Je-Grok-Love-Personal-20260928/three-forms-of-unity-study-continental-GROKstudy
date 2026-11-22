@@ -3,7 +3,7 @@
 
 from extra import *
 import html as H
-V = "v20261122-24"
+V = "v20261122-25"
 CUR = {"f": None, "n": 0, "c2": 0}
 PEND = []
 PEND3 = []
