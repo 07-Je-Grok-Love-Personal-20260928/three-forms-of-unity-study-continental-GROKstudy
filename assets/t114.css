@@ -156,11 +156,13 @@ html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) main h1{b
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 .lb{color:#fff}
 
 /* ---- hideable top section tabs ---- */
+/* overflow-x:hidden on body/html (#top) turns them into a scrollport and breaks sticky */
+html,body{overflow-x:clip}
 .ptabwrap{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:6px;margin:0 0 4px;padding:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid transparent}
 .ptabwrap .ptabs{flex:1;min-width:0;margin:0;padding:12px 2px 10px}
 .ptab-tog{flex:none;width:28px;height:28px;margin:0 2px 0 0;padding:0;border:1px solid rgba(var(--W),.12);border-radius:999px;background:rgba(var(--W),.04);color:color-mix(in srgb,var(--mut),var(--dkc) var(--dk));cursor:pointer;font-size:12px;line-height:1;font-family:inherit}
 .ptab-tog:hover{color:var(--hi);background:rgba(var(--W),.08)}
-.ptabline{position:sticky;top:0;z-index:41;height:0;overflow:visible;pointer-events:none}
+.ptabline{position:fixed;top:0;left:0;right:0;z-index:61;height:0;overflow:visible;pointer-events:none}
 .ptabline .ptab-hair,.ptabline .ptab-handle{opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .28s ease,transform .28s ease}
 #main{position:relative}
 .ptabwrap.is-hide{position:absolute;left:0;right:0;top:0;margin:0;padding:0;border:0;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;opacity:0;transform:translateY(-12px)}
