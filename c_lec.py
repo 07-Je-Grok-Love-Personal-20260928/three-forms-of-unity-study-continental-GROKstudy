@@ -259,12 +259,12 @@ def _dort_group(it):
 def part_lec_dort():
     items = DATA["dort"]
     groups = [
-        ("lecd-hist", "历史回顾：从伯拉纠到多特大会", lambda it: _dort_group(it) == "hist", "clock", "lec-dort-hist.html"),
+        ("lecd-hist-g", "历史回顾：从伯拉纠到多特大会", lambda it: _dort_group(it) == "hist", "clock", "lec-dort-hist.html"),
         ("lecd-h1", "第一项　论神的拣选与弃绝", lambda it: _dort_group(it) == "h1", "scale", "lec-dort-h1.html"),
         ("lecd-h2", "第二项　论基督的死和人藉此而得的救赎", lambda it: _dort_group(it) == "h2", "heart", "lec-dort-h2.html"),
         ("lecd-h34", "第三、四项　论人的败坏、向神归正及其方法", lambda it: _dort_group(it) == "h34", "alert", "lec-dort-h34.html"),
         ("lecd-h5", "第五项　真信徒能持守信仰", lambda it: _dort_group(it) == "h5", "shield", "lec-dort-h5.html"),
-        ("lecd-sum", "总结", lambda it: _dort_group(it) == "sum", "flame", "lec-dort-sum.html"),
+        ("lecd-sum-g", "总结", lambda it: _dort_group(it) == "sum", "flame", "lec-dort-sum.html"),
     ]
     intro = flow([
         ("历史", "阿米念与抗辩书", "#e07a5f"),
