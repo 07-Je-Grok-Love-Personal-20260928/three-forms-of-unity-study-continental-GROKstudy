@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""第十六部分：救恩教义专题；第十七部分：儿童要理问答占位。"""
+"""第十六部分：救恩教义专题；第十七部分：儿童要理问答（信仰的基石），逐字收录。"""
 import json, re, html as H
 from pathlib import Path
-from core import L1, L2, L3, key, hard, note, app, cards, table, flow, CUR, ic
+from core import L1, L2, L3, key, hard, note, app, cards, table, flow, CUR, ic, PEND, PEND3
 from c_common import hq, hl, bl, dl, hqs
 import quotes as Q
 
@@ -81,7 +81,7 @@ def svg_emblem():
         (288, "Soli Deo Gloria", "唯独上帝的荣耀", "crown"),
     ]
     parts = [
-        '<figure class="sotfig"><svg class="sot-emblem" viewBox="0 0 400 400" role="img" aria-labelledby="emblem-t emblem-d">',
+        '<figure class="sotfig"><svg class="sot-emblem" viewBox="0 0 400 430" role="img" aria-labelledby="emblem-t emblem-d">',
         '<title id="emblem-t">五个唯独</title>',
         '<desc id="emblem-d">五枚圆环绕「The Five Solas」：圣经、基督、恩典、信心、上帝的荣耀。</desc>',
         '<circle cx="200" cy="200" r="196" fill="var(--bg)" stroke="var(--gold)" stroke-width="1.25"/>',
@@ -104,9 +104,9 @@ def svg_emblem():
         parts.append(f'<g transform="translate({cx:.1f},{cy:.1f})">')
         parts.append('<circle r="36" fill="var(--pnl)" stroke="var(--gold)" stroke-width="1.6"/>')
         parts.append(f'<path d="{icons[ico]}" fill="none" stroke="var(--gold2)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>')
-        parts.append(f'<text y="52" text-anchor="middle" fill="var(--gold2)" font-size="8.5" font-family="Georgia,serif">{lat}</text>')
-        parts.append(f'<text y="64" text-anchor="middle" fill="var(--tx)" font-size="9">{zh}</text>')
         parts.append("</g>")
+        parts.append(f'<text x="{cx:.1f}" y="{cy+52:.1f}" text-anchor="middle" fill="var(--gold2)" font-size="8.5" font-family="Georgia,serif">{lat}</text>')
+        parts.append(f'<text x="{cx:.1f}" y="{cy+64:.1f}" text-anchor="middle" fill="var(--tx)" font-size="9">{zh}</text>')
     parts.append('</svg><figcaption>五个唯独圆形徽章（本站原作示意图，金线圆环构图）。</figcaption></figure>')
     return "".join(parts)
 
@@ -129,8 +129,9 @@ def svg_ordo():
     for i, (x, t, sub) in enumerate(steps):
         s.append(f'<g transform="translate({x},40)">')
         s.append('<rect x="-38" y="0" width="76" height="52" rx="10" fill="var(--pnl)" stroke="var(--gold)" stroke-width="1.2"/>')
-        s.append(f'<text y="22" text-anchor="middle" fill="var(--hi)" font-size="13" font-weight="700">{t}</text>')
-        s.append(f'<text y="40" text-anchor="middle" fill="var(--mut)" font-size="9">{sub}</text></g>')
+        s.append("</g>")
+        s.append(f'<text x="{x}" y="62" text-anchor="middle" fill="var(--hi)" font-size="13" font-weight="700">{t}</text>')
+        s.append(f'<text x="{x}" y="80" text-anchor="middle" fill="var(--mut)" font-size="9">{sub}</text>')
         if i < len(steps) - 1:
             x2 = steps[i + 1][0]
             s.append(f'<path d="M{x+40},66 H{x2-40}" fill="none" stroke="var(--gold)" stroke-width="1.2" marker-end="none"/>')
@@ -152,12 +153,12 @@ def svg_states():
         x = 20 + i * 155
         s.append(f'<g transform="translate({x},20)">')
         s.append('<rect width="140" height="160" rx="12" fill="var(--pnl)" stroke="var(--gold)" stroke-width="1.2"/>')
-        s.append(f'<text x="70" y="28" text-anchor="middle" fill="var(--gold2)" font-size="14" font-weight="700">{title}</text>')
-        for j, line in enumerate(lat.split("\n")):
-            s.append(f'<text x="70" y="{58+j*16}" text-anchor="middle" fill="var(--mut)" font-size="10" font-family="Georgia,serif">{line}</text>')
-        for j, line in enumerate(zh.split("\n")):
-            s.append(f'<text x="70" y="{120+j*18}" text-anchor="middle" fill="var(--tx)" font-size="13">{line}</text>')
         s.append("</g>")
+        s.append(f'<text x="{x+70}" y="48" text-anchor="middle" fill="var(--gold2)" font-size="14" font-weight="700">{title}</text>')
+        for j, line in enumerate(lat.split("\n")):
+            s.append(f'<text x="{x+70}" y="{78+j*16}" text-anchor="middle" fill="var(--mut)" font-size="10" font-family="Georgia,serif">{line}</text>')
+        for j, line in enumerate(zh.split("\n")):
+            s.append(f'<text x="{x+70}" y="{140+j*18}" text-anchor="middle" fill="var(--tx)" font-size="13">{line}</text>')
     s.append('</svg><figcaption>奥古斯丁论人的四种状况（本站示意图）。重生一栏从俗：仍能犯罪，也能不犯罪（参见罗 7:14–25）。</figcaption></figure>')
     return "".join(s)
 
@@ -504,34 +505,167 @@ def part_sot():
     ) + "</div>"
     lead = ("本专题把宗教改革的原则、多特的救恩论、律法与福音、称义与成圣放在同一条阅读线上。"
             "五个唯独是十六世纪对罗马的原则；多特五要点是 1618–19 年回答抗辩派的救恩论；二者常被弄混，故专设辨惑。"
-            "讲座幻灯片与繁体海报按原文收录，与 CCI 信条原文分开。儿童要理问答另见第十七部分（正文待录入）。")
+            "讲座幻灯片与繁体海报按原文收录，与 CCI 信条原文分开。儿童要理问答见第十七部分（改革宗出版社《信仰的基石》，逐字收录）。")
     intro = (site("本页地图、对照与图示是本站学习材料。信条只摘本站已有 CCI 原文；经文用和合本并已核对。")
              + key("建议顺序：先读五个唯独，再读五要点辨惑（含讲座原文），然后是律法，最后是救恩五题与人的四种状况。")
              + '<p class="lec-k">本专题子页</p>' + grid)
     return L1("sot", 16, "救恩教义专题", "cross", lead, intro)
 
 
+# ---- 儿童要理问答（信仰的基石），逐字 ----
+_CQ_BOOK = r"(?:创|出|利|民|申|书|士|得|撒上|撒下|王上|王下|代上|代下|拉|尼|斯|伯|诗|箴|传|歌|赛|耶|哀|结|但|何|珥|摩|俄|拿|弥|鸿|哈|番|该|亚|玛|太|可|路|约|徒|罗|林前|林后|加|弗|腓|西|帖前|帖后|提前|提后|多|门|来|雅|彼前|彼后|约壹|约贰|约叁|犹|启)"
+_CQ_REF1 = _CQ_BOOK + r"\d+：[0-9]+(?:-[0-9]+)?(?:、[0-9]+(?:-[0-9]+)?)*"
+_CQ_REFS = re.compile(r"(" + _CQ_REF1 + r"(?:、" + _CQ_REF1 + r")*)$")
+_CQ_SRC = ROOT / "data/t114/child-catechism-130.txt"
+
+_CQ_SEC_ICO = [
+    ("sun", "创造"),
+    ("crown", "上帝的问答"),
+    ("library", "图书馆"),
+    ("eye", "活到永远"),
+    ("link", "圣约"),
+    ("shield", "欺骗者"),
+    ("leaf", "新造的人"),
+    ("dove", "圣灵"),
+    ("cross", "先知、祭司、君王"),
+    ("scroll", "诫命？（1）"),
+    ("list", "诫命？（2）"),
+    ("hands", "主祷文"),
+]
+
+# 本站注（非原文）：题号 → 简短对照。不改动问答正文。
+_CQ_LINKS = {
+    1: '另可对照海德堡<a href="hc.html#hd-ld9">主日9 · 圣父与创造</a>。',
+    29: '另可对照本站<a href="sot-ordo.html">十六、救恩教义 · 称义成圣与救恩次序</a>（行为之约与恩典之约是本站专题的背景，不是本问答的原文注释）。',
+    57: '另可对照本站<a href="sot-ordo.html#ordo-js">称义与成圣对照</a>，以及海德堡<a href="hc.html#hd-ld23">主日23 · 因信称义</a>。',
+    58: '另可对照本站<a href="sot-ordo.html#ordo-js">称义与成圣对照</a>，以及海德堡<a href="hc.html#hd-ld33">主日33 · 真悔改与善行</a>。',
+    72: '另可对照本站<a href="sot-ordo.html#ordo-fruit">救恩的果子</a>。',
+    89: '十诫条目另可对照海德堡<a href="hc.html#hd-ld34">主日34–44</a>。',
+    114: '主祷文另可对照海德堡<a href="hc.html#hd-ld45">主日45–52</a>。',
+}
+
+
+def parse_child_catechism(path=None):
+    """Parse the transcribed source. Question / answer / ref strings stay byte-identical."""
+    raw = Path(path or _CQ_SRC).read_text(encoding="utf-8")
+    lines = raw.splitlines()
+    title = lines[0]
+    secs, cur = [], None
+    i = 1
+    while i < len(lines):
+        ln = lines[i]
+        if ln.startswith("## "):
+            cur = {"title": ln[3:], "items": []}
+            secs.append(cur)
+            i += 1
+            continue
+        m = re.match(r"^(\d+)", ln)
+        if not m:
+            raise ValueError(f"unparsed line {i+1}: {ln!r}")
+        n = int(m.group(1))
+        i += 1
+        if i >= len(lines) or not lines[i].startswith("\t"):
+            raise ValueError(f"missing tab-indented answer for Q{n}")
+        body = lines[i][1:]
+        rm = _CQ_REFS.search(body)
+        if rm:
+            ans, ref = body[:rm.start()], rm.group(1)
+        else:
+            ans, ref = body, ""
+        rec = {"n": n, "qline": ln, "aline": body, "a": ans, "ref": ref}
+        cur["items"].append(rec)
+        i += 1
+    items = [it for s in secs for it in s["items"]]
+    ns = [it["n"] for it in items]
+    if ns != list(range(1, 131)):
+        raise AssertionError(f"expected Q1–130 in order, got {ns[:5]}…{ns[-3:]} len={len(ns)}")
+    return title, secs, items
+
+
+def _cq_l2(sid, title, ico, body):
+    CUR["c2"] += 1
+    num = f'{CUR["n"]}.{CUR["c2"]}'
+    kids = PEND3[:]; PEND3.clear()
+    PEND.append((sid, f"{num} {title}", kids, CUR["f"]))
+    return (f'<section class="l2 reveal" id="{sid}">'
+            f'<h3><span class="n">{num}</span>{ic(ico)}{H.escape(title)}</h3>{body}</section>')
+
+
+def _cq_card(it, sec_i):
+    n, q, a, ref = it["n"], it["qline"], it["a"], it["ref"]
+    ref_html = f'<span class="cq-ref">{H.escape(ref)}</span>' if ref else ""
+    site = ""
+    if n in _CQ_LINKS:
+        site = f'<p class="cq-site"><b>本站注</b>（非原文）：{_CQ_LINKS[n]}</p>'
+    return (
+        f'<article class="cq" id="cq-{n}" data-n="{n}" data-sec="{sec_i}">'
+        f'<p class="cq-q"><span class="cq-lab">问</span>{H.escape(q)}</p>'
+        f'<p class="cq-a"><span class="cq-lab">答</span>{H.escape(a)}{ref_html}</p>'
+        f'{site}</article>'
+    )
+
+
+def _cq_grid(secs):
+    cells = []
+    for i, s in enumerate(secs, 1):
+        for it in s["items"]:
+            n = it["n"]
+            tip = H.escape(it["qline"])
+            cells.append(f'<a class="cq-cell s{i}" href="#cq-{n}" title="{tip}">{n}</a>')
+    return ('<nav class="cq-grid" aria-label="130 问索引">'
+            + "".join(cells) + "</nav>")
+
+
+def _cq_corrigenda():
+    rows = [
+        "第 91 问题号后无顿号，作「91 第二条…」。",
+        "第 49、72、78 问以句号「。」收束，不作问号。",
+        "第 114 问「什么是祷告」句末无问号。",
+        "第 56 问答文作「为为人」。",
+        "第 61 问答文作「十字架十字架」。",
+        "第 89 问答文作「除了我意外」。",
+        "第 95 问答文作「第四条第四条诫命吩咐」。",
+        "第 101 问答文作「敬爱爱」。",
+        "第 120 问正文作「在第二项祈求中」，而其前一条为第一项祈求；答文作「所有所有人」。",
+    ]
+    lis = "".join(f"<li>{H.escape(x)}</li>" for x in rows)
+    return (
+        '<div class="call note cq-corr"><b>本站校记</b>'
+        '<p>下列是转录稿里可见的笔误或体例不一，照原文收录，不在问答正文中改正。</p>'
+        f"<ul>{lis}</ul></div>"
+    )
+
+
 def part_childq():
-    items = CHILD.get("items") or []
-    if items:
-        rows = "".join(
-            f'<section class="l3" id="cq-{H.escape(str(it.get("n", i+1)))}">'
-            f'<h4>{H.escape(str(it.get("n", i+1)))}. {H.escape(it.get("q",""))}</h4>'
-            f'<p>{H.escape(it.get("a",""))}</p>'
-            f'<p class="vq">{H.escape(it.get("verse",""))}</p>'
-            f'<p>{H.escape(it.get("note",""))}</p></section>'
-            for i, it in enumerate(items)
-        )
-        body = rows
-    else:
-        body = (
-            f'<div class="childq-slot" data-src="data/t114/childq.json">'
-            f'<p><b>{H.escape(CHILD.get("toc_label") or "儿童要理问答（待录入）")}</b></p>'
-            f'<p>{H.escape(CHILD.get("note") or "正文待录入。")}</p>'
-            f'<p>预定版式（有文本后将按 JSON 的 items 注入，字段为号、问、答、经文、注释）：</p>'
-            f'<ol><li>题号</li><li>问</li><li>答</li><li>经文</li><li>注释</li></ol>'
-            f'<p>目前 items 为空，不编造任何问答句。</p></div>'
-        )
-    return L1("childq", 17, "儿童要理问答", "users",
-              "本部分预留给儿童要理问答的逐字录入。上传件目前为无文字层的扫描页，故只设目录与版式，不编写任何问答正文。",
-              L2("childq-pending", "", "儿童要理问答（待录入）", body))
+    title, secs, items = parse_child_catechism()
+    src_line = ("来源：改革宗出版社《信仰的基石》，Joseph P. Engles, "
+                "Catechism for Young Children（据用户提供的 PDF 转录，逐字照录）。")
+    toolbar = (
+        '<div class="cq-toolbar">'
+        '<label class="cq-recite"><input type="checkbox" id="cq-recite" name="cq-recite">'
+        " 背诵模式</label>"
+        '<span class="cq-hint">背诵模式下隐藏经文出处与本站注；问答正文仍显示。此开关不需要脚本。</span>'
+        "</div>"
+    )
+    intro = (
+        f'<p class="cq-fulltitle">{H.escape(title)}</p>'
+        f'<p class="src">{H.escape(src_line)}</p>'
+        + site("本页问答正文逐字取自转录稿。经文出处排成小标签，不改动文字。"
+               "下面的索引、校记与对照链接是本站编排，不是原书的一部分。")
+        + toolbar
+        + '<p class="lec-k">130 问索引</p>'
+        + _cq_grid(secs)
+        + _cq_corrigenda()
+    )
+    blocks = []
+    for i, s in enumerate(secs, 1):
+        ico = "cross"
+        for name, keyw in _CQ_SEC_ICO:
+            if keyw in s["title"]:
+                ico = name
+                break
+        cards_html = '<div class="cq-list">' + "".join(_cq_card(it, i) for it in s["items"]) + "</div>"
+        blocks.append(_cq_l2(f"cq-s{i}", s["title"], ico, cards_html))
+    lead = ("改革宗出版社《信仰的基石》儿童要理问答，130 问、十二章，逐字收录。"
+            "不改正文中的笔误；校记另列。背诵模式可隐藏经文出处。")
+    return L1("childq", 17, "儿童要理问答", "users", lead, intro + "".join(blocks))

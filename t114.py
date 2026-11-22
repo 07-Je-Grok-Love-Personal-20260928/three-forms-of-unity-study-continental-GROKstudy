@@ -105,10 +105,16 @@ def apply(h, page, site):
         else:
             h = h2
 
-    # Light-theme L3 badge rule left by t90 (TEC).
+    # Light-theme L3 badge rule left by t90: drop the white-text override.
+    # Pale chips and TEC gold2 pills are restyled in t114.css (dark ink on a light tint).
     h = h.replace(
         "<style>html:is([data-theme=sakura],[data-theme=paper],[data-theme=eye]) .l3 .lb{color:#fff}</style>",
+        "",
+        1,
+    )
+    h = h.replace(
         "<style>html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 .lb{color:#fff}</style>",
+        "",
         1,
     )
 

@@ -153,7 +153,18 @@ html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .hxy{colo
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]):not(.mkoff) .mk-ref{background:rgba(185,131,20,.14)}
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .core-n{background:var(--gtx);color:#fff}
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) main h1{background-image:linear-gradient(90deg,var(--gtx),var(--gold) 60%,var(--gold2))}
-html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 .lb{color:#fff}
+/* contrast AA: pale TFU chips and TEC gold2 pills both get dark ink on a light tint (white fails on pale chips; paper gold2 is too light for white) */
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .lb,
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 .lb,
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 p.k .lb{
+  color:#1a160f;
+  background:color-mix(in srgb,var(--gold2) 28%,#fff);
+}
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .ychip{color:#3a2500}
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .sot-poster .banner{color:color-mix(in srgb,var(--gold2),var(--dkc) 45%)}
+/* 要问／答案 chips: --mut is just under AA on the lifted card in dark palettes */
+html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]) .aq small,
+html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]) .aa small{color:color-mix(in srgb,var(--mut) 70%,#fff)}
 
 /* ---- hideable top section tabs ---- */
 /* overflow-x:hidden on body/html (#top) turns them into a scrollport and breaks sticky */
@@ -204,3 +215,35 @@ html:not(.jsok) .ptabwrap .ptabs{height:auto;opacity:1;transform:none;pointer-ev
 .sot-matrix th:first-child,.sot-cmp td:first-child{white-space:nowrap}
 .childq-slot{padding:16px;border:1px dashed rgba(var(--W),.25);border-radius:14px;color:var(--mut)}
 .lec-crumb{margin:10px 0 0;font-size:.92rem}
+
+/* ---- 儿童要理问答（第十七部分） ---- */
+.cq-fulltitle{font-family:"I.Ming","Noto Serif TC","Songti SC",serif;font-size:1.28rem;font-weight:800;margin:.2em 0 .4em;color:var(--hi)}
+.cq-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:12px 0;padding:10px 12px;border:1px solid rgba(var(--W),.12);border-radius:12px;background:rgba(var(--W),.04)}
+.cq-recite{font-weight:700;cursor:pointer;color:var(--hi)}
+.cq-recite input{margin-right:.35em;vertical-align:middle}
+.cq-hint{color:var(--mut);font-size:.86rem}
+.cq-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;margin:8px 0 16px}
+@media(min-width:720px){.cq-grid{grid-template-columns:repeat(13,minmax(0,1fr))}}
+.cq-cell{display:grid;place-items:center;min-height:32px;border-radius:8px;font-weight:700;font-variant-numeric:tabular-nums;font-size:.86rem;text-decoration:none;color:var(--tx);border:1px solid rgba(var(--W),.12);background:color-mix(in srgb,var(--cc,#d4af37) 22%,transparent)}
+.cq-cell:hover,.cq-cell:focus{outline:2px solid var(--gold);outline-offset:1px}
+.cq-cell.s1{--cc:#d4af37}.cq-cell.s2{--cc:#5aa9e6}.cq-cell.s3{--cc:#81b29a}.cq-cell.s4{--cc:#a78bfa}.cq-cell.s5{--cc:#e07a5f}.cq-cell.s6{--cc:#e07a5f}.cq-cell.s7{--cc:#81b29a}.cq-cell.s8{--cc:#5aa9e6}.cq-cell.s9{--cc:#d4af37}.cq-cell.s10{--cc:#c9b17a}.cq-cell.s11{--cc:#7eb8c9}.cq-cell.s12{--cc:#c0a8f0}
+.cq-list{display:flex;flex-direction:column;gap:8px;margin:8px 0 4px}
+.cq{margin:0;padding:10px 12px 10px 14px;border-radius:12px;border:1px solid rgba(var(--W),.1);border-left:3px solid var(--gold);background:rgba(var(--W),.03)}
+.cq-q,.cq-a{margin:.15em 0;line-height:1.7;overflow-wrap:anywhere}
+.cq-q{color:var(--hi);font-weight:700}
+.cq-a{color:var(--tx)}
+.cq-lab{display:inline-block;min-width:1.7em;margin-right:8px;padding:0 6px;border-radius:6px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-align:center;vertical-align:1px}
+.cq-q .cq-lab{background:color-mix(in srgb,var(--gold) 28%,transparent);color:color-mix(in srgb,var(--gtx,var(--gold2)),var(--dkc) var(--dk))}
+.cq-a .cq-lab{background:rgba(var(--W),.1);color:color-mix(in srgb,var(--mut),var(--dkc) var(--dk))}
+.cq-ref{display:inline-block;margin-left:.45em;padding:0 7px;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.02em;background:rgba(var(--A),.18);color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));border:1px solid rgba(var(--A),.4);white-space:nowrap}
+.cq-site{margin:.35em 0 0;padding:6px 10px;border-radius:8px;font-size:.86rem;color:var(--mut);background:rgba(var(--W),.04);border:1px dashed rgba(var(--W),.16)}
+.cq-site b{color:var(--gtx,var(--gold2));margin-right:.25em}
+.cq-corr ul{margin:.4em 0 0;padding-left:1.2em}
+.cq-corr li{margin:.2em 0}
+/* 背诵模式：隐藏经文出处与本站注（纯 CSS，无脚本亦可） */
+.l1:has(#cq-recite:checked) .cq-ref,
+.l1:has(#cq-recite:checked) .cq-site{display:none}
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .cq-q .cq-lab{color:#3a2500}
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .cq-a .cq-lab{color:#1a160f}
+html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .cq-ref{color:#3a2500}
+html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]) .cq-a .cq-lab{color:color-mix(in srgb,var(--mut) 70%,#fff)}

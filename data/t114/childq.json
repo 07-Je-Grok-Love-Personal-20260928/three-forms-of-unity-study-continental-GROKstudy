@@ -1,7 +1,7 @@
 {
-  "status": "pending",
-  "title": "儿童要理问答",
-  "toc_label": "儿童要理问答（待录入）",
-  "note": "正文待录入。上传件为无文字层的扫描页，本次不编造任何问答。预定由本 JSON 的 items 注入：号、问、答、经文、注释。",
-  "items": []
+  "status": "verbatim",
+  "title": "儿童要理问答（信仰的基石）",
+  "source": "改革宗出版社《信仰的基石》, Joseph P. Engles, Catechism for Young Children",
+  "file": "data/t114/child-catechism-130.txt",
+  "note": "正文逐字取自转录稿，不改动原文。校记另见本页「本站校记」。"
 }

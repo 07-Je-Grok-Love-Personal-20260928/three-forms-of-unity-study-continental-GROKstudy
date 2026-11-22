@@ -74,7 +74,56 @@ def main():
     print(f"slide markers: {160-len(absent)}/160", ("missing "+str(absent[:5]) if absent else "ok"))
     if absent:
         bad += 1
+
+    # children's catechism: 130/130 exact packed coverage of each Q+A line
+    cq_path = ROOT / "data/t114/child-catechism-130.txt"
+    cq_html = (ROOT / "childq.html").read_text(encoding="utf-8")
+    cq_dst = pack(text_of(cq_html))
+    book = r"(?:创|出|利|民|申|书|士|得|撒上|撒下|王上|王下|代上|代下|拉|尼|斯|伯|诗|箴|传|歌|赛|耶|哀|结|但|何|珥|摩|俄|拿|弥|鸿|哈|番|该|亚|玛|太|可|路|约|徒|罗|林前|林后|加|弗|腓|西|帖前|帖后|提前|提后|多|门|来|雅|彼前|彼后|约壹|约贰|约叁|犹|启)"
+    ref1 = book + r"\d+：[0-9]+(?:-[0-9]+)?(?:、[0-9]+(?:-[0-9]+)?)*"
+    refs = re.compile(r"(" + ref1 + r"(?:、" + ref1 + r")*)$")
+    cq_lines = cq_path.read_text(encoding="utf-8").splitlines()
+    cq_title = cq_lines[0]
+    if pack(cq_title) not in cq_dst:
+        print("child-catechism title missing:", cq_title)
+        bad += 1
+    qitems = []
+    i = 1
+    while i < len(cq_lines):
+        ln = cq_lines[i]
+        if ln.startswith("## "):
+            if pack(ln[3:]) not in cq_dst:
+                print("child-catechism section missing:", ln[3:])
+                bad += 1
+            i += 1
+            continue
+        if not re.match(r"^\d+", ln):
+            print("child-catechism unparsed:", ln)
+            bad += 1
+            i += 1
+            continue
+        i += 1
+        if i >= len(cq_lines) or not cq_lines[i].startswith("\t"):
+            print("child-catechism missing answer after", ln)
+            bad += 1
+            continue
+        body = cq_lines[i][1:]
+        qitems.append((ln, body))
+        i += 1
+    nmiss = 0
+    for q, a in qitems:
+        if pack(q) not in cq_dst or pack(a) not in cq_dst:
+            nmiss += 1
+            if nmiss <= 8:
+                print(" missing", q[:40], "|", a[:40])
+    print(f"child-catechism questions: {len(qitems)-nmiss}/{len(qitems)}")
+    if nmiss or len(qitems) != 130:
+        if len(qitems) != 130:
+            print(f"child-catechism expected 130 items, got {len(qitems)}")
+        bad += 1
+
     return bad
+
 
 if __name__ == "__main__":
     sys.exit(main())

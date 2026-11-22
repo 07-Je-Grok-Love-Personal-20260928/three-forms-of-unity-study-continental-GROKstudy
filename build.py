@@ -90,7 +90,7 @@ def index_body():
     desc={"bible":"救恩史四幕、圣约框架、三份文件如何成为一个整体","hc":"52 主日 · 罪·救·谢 · 本质与应用 · 时间线与地图","bc":"37 条七群 · 德布利的故事 · 11 张深读卡","dort":"1618–19 · 4 项 · 34 条错谬反驳 · TULIP 术语说明",
       "compare":"体裁、问题、对照表、签署书与 BC 9","westminster":"WCF/WLC/WSC 十五个主题的对读","hct":"129 问逐字全文（CCI）","bct":"37 条逐字全文（CCI）","dtt":"63 个条目逐字全文（CCI）",
       "creedsx":"三大信经 CCI 原文附录","memory":"口诀、导图、翻卡、15 题自测、52 周计划","sources":"哪些逐字、哪些转述、哪些 CCI 没有",
-      "lec-hc":"中国改革宗圣经学院 53 讲全文逐字＋本站要点（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》全文逐字＋本站要点（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义全文逐字＋本站要点（释义材料，非 CCI 原文）","sot":"五个唯独、救恩五要点辨惑、律法与福音、称义成圣与果子","childq":"儿童要理问答（待录入，不编造正文）"}
+      "lec-hc":"中国改革宗圣经学院 53 讲全文逐字＋本站要点（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》全文逐字＋本站要点（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义全文逐字＋本站要点（释义材料，非 CCI 原文）","sot":"五个唯独、救恩五要点辨惑、律法与福音、称义成圣与果子","childq":"儿童要理问答（信仰的基石），130 问逐字收录"}
     icon={k:i for k,_,_,i in PAGES}
     steps="".join(f'<a class="step" href="{FILE[k]}" data-pg="{k}" style="--i:{n}"><span class="sno">{n+1}</span><span class="si">{ic(icon[k],"ic big")}</span><b>{LABEL[k]}</b><small>{desc[k]}</small><span class="bar"><i></i></span><em class="pc" data-pc="{k}">未读</em></a>' for n,(k,_,_,_) in enumerate(PAGES[1:]))
     hero=f'''<header class="hero"><div class="hin"><div class="badge">欧陆改革宗 · 三项联合信条</div><h1>三项联合信条<br><span>比利时信条 · 海德堡要理问答 · 多特信经</span></h1><p>先看整本圣经与圣约，再逐条深读。三项联合信条与所有引文<b>逐字取自 CCI《赞美手册》中文版</b>。</p>
