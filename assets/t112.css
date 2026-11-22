@@ -1,0 +1,299 @@
+/* t112: one subtle ⋯ launcher at the bottom-right; no text gutter for a cluster. */
+
+/* Kill reserves that existed to keep text clear of #navc / #tocbtn. */
+html:not(.jsok) #main{
+  padding-right:max(0px, env(safe-area-inset-right,0px))!important;
+}
+@media (max-width:800px){
+  html:not(.jsok) #main,
+  html.jsok #main,
+  #main{
+    padding-right:max(0px, env(safe-area-inset-right,0px))!important;
+  }
+}
+@media (min-width:801px){
+  html:not(.jsok) #main,
+  #main{
+    padding-right:max(clamp(10px,1.6vw,28px), env(safe-area-inset-right,0px))!important;
+  }
+}
+#main{
+  padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important;
+}
+html.jsok main .nav-clear,
+html.jsok main p.nav-clear,
+html.jsok main p.ex.nav-clear,
+html.jsok main p.exn.nav-clear,
+html.jsok main p.lead.nav-clear,
+html.jsok main li.nav-clear,
+html.jsok main h1.nav-clear,
+html.jsok main h2.nav-clear,
+html.jsok main h3.nav-clear,
+html.jsok main h4.nav-clear,
+html.jsok main table.nav-clear,
+html.jsok main table.cmp.nav-clear,
+html.jsok main td.nav-clear,
+html.jsok main th.nav-clear,
+html.jsok main figure.nav-clear,
+html.jsok main .t90viz.nav-clear,
+html.jsok main .mapx.nav-clear,
+html.jsok main .hx.nav-clear,
+html.jsok main section.nav-clear{
+  margin-right:0!important;
+  max-width:none!important;
+  width:auto!important;
+}
+
+/* The only fixed control: a 36px low-opacity glass ⋯ */
+#nvlaunch.nvlaunch{
+  position:fixed;
+  right:calc(10px + env(safe-area-inset-right,0px));
+  bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  z-index:56;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  width:auto;
+  max-width:calc(100vw - 16px);
+}
+#nvlaunch > summary.nvlaunch-btn{
+  list-style:none;
+  box-sizing:border-box;
+  width:36px;
+  height:36px;
+  margin:0;
+  padding:0 0 3px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  user-select:none;
+  font-size:1.2rem;
+  line-height:1;
+  letter-spacing:.06em;
+  color:var(--gtx,var(--gold2));
+  background:rgba(var(--D),.4);
+  border:1px solid rgba(var(--W),.14);
+  box-shadow:0 4px 14px rgba(0,0,0,.14);
+  opacity:.5;
+  transition:opacity .2s, background .2s, border-color .2s, transform .15s;
+}
+#nvlaunch > summary.nvlaunch-btn::-webkit-details-marker{display:none}
+#nvlaunch > summary.nvlaunch-btn::marker{content:""; font-size:0}
+#nvlaunch:hover > summary.nvlaunch-btn,
+#nvlaunch:focus-within > summary.nvlaunch-btn,
+#nvlaunch[open] > summary.nvlaunch-btn,
+#nvlaunch > summary.nvlaunch-btn:hover,
+#nvlaunch > summary.nvlaunch-btn:focus-visible{
+  opacity:1;
+  background:rgba(var(--D),.86);
+  border-color:rgba(var(--A),.45);
+}
+#nvlaunch > summary.nvlaunch-btn:focus-visible{
+  outline:3px solid #f08a24;
+  outline-offset:2px;
+}
+#nvlaunch.dim:not([open]):not(:hover):not(:focus-within) > summary.nvlaunch-btn{
+  opacity:.28;
+}
+
+/* Popover: compact labeled actions, always kept in the viewport */
+#nvlaunch .nvlaunch-pop{
+  position:absolute;
+  right:0;
+  bottom:calc(100% + 8px);
+  left:auto;
+  top:auto;
+  box-sizing:border-box;
+  width:max-content;
+  min-width:196px;
+  max-width:min(260px, calc(100vw - 16px));
+  max-height:min(70vh, calc(100dvh - 64px));
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:8px;
+  border-radius:14px;
+  border:1px solid rgba(var(--W),.16);
+  background:rgba(var(--D),.94);
+  box-shadow:0 12px 32px rgba(0,0,0,.32);
+  z-index:57;
+}
+#nvlaunch:not([open]) .nvlaunch-pop{display:none}
+
+/* Reset the old fixed cluster so it lays out as a menu */
+#nvlaunch #navc{
+  position:static!important;
+  inset:auto!important;
+  display:flex!important;
+  flex-direction:column;
+  align-items:stretch;
+  gap:4px;
+  opacity:1!important;
+  transform:none!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
+  width:auto!important;
+  height:auto!important;
+}
+#nvlaunch #navc .nv-l,
+#nvlaunch #navc .nv-dock,
+#nvlaunch #navc #thm{
+  position:static!important;
+  inset:auto!important;
+  display:flex!important;
+  flex-direction:column;
+  align-items:stretch;
+  gap:4px;
+  visibility:visible!important;
+  opacity:1!important;
+  transform:none!important;
+  pointer-events:auto!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  width:auto!important;
+}
+#nvlaunch #navc .nv-t{display:none!important}
+#nvlaunch #navc button,
+#nvlaunch #navc a,
+#nvlaunch #navc #thmb.fab2,
+#nvlaunch #tocbtn.fab{
+  position:static!important;
+  inset:auto!important;
+  width:auto!important;
+  height:auto!important;
+  min-height:36px;
+  display:flex!important;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  padding:6px 10px!important;
+  border-radius:10px!important;
+  border:1px solid rgba(var(--W),.12)!important;
+  background:rgba(var(--W),.06)!important;
+  color:var(--gtx,var(--gold2))!important;
+  box-shadow:none!important;
+  font:inherit!important;
+  font-size:.88rem!important;
+  line-height:1.3!important;
+  text-decoration:none!important;
+  transform:none!important;
+  overflow:visible!important;
+  white-space:nowrap;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+#nvlaunch #navc button:hover,
+#nvlaunch #navc a:hover,
+#nvlaunch #navc button:focus-visible,
+#nvlaunch #navc a:focus-visible,
+#nvlaunch #tocbtn.fab:hover,
+#nvlaunch #tocbtn.fab:focus-visible{
+  background:rgba(var(--A),.18)!important;
+  border-color:rgba(var(--A),.45)!important;
+  transform:none!important;
+}
+#nvlaunch #navc [hidden]{display:none!important}
+#nvlaunch #navc [disabled],
+#nvlaunch #navc [aria-disabled=true]{
+  opacity:.4!important;
+  cursor:not-allowed;
+}
+
+/* Labels for icon-only controls */
+#nvlaunch #navc [data-nv=back]::after{content:"后退"}
+#nvlaunch #navc [data-nv=fwd]::after{content:"前进"}
+#nvlaunch #navc [data-nv=top]::after{content:"顶部"}
+#nvlaunch #navc [data-nv=bot]::after{content:"底部"}
+#nvlaunch #navc a[href="index.html"]::after{content:"首页"}
+#nvlaunch #tocbtn.fab::after{content:"目录"}
+#nvlaunch #thmb.fab2::after{content:"主题"}
+#nvlaunch #navc [data-nv=mk]:not([hidden])::after{content:"标记"}
+#nvlaunch #navc [data-nv=leg]:not([hidden])::after{content:"图例"}
+
+/* Theme palette sits in the sheet, not as a second floating panel */
+#nvlaunch #thmm{
+  position:static!important;
+  inset:auto!important;
+  display:none;
+  grid-template-columns:1fr;
+  gap:3px;
+  margin:4px 0 0;
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  max-height:none;
+  width:auto;
+  z-index:auto;
+}
+#nvlaunch #thm.open #thmm{
+  display:grid!important;
+}
+#nvlaunch #thmm button{
+  justify-content:flex-start;
+  min-height:32px;
+  font-size:.82rem!important;
+  padding:4px 8px!important;
+}
+
+/* No-JS: details/summary works; TOC via :target; hide JS-only actions */
+html:not(.jsok) #nvlaunch{display:block!important; opacity:1!important}
+html:not(.jsok) #nvlaunch #navc,
+html:not(.jsok) #nvlaunch #navc .nv-l{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+html:not(.jsok) #nvlaunch #navc [data-nv=back],
+html:not(.jsok) #nvlaunch #navc [data-nv=fwd],
+html:not(.jsok) #nvlaunch #navc [data-nv=mk],
+html:not(.jsok) #nvlaunch #navc [data-nv=leg],
+html:not(.jsok) #nvlaunch #thm,
+html:not(.jsok) #nvlaunch #tocbtn{
+  display:none!important;
+}
+html.jsok .nv-toc-fallback{display:none!important}
+html:not(.jsok) .nv-toc-fallback{
+  display:flex!important;
+}
+html:not(.jsok) .nv-toc-fallback::after{content:"目录"}
+@media (max-width:1099px){
+  html:not(.jsok) #toc:target{
+    transform:none!important;
+    visibility:visible!important;
+    z-index:80!important;
+  }
+}
+
+/* Open TOC still hides the launcher so it doesn't sit on the drawer */
+@media (max-width:1099px){
+  body.tocopen #nvlaunch{
+    opacity:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+}
+
+@media print{
+  #nvlaunch{display:none!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  #nvlaunch > summary.nvlaunch-btn,
+  #nvlaunch .nvlaunch-pop{transition:none}
+}
+
+/* Help headings clear the 3px progress bar (and any sticky chrome) on jump */
+.l1, .l2, .l3, .l1h, .l2h, .l3h, main h2, main h3, main h4, main [id]{
+  scroll-margin-top:max(24px, env(safe-area-inset-top,0px));
+}

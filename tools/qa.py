@@ -57,34 +57,18 @@ JS_T100=r'''()=>{
       if(r.width>2&&r.height>2&&cs.visibility!=='hidden'&&+cs.opacity>=0.2) crs.push({sel:p.getAttribute('data-nv')||p.id||p.className||'nav',r});
     });
   }
-  if(vis(toc)) crs.push({sel:'#tocbtn',r:toc.getBoundingClientRect()});
-  function visRect(el){
-    let r=el.getBoundingClientRect();
-    let L=r.left,T=r.top,R=r.right,B=r.bottom;
-    for(let p=el.parentElement;p&&p!==document.body;p=p.parentElement){
-      const cs=getComputedStyle(p);
-      const ox=cs.overflowX, oy=cs.overflowY;
-      if(ox==='auto'||ox==='scroll'||ox==='hidden'||ox==='clip'||oy==='auto'||oy==='scroll'||oy==='hidden'||oy==='clip'){
-        const pr=p.getBoundingClientRect();
-        L=Math.max(L,pr.left); T=Math.max(T,pr.top); R=Math.min(R,pr.right); B=Math.min(B,pr.bottom);
-      }
+  /* t112: ⋯ may overlap content edges; only fail if the open popover is off-screen. */
+  var launch=document.getElementById('nvlaunch');
+  var pop=document.getElementById('nvpop');
+  if(launch && pop && launch.hasAttribute('open')){
+    var pr=pop.getBoundingClientRect();
+    var vw=document.documentElement.clientWidth||window.innerWidth;
+    var vh=document.documentElement.clientHeight||window.innerHeight;
+    if(pr.width>2 && pr.height>2){
+      if(pr.left<-1 || pr.right>vw+1 || pr.top<-1 || pr.bottom>vh+1)
+        bad.push('launcher popover off-screen '+[Math.round(pr.left),Math.round(pr.top),Math.round(pr.right),Math.round(pr.bottom),vw,vh].join(','));
     }
-    return {left:L,top:T,right:R,bottom:B,width:R-L,height:B-T};
   }
-  const hits=[];
-  document.querySelectorAll('main p, main li, main h1, main h2, main h3, main h4, main td, main th, main svg, main .mapx, main .t90viz, main .hx, main figure, main table, main .ptabs a, main .hero h1').forEach(el=>{
-    if(el.closest('#navc')||el.closest('#thm')||el.closest('#tocbtn')) return;
-    const r=visRect(el);
-    if(r.width<4||r.height<4) return;
-    if(r.bottom<0||r.top>(window.innerHeight||0)||r.right<0||r.left>(window.innerWidth||0)) return;
-    for(const c of crs){
-      const a=c.r;
-      if(!(a.right<=r.left+1||a.left>=r.right-1||a.bottom<=r.top+1||a.top>=r.bottom-1)){
-        hits.push(c.sel+' overlaps '+el.tagName+'.'+String(el.className||'').slice(0,20));
-      }
-    }
-  });
-  if(hits.length) bad.push('nav overlap '+[...new Set(hits)].slice(0,6).join('; '));
   return bad;
 }'''
 res=[];fail=0
@@ -103,7 +87,10 @@ with sync_playwright() as p:
                 h=pg.evaluate('document.documentElement.scrollHeight')
                 pg.evaluate('''async(h)=>{const f=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));for(let y=0;y<h;y+=700){window.scrollTo(0,y);await f();}}''',h)  # 单次 evaluate 内滚动，免去每步往返
                 pg.evaluate('window.scrollTo(0,0)'); pg.wait_for_timeout(200)
-            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS); t100=pg.evaluate(JS_T100)
+            ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS)
+            pg.evaluate("()=>{var el=document.getElementById('nvlaunch'); if(el) el.setAttribute('open','');}")
+            t100=pg.evaluate(JS_T100)
+            pg.evaluate("()=>{var el=document.getElementById('nvlaunch'); if(el) el.removeAttribute('open');}")
             bad=[]
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
