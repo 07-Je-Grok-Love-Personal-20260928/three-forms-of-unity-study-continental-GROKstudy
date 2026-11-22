@@ -1,0 +1,79 @@
+/* t107: flatten nested glass cards so body text sits close to the screen edge.
+   Do not change CCI / .ex font size. Override t106's document-wide 52px right gutters. */
+
+html{overflow-x:hidden}
+
+/* ---- Phones and tablets: screen→text inset ≈ 12px (≤14px) ---- */
+@media (max-width:800px){
+  #main{
+    padding-left:max(4px, env(safe-area-inset-left,0px))!important;
+    padding-right:max(4px, env(safe-area-inset-right,0px))!important;
+  }
+
+  /* Drop the page-wide 52px nav reserve. The cluster stays a floating overlay. */
+  main .icm-n, main p, main li, main h1, main h2, main h3, main h4,
+  html:not(.jsok) main p, html:not(.jsok) main li,
+  main table, main table.cmp{
+    margin-left:0!important;
+    margin-right:0!important;
+    max-width:none!important;
+  }
+  main table, main table.cmp{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  /* Outer cards: flush to #main, no side padding of their own (avoids stacking). */
+  main .l1h, main .l2, main .l3, main .art, main .icm, main .qac,
+  main .card, main .tri, main .vcard, main .boxq, main .call, main .note,
+  main .srcd, main .people, main .myths, main .stats, main figure,
+  main .qa7 .qa, main .map, main .cmpw, main .vst, main .hero .hin,
+  main .exeg, main .exb, main details.ex, main .mapx, main .mx-r, main figure.rmap{
+    margin-left:0!important;
+    margin-right:0!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    max-width:none!important;
+  }
+
+  /* Text-bearing children: a single 8px side pad, no extra margin. */
+  main p, main li, main h3, main h4, main h5,
+  main p.ex, main p.exn, main p.lead, main p.k, main p.bt, main p.rm-st,
+  main p.sl-leg, main p.lec-struct, main .lec-struct,
+  main .exn, main .ex, main .src, main figcaption,
+  main details.rfx, main details.rfx .refs2, main details.rfx .src,
+  main .qa7 .qa, main blockquote{
+    margin-left:0!important;
+    margin-right:0!important;
+    max-width:none!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+    box-sizing:border-box;
+  }
+
+  main p.exn, main p.ex, main .exn, main .ex, main .call, main .note, main .boxq{
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+  }
+
+  /* Q/A marker column stays; only the side pad is flattened. */
+  main p.qa{padding-left:36px!important;padding-right:8px!important}
+
+  /* Keep the chapter icon bar from kissing the screen edge. */
+  main .l1h{padding:12px 8px!important}
+}
+
+/* ---- Desktop / large tablet: shrink the old 48px clamp gutters ---- */
+@media (min-width:801px){
+  #main{
+    padding-left:clamp(10px,1.6vw,28px)!important;
+    padding-right:clamp(10px,1.6vw,28px)!important;
+  }
+  main .icm-n, main p.ex, main p.exn, main p.lead,
+  main h2, main h3, main h4,
+  html:not(.jsok) main p, html:not(.jsok) main li{
+    margin-right:0!important;
+    max-width:none!important;
+  }
+}
