@@ -1,0 +1,143 @@
+/* t118: put the header ☰ in layout flow; never float over the drawer or tabs.
+   Hide it while the drawer is open (the drawer has its own ×).
+   Level-button row wraps and clears the hoisted × at every drawer width. */
+
+#ptabrow{
+  position:sticky;
+  top:0;
+  z-index:40;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:0 0 4px;
+  padding:0 0 0 max(2px, env(safe-area-inset-left,0px));
+  background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
+  border-bottom:1px solid color-mix(in srgb,var(--gb) 50%,transparent);
+}
+#ptabrow > #ptabwrap{
+  position:relative;
+  top:auto;
+  flex:1 1 auto;
+  min-width:0;
+  margin:0;
+  padding:0!important;
+  background:transparent;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  border-bottom:none;
+  z-index:auto;
+}
+#ptabrow > #tochd,
+#ptabrow #tochd{
+  position:relative!important;
+  top:auto!important;
+  left:auto!important;
+  z-index:2;
+  flex:0 0 36px;
+  margin:0;
+  opacity:1;
+}
+
+/* drawer open: header ☰ is redundant and would cover the drawer title / × */
+body.tocopen #tochd{display:none!important}
+@media (min-width:1100px){
+  body:not(.tochide) #tochd{display:none!important}
+}
+
+/* tabs collapsed to the hairline: keep ☰ fixed in the corner, no full header bar */
+#ptabrow:has(> .ptabwrap.is-hide),
+#ptabrow.is-hair{
+  position:static;
+  height:0;
+  margin:0;
+  padding:0;
+  overflow:visible;
+  background:none;
+  border:0;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  pointer-events:none;
+}
+#ptabrow:has(> .ptabwrap.is-hide) > #tochd,
+#ptabrow.is-hair > #tochd{
+  position:fixed!important;
+  top:max(8px, env(safe-area-inset-top,0px))!important;
+  left:max(8px, env(safe-area-inset-left,0px))!important;
+  z-index:70;
+  pointer-events:auto;
+  transform:none;
+  opacity:1!important;
+  visibility:visible;
+}
+body.tocopen #ptabrow:has(> .ptabwrap.is-hide) > #tochd,
+body.tocopen #ptabrow.is-hair > #tochd{display:none!important}
+@media (min-width:1100px){
+  body:not(.tochide) #ptabrow:has(> .ptabwrap.is-hide) > #tochd,
+  body:not(.tochide) #ptabrow.is-hair > #tochd{display:none!important}
+}
+
+/* hairline starts after the fixed ☰ so the two cannot overlap */
+#ptabrow .ptabwrap.is-hide + .ptabline{
+  padding-left:max(52px, calc(44px + env(safe-area-inset-left,0px)));
+}
+
+/* drawer header: wrap at the minimum drag width; leave a column for #tocx */
+#toc .tochead{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px 8px;
+  padding-right:44px;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#toc .tocbtns,
+#toc .toclv{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:3px;
+  min-width:0;
+  max-width:100%;
+}
+#toc .tocctl{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+
+@media print{
+  #ptabrow #tochd,#tochd{display:none!important}
+}
+
+#toc .tochead > b{
+  flex:0 0 auto;
+  white-space:nowrap;
+  min-width:max-content;
+}
+/* keep the hoisted × inside the drawer at every drag width */
+body.tocopen #tocx,
+html body:not(.tochide) #tocx{
+  box-sizing:border-box;
+  width:36px;
+  min-width:36px;
+  max-width:36px;
+  padding:0;
+}
+@media (min-width:1100px){
+  body:not(.tochide) #tocx{left:calc(var(--tw) - 44px); top:14px}
+}
+@media (max-width:1099px){
+  body.tocopen #tocx{left:calc(var(--twm) - 44px); top:12px}
+}
+
+/* hairline is fixed at the top; keep it out of the open drawer */
+@media (min-width:1100px){
+  body:not(.tochide) #ptabline,
+  body:not(.tochide) #ptabrow .ptabline{left:var(--tw)}
+}
+@media (max-width:1099px){
+  body.tocopen #ptabline,
+  body.tocopen #ptabrow .ptabline{left:var(--twm)}
+}

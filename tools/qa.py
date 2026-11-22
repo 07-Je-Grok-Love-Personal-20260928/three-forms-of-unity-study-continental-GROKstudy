@@ -71,6 +71,185 @@ JS_T100=r'''()=>{
   }
   return bad;
 }'''
+JS_T118=r"""()=>{
+  const bad=[];
+  const vw=document.documentElement.clientWidth||window.innerWidth;
+  const vh=document.documentElement.clientHeight||window.innerHeight;
+  function vis(el){
+    if(!el) return false;
+    const r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+    if(!(r.width>2 && r.height>2 && cs.display!=='none' && cs.visibility!=='hidden' && +cs.opacity>=0.2 && cs.pointerEvents!=='none')) return false;
+    if(r.right<=2 || r.bottom<=2 || r.left>=vw-2 || r.top>=vh-2) return false;
+    return true;
+  }
+  function box(el){return el.getBoundingClientRect()}
+  function visibleRect(el, r){
+    r = r || (el.getBoundingClientRect ? el.getBoundingClientRect() : r);
+    if(!r) return null;
+    let x1=r.left, y1=r.top, x2=r.right, y2=r.bottom;
+    let p=el && (el.nodeType===1?el.parentElement:el.parentElement);
+    while(p && p!==document.documentElement){
+      const cs=getComputedStyle(p);
+      const clipX=cs.overflowX==='hidden'||cs.overflowX==='auto'||cs.overflowX==='scroll'||cs.overflowX==='clip';
+      const clipY=cs.overflowY==='hidden'||cs.overflowY==='auto'||cs.overflowY==='scroll'||cs.overflowY==='clip';
+      if(clipX||clipY){
+        const pr=p.getBoundingClientRect();
+        if(clipX){ x1=Math.max(x1, pr.left); x2=Math.min(x2, pr.right); }
+        if(clipY){ y1=Math.max(y1, pr.top); y2=Math.min(y2, pr.bottom); }
+      }
+      p=p.parentElement;
+    }
+    x1=Math.max(x1,0); y1=Math.max(y1,0); x2=Math.min(x2,vw); y2=Math.min(y2,vh);
+    if(x2-x1<=2 || y2-y1<=2) return null;
+    return {left:x1,top:y1,right:x2,bottom:y2};
+  }
+  function hit(a,b){
+    const x=Math.max(0, Math.min(a.right,b.right)-Math.max(a.left,b.left));
+    const y=Math.max(0, Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+    return (x>2 && y>2) ? {x:Math.round(x),y:Math.round(y)} : null;
+  }
+  function lab(el){
+    if(!el) return '?';
+    return (el.id && ('#'+el.id)) || (el.getAttribute && el.getAttribute('class') && ('.'+String(el.getAttribute('class')).split(/\s+/).slice(0,2).join('.'))) || el.tagName;
+  }
+  function wide(){return window.innerWidth>=1100}
+  function drawerOpen(){return wide()?!document.body.classList.contains('tochide'):document.body.classList.contains('tocopen')}
+  function setDrawer(open){
+    if(wide()) document.body.classList.toggle('tochide', !open);
+    else document.body.classList.toggle('tocopen', !!open);
+  }
+  function isOwn(chrome, node){
+    const el=node.nodeType===1?node:node.parentElement;
+    return !!(el && chrome.contains(el));
+  }
+  function inMainFlow(node){
+    const el=node.nodeType===1?node:node.parentElement;
+    if(!el) return false;
+    if(el.closest('#ptabrow,#ptabwrap,#ptabline,#toc,#tocx,#tochd,#nvdock,#nvpop,#navc,#tocgrip')) return false;
+    return !!el.closest('#main');
+  }
+  function inChromeLayer(node){
+    const el=node.nodeType===1?node:node.parentElement;
+    return !!(el && el.closest('#ptabrow,#ptabwrap,#ptabline,#toc,#tocx,#tochd,#nvdock,#nvpop,#navc,#tocgrip'));
+  }
+  function interactive(el){
+    if(!el || el.nodeType!==1) return false;
+    const t=el.tagName;
+    if(t==='A'||t==='BUTTON'||t==='SUMMARY'||t==='INPUT'||t==='SELECT'||t==='TEXTAREA') return true;
+    const role=el.getAttribute('role');
+    if(role==='button'||role==='menuitem'||role==='menuitemradio'||role==='link'||role==='tab') return true;
+    if(el.hasAttribute('tabindex') && el.getAttribute('tabindex')!=='-1') return true;
+    return false;
+  }
+  function textHits(chrome, r, dockMode){
+    const out=[];
+    const tw=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode:function(n){
+        if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        const p=n.parentElement;
+        if(!p || p.closest('script,style,noscript,title')) return NodeFilter.FILTER_REJECT;
+        if(isOwn(chrome,n)) return NodeFilter.FILTER_REJECT;
+        if(dockMode && inMainFlow(n) && !inChromeLayer(n)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let n;
+    while((n=tw.nextNode())){
+      const p=n.parentElement; if(!p) continue;
+      const pr=p.getBoundingClientRect();
+      if(pr.width<2||pr.height<2) continue;
+      if(!hit(r,pr)) continue;
+      const range=document.createRange();
+      range.selectNodeContents(n);
+      const rects=range.getClientRects();
+      for(const tr of rects){
+        const vr=visibleRect(p, tr);
+        if(!vr) continue;
+        const o=hit(r,vr);
+        if(o){ out.push((n.nodeValue||'').trim().slice(0,16)); break; }
+      }
+      if(out.length>=3) break;
+    }
+    return out;
+  }
+  function controlHits(chrome, r, dockMode){
+    const out=[];
+    document.querySelectorAll('a,button,summary,input,select,textarea,[role="button"],[role="menuitem"],[role="menuitemradio"],#tocx,.tocctl,.ptab-tog,.ptab-hair,#nvsum,#tocbtn,#tochd').forEach(el=>{
+      if(isOwn(chrome,el)) return;
+      if(!vis(el)) return;
+      if(dockMode && inMainFlow(el) && !inChromeLayer(el)) return;
+      const br=visibleRect(el);
+      if(!br) return;
+      const o=hit(r, br);
+      if(o) out.push(lab(el)+'@'+o.x+'x'+o.y);
+    });
+    return out.slice(0,4);
+  }
+  function checkOne(el, name, dockMode){
+    if(!vis(el)) return;
+    const r=visibleRect(el); if(!r) return;
+    const ih=controlHits(el,r,dockMode);
+    const th=textHits(el,r,dockMode);
+    if(ih.length) bad.push(name+' overlaps controls '+ih.join(','));
+    if(th.length) bad.push(name+' overlaps text '+JSON.stringify(th));
+  }
+  function checkLevelRow(){
+    const toc=document.getElementById('toc');
+    if(!vis(toc)) return;
+    const cr=toc.getBoundingClientRect();
+    const cs=getComputedStyle(toc);
+    const padR=parseFloat(cs.paddingRight)||0;
+    const innerRight=cr.right-padR;
+    const innerLeft=cr.left+(parseFloat(cs.paddingLeft)||0);
+    toc.querySelectorAll('.tochead b, .tochead .tocctl, #toc-ex, #toc-cl').forEach(el=>{
+      if(!vis(el)) return;
+      const r=box(el);
+      if(r.right>innerRight+1 || r.left<innerLeft-1 || r.right>cr.right+1){
+        bad.push('toc control clipped '+lab(el)+' r='+Math.round(r.right)+' tocR='+Math.round(cr.right)+' inner='+Math.round(innerRight));
+      }
+    });
+    const x=document.getElementById('tocx');
+    if(vis(x)){
+      const xr=box(x);
+      toc.querySelectorAll('.tochead b, .tochead .tocctl, #toc-ex, #toc-cl').forEach(el=>{
+        if(!vis(el)) return;
+        const o=hit(xr, box(el));
+        if(o) bad.push('#tocx overlaps '+lab(el)+'@'+o.x+'x'+o.y);
+      });
+    }
+  }
+  function run(tag){
+    const hd=document.getElementById('tochd');
+    checkOne(hd, tag+' #tochd', false);
+    const hair=document.querySelector('#ptabline .ptab-hair, .ptab-hair');
+    const wrap=document.getElementById('ptabwrap');
+    if(wrap && wrap.classList.contains('is-hide')) checkOne(hair, tag+' hairline', true);
+    ['#nvdock #tocbtn','#nvdock #nvsum','#nvdock .nv-toc-fallback'].forEach(sel=>{
+      const el=document.querySelector(sel);
+      checkOne(el, tag+' '+sel, true);
+    });
+    const launch=document.getElementById('nvlaunch');
+    const pop=document.getElementById('nvpop');
+    if(launch && pop && launch.hasAttribute('open')) checkOne(pop, tag+' #nvpop', true);
+    checkLevelRow();
+  }
+  const wasOpen=drawerOpen();
+  const root=document.documentElement;
+  const prop=wide()?'--tw':'--twm';
+  const prev=root.style.getPropertyValue(prop);
+  setDrawer(false);
+  run('closed');
+  setDrawer(true);
+  run('open');
+  const min=wide()?240:200;
+  root.style.setProperty(prop, min+'px');
+  run('open-min'+min);
+  if(prev) root.style.setProperty(prop, prev);
+  else root.style.removeProperty(prop);
+  setDrawer(wasOpen);
+  return bad;
+}"""
+
 res=[];fail=0
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -90,7 +269,10 @@ with sync_playwright() as p:
             ov=pg.evaluate(JS_OVER); cl=pg.evaluate(JS_CLIP); vis=pg.evaluate(JS_VIS)
             pg.evaluate("()=>{var el=document.getElementById('nvlaunch'); if(el) el.setAttribute('open','');}")
             t100=pg.evaluate(JS_T100)
+            t118d=pg.evaluate(JS_T118) if not nojs else []
             pg.evaluate("()=>{var el=document.getElementById('nvlaunch'); if(el) el.removeAttribute('open');}")
+            t118=pg.evaluate(JS_T118) if not nojs else []
+            if t118d: t118=list(t118)+['dockopen '+x for x in t118d]
             bad=[]
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
@@ -100,6 +282,7 @@ with sync_playwright() as p:
             if (nojs and vis['js']) : bad.append("no-JS 却带 js 类")
             if rm and vis['js']: bad.append("reduced-motion 却启用 reveal")
             if t100: bad.append("t100: "+str(t100))
+            if t118: bad.append("t118: "+str(t118))
             if shots and w in (360,1280) and not nojs and not rm:
                 os.makedirs('_shots',exist_ok=True); pg.screenshot(path=f'_shots/{f[:-5]}_{w}.png',full_page=True)
             tag='FAIL' if bad else 'ok'
