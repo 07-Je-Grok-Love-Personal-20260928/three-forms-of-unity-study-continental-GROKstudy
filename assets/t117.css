@@ -49,7 +49,7 @@ html[data-theme=lights] body{--bgimg:#000}
 html[data-theme=dim]{
   --bg:#15202b;--bg2:#192734;
   --gold:#4dabf5;--gold2:#7ec4f8;
-  --tx:#f7f9f9;--mut:#8b98a5;--hi:#ffffff;
+  --tx:#f7f9f9;--mut:#9ca8b4;--hi:#ffffff;
   --f:#4dabf5;--s:#4dabf5;--g:#6db8a8;
   --W:255,255,255;--D:21,32,43;--A:29,155,240;--A2:77,171,245;
   --pnl:#1e2732;--pnl2:#22303c;--dk:0%;--dkc:#000;
@@ -69,7 +69,7 @@ html[data-theme=dim] body{--bgimg:#15202b}
 html[data-theme=paper]{
   --bg:#f0f2f5;--bg2:#e8eaee;
   --gold:#1558c0;--gold2:#0d5bd1;
-  --tx:#050505;--mut:#65676b;--hi:#000000;
+  --tx:#050505;--mut:#5b5e63;--hi:#000000;
   --f:#1558c0;--s:#1558c0;--g:#1a6b4a;
   --W:5,5,5;--D:255,255,255;--A:24,119,242;--A2:13,91,209;
   --pnl:#ffffff;--pnl2:#f7f8fa;--dk:64%;--dkc:#050505;
@@ -111,7 +111,7 @@ html[data-theme=warm] body{--bgimg:#fbfbfa}
 html[data-theme=mono]{
   --bg:#ffffff;--bg2:#f6f8fa;
   --gold:#0969da;--gold2:#0550ae;
-  --tx:#1f2328;--mut:#656d76;--hi:#0d1117;
+  --tx:#1f2328;--mut:#555c64;--hi:#0d1117;
   --f:#0969da;--s:#0969da;--g:#1a6b4a;
   --W:31,35,40;--D:255,255,255;--A:9,105,218;--A2:5,80,174;
   --pnl:#ffffff;--pnl2:#f6f8fa;--dk:64%;--dkc:#0d1117;
@@ -433,3 +433,24 @@ html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #nvlaunch > summ
   .ptab-hair::after{animation:none;opacity:.9;transform:none;background-position:50% 50%}
   .ptabwrap .ptabs,.ptabwrap .ptab-tog,.ptabline .ptab-hair,.ptabline .ptab-handle{transition:none}
 }
+
+/* AA: section numbers used a translucent accent that failed large-text 3:1 */
+.sno{color:var(--gold2);opacity:1}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .sno{color:var(--gold)}
+/* muted captions: lighten on dark surfaces, darken on light tinted chips */
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .qac-n,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .qac-n span{color:color-mix(in srgb,var(--mut) 40%,#fff)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .qac-n,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .qac-n span{color:color-mix(in srgb,var(--mut),var(--dkc) 30%)}
+.lead{color:color-mix(in srgb,var(--mut) 78%,var(--tx))}
+/* 要问／答案 chips sit on mid tints; mix direction is % of mut */
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .aq small,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .aa small{color:color-mix(in srgb,var(--mut) 40%,#fff)!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .aq small,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .aa small{color:var(--hi)!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-ref{color:#0550ae}
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .own,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) span.own{color:color-mix(in srgb,var(--mut) 40%,#fff)}
+
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) details>summary small,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .lyi small{color:color-mix(in srgb,var(--mut) 55%,#fff)}

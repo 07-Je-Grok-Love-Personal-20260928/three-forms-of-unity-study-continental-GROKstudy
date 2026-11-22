@@ -163,8 +163,8 @@ html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 p.k .
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .ychip{color:#3a2500}
 html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .sot-poster .banner{color:color-mix(in srgb,var(--gold2),var(--dkc) 45%)}
 /* 要问／答案 chips: --mut is just under AA on the lifted card in dark palettes */
-html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]) .aq small,
-html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]) .aa small{color:color-mix(in srgb,var(--mut) 70%,#fff)}
+html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]):not([data-theme=warm]):not([data-theme=mono]) .aq small,
+html:not([data-theme=paper]):not([data-theme=celadon]):not([data-theme=wisteria]):not([data-theme=warm]):not([data-theme=mono]) .aa small{color:color-mix(in srgb,var(--mut) 70%,#fff)}
 
 /* ---- hideable top section tabs ---- */
 /* overflow-x:hidden on body/html (#top) turns them into a scrollport and breaks sticky */

@@ -1,8 +1,8 @@
 /* t114: migrate stored themes; hideable top section tabs */
 (function(){
-  var AL={dawn:'paper',jade:'navy',grape:'wisteria',sakura:'wisteria',ocean:'navy',amber:'charcoal',eye:'celadon'};
-  var OK={night:1,navy:1,paper:1,celadon:1,wisteria:1,charcoal:1};
-  var META={night:'#0b1110',navy:'#0a1020',paper:'#f3ead8',celadon:'#e8f0ea',wisteria:'#efeaf4',charcoal:'#161314'};
+  var AL={dawn:'paper',jade:'dim',grape:'mono',sakura:'mono',ocean:'dim',amber:'lights',eye:'warm',navy:'dim',celadon:'warm',wisteria:'mono',charcoal:'lights'};
+  var OK={night:1,lights:1,dim:1,paper:1,warm:1,mono:1};
+  var META={night:'#0f1011',lights:'#000000',dim:'#15202b',paper:'#f0f2f5',warm:'#fbfbfa',mono:'#ffffff'};
   try{
     var t=localStorage.getItem('ui.theme');
     var n=AL[t]||(OK[t]?t:'night');
