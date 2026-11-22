@@ -59,6 +59,14 @@ html{overflow-x:hidden}
     padding-left:8px!important;
     margin-left:0!important;
   }
+  main .lec-sum ul, main .lec-sum ol{
+    padding-left:1em!important;
+    margin-left:0!important;
+  }
+  main .lec-sum li{
+    padding-left:0!important;
+    padding-right:8px!important;
+  }
   main li.sl-st{
     padding-left:0!important;
     padding-right:0!important;
@@ -118,4 +126,56 @@ html{overflow-x:hidden}
   main .l3.ldc.p1{box-shadow:inset 3px 0 0 #e07a5f}
   main .l3.ldc.p2{box-shadow:inset 3px 0 0 #5aa9e6}
   main .l3.ldc.p3{box-shadow:inset 3px 0 0 #81b29a}
+}
+
+
+/* Cluster must not sit on text boxes. JS adds .nav-clear only to the
+   colliding element; no-JS keeps a right reserve so the static cluster
+   has somewhere to live. */
+#tocbtn.fab.away{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+html.jsok main .nav-clear,
+html.jsok main p.nav-clear,
+html.jsok main p.ex.nav-clear,
+html.jsok main p.exn.nav-clear,
+html.jsok main p.lead.nav-clear,
+html.jsok main li.nav-clear,
+html.jsok main h1.nav-clear,
+html.jsok main h2.nav-clear,
+html.jsok main h3.nav-clear,
+html.jsok main h4.nav-clear,
+html.jsok main table.nav-clear,
+html.jsok main table.cmp.nav-clear,
+html.jsok main td.nav-clear,
+html.jsok main th.nav-clear,
+html.jsok main figure.nav-clear,
+html.jsok main .t90viz.nav-clear,
+html.jsok main .mapx.nav-clear,
+html.jsok main .hx.nav-clear,
+html.jsok main section.nav-clear{
+  margin-right:var(--nav-clear,52px)!important;
+  max-width:calc(100% - var(--nav-clear,52px))!important;
+  width:auto!important;
+  box-sizing:border-box!important;
+}
+html.jsok main table.nav-clear,
+html.jsok main table.cmp.nav-clear,
+html.jsok main figure.nav-clear,
+html.jsok main .t90viz.nav-clear,
+html.jsok main .mapx.nav-clear,
+html.jsok main .hx.nav-clear,
+html.jsok main section.nav-clear{
+  width:calc(100% - var(--nav-clear,52px))!important;
+}
+
+html:not(.jsok) #main{
+  padding-right:calc(56px + env(safe-area-inset-right,0px))!important;
+}
+@media (min-width:801px){
+  html:not(.jsok) #main{
+    padding-right:max(clamp(10px,1.6vw,28px), calc(56px + env(safe-area-inset-right,0px)))!important;
+  }
 }

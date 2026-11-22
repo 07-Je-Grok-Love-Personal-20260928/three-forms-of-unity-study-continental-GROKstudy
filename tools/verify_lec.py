@@ -76,6 +76,11 @@ def running_headers(book: str) -> list[str]:
         "多特信经的历史回顾",
         "第一项教义", "第二项教义", "第三、四项教义", "第五项教义",
         "论神的拣选与弃绝",
+        "论基督的死和人的救赎",
+        "论基督的死和人藉此而得的救赎",
+        "论人的败坏、向神归正及其方法",
+        "论圣徒的坚忍",
+        "真信徒能持守信仰",
         "为什么要学习《比利时信条》？",
         "为什么要学习《比利时信条》",
         "《比利时信条》的历史背景",
@@ -155,6 +160,15 @@ def strip_chrome(s: str, headers: list[str]) -> str:
             s = s.replace(h, "")
     # BC (and similar) running article titles, Arabic or Chinese numerals
     s = re.sub(r"第[0-9一二三四五六七八九十百]+条论[^。？?；;]{0,40}", "", s)
+    # split running titles left at a page top, e.g. "坏、向神归正及其方法"
+    for h in sorted(headers, key=len, reverse=True):
+        if len(h) < 10:
+            continue
+        for i in range(len(h)-1, 7, -1):
+            frag=h[-i:]
+            if len(frag)>=8 and frag in s and frag != h:
+                s=s.replace(frag, "")
+                break
     return s
 
 def peel_footnote_islands(s: str) -> tuple[str, str]:

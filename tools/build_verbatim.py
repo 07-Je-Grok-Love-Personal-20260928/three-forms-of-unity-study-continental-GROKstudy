@@ -271,6 +271,36 @@ def merge_footnote_markers(lines):
         i += 1
     return out
 
+
+def peel_running_title_leaks(blocks, title_heads):
+    """Remove a running title that pdftotext glued into a longer paragraph."""
+    heads=[]
+    seen=set()
+    for h in title_heads or []:
+        hs=re.sub(r"\s+", "", (h or "").strip())
+        if 6 <= len(hs) <= 48 and hs not in seen:
+            seen.add(hs); heads.append(hs)
+    # longest first so we strip the full title before a short fragment
+    heads.sort(key=len, reverse=True)
+    if not heads:
+        return blocks
+    out=[]
+    for kind, text in blocks:
+        if kind in {"h","pg"} or not text:
+            out.append((kind, text)); continue
+        compact=re.sub(r"\s+", "", text)
+        new=text
+        for h in heads:
+            if h and h in compact and compact != h:
+                # only drop a mid-paragraph occurrence, not a heading-only block
+                new=new.replace(h, "")
+                # also drop if original had spaces inside the title
+                new=re.sub(re.escape(h), "", new)
+        new=re.sub(r"[ \t]{2,}", " ", new).strip()
+        if new:
+            out.append((kind, new))
+    return out
+
 def slice_chapter(cleaned, pdf_start, pdf_end, page_start, heads, title_heads=None):
     """Concatenate chapter pages, join wraps across page breaks, mark print pages."""
     pages_used=[]
@@ -317,7 +347,13 @@ def slice_chapter(cleaned, pdf_start, pdf_end, page_start, heads, title_heads=No
                 else:
                     for h in title_heads:
                         hc, sc = compact(h), compact(ts)
-                        if hc and 4 <= len(hc) <= 40 and sc == hc:
+                        if not hc or len(hc) < 4 or len(hc) > 48:
+                            continue
+                        if sc == hc:
+                            is_run = True
+                            break
+                        # split running titles: "论人的败" / "坏、向神归正及其方法"
+                        if len(sc) >= 8 and (hc.endswith(sc) or sc.endswith(hc) or (len(hc) >= 8 and sc.startswith(hc))):
                             is_run = True
                             break
             if is_run:
@@ -381,6 +417,7 @@ def slice_chapter(cleaned, pdf_start, pdf_end, page_start, heads, title_heads=No
             lines.append(item[1])
             page_of.append(item[2])
     joined = join_paragraphs(lines, heads)
+    joined = peel_running_title_leaks(joined, title_heads)
     # assign pages: walk original lines? simpler: use first page marker then current
     # join_paragraphs lost line index; estimate by text search
     blocks=[]

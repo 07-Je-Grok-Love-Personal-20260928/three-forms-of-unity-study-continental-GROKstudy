@@ -1,29 +1,29 @@
 {
   "hc": {
     "chapters": 53,
-    "chars": 337500,
+    "chars": 337395,
     "headers": [
       "中国改革宗圣经学院：海德堡要理问答讲座"
     ],
     "file": "/workspace/three-forms-of-unity-study-continental-20261017/data/lec-verbatim/hc.json",
-    "kb": 1365.9
+    "kb": 1365.6
   },
   "dort": {
     "chapters": 61,
-    "chars": 228404,
+    "chars": 228334,
     "headers": [
       "第一项教义",
       "第三、四项教义",
       "第五项教义"
     ],
     "file": "/workspace/three-forms-of-unity-study-continental-20261017/data/lec-verbatim/dort.json",
-    "kb": 992.6
+    "kb": 992.4
   },
   "bc": {
     "chapters": 38,
-    "chars": 237941,
+    "chars": 237927,
     "headers": [],
     "file": "/workspace/three-forms-of-unity-study-continental-20261017/data/lec-verbatim/bc.json",
-    "kb": 911.3
+    "kb": 911.2
   }
 }
