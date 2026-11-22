@@ -30,7 +30,7 @@ html{overflow-x:hidden}
   main .srcd, main .people, main .myths, main .stats, main figure,
   main .qa7 .qa, main .map, main .cmpw, main .vst, main .hero .hin,
   main .exeg, main .exb, main details.ex, main .mapx, main .mx-r, main figure.rmap,
-  main .sline, main .sl-steps, main .sl-bar, main li.sl-st,
+  main .sline, main .sl-steps, main li.sl-st,
   main details.mkdefs, main .mkdefs, main .mkdef, main .mkdl,
   main details.dp, main .dp, main .dpb, main .dpt, main .dpr, main .dps,
   main .dcol, main .dc, main .t91flow, main .t90-in, main .t91steps,
@@ -40,6 +40,14 @@ html{overflow-x:hidden}
     padding-left:0!important;
     padding-right:0!important;
     max-width:none!important;
+  }
+  /* Timeline bar icons are 30px and centered on 0%/100%, so the bar
+     itself needs the original 16px side margin or they hang off the viewport. */
+  main .sl-bar{
+    margin-left:16px!important;
+    margin-right:16px!important;
+    padding-left:0!important;
+    padding-right:0!important;
   }
   main ul, main ol{
     margin-left:0!important;
