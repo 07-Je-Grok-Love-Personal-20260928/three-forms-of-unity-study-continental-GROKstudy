@@ -180,7 +180,8 @@ html,body{overflow-x:clip}
   .ptabwrap .ptabs,.ptabwrap .ptab-tog,.ptabline .ptab-hair,.ptabline .ptab-handle{transition:none}
 }
 html:not(.jsok) .ptab-tog,html:not(.jsok) .ptabline{display:none}
-html:not(.jsok) .ptabwrap,html:not(.jsok) .ptabwrap .ptabs,html:not(.jsok) .ptabwrap .ptab-tog{height:auto;opacity:1;transform:none;pointer-events:auto;overflow:visible}
+html:not(.jsok) .ptabwrap,html:not(.jsok) .ptabwrap .ptab-tog{height:auto;opacity:1;transform:none;pointer-events:auto;overflow:visible}
+html:not(.jsok) .ptabwrap .ptabs{height:auto;opacity:1;transform:none;pointer-events:auto;overflow-x:auto}
 
 /* t114 study pages */
 .sot-emblem,.sot-ordo,.sot-states{display:block;width:100%;max-width:720px;margin:12px auto;height:auto}
