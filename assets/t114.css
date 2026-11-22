@@ -179,3 +179,25 @@ html:is([data-theme=paper],[data-theme=celadon],[data-theme=wisteria]) .l3 .lb{c
 }
 html:not(.jsok) .ptab-tog,html:not(.jsok) .ptabline{display:none}
 html:not(.jsok) .ptabwrap,html:not(.jsok) .ptabwrap .ptabs,html:not(.jsok) .ptabwrap .ptab-tog{height:auto;opacity:1;transform:none;pointer-events:auto;overflow:visible}
+
+/* t114 study pages */
+.sot-emblem,.sot-ordo,.sot-states{display:block;width:100%;max-width:720px;margin:12px auto;height:auto}
+.sot-emblem{max-width:640px}
+.sot-poster{margin:14px 0;padding:16px 16px 18px;border:1px solid rgba(var(--W),.14);border-radius:16px;background:rgba(var(--D),.45)}
+.sot-poster h3,.sot-poster h4{margin:0 0 8px;font-family:"I.Ming","Noto Serif TC","Songti SC",serif}
+.sot-poster .banner{letter-spacing:.12em;color:var(--gold2);font-weight:700;margin:0 0 10px}
+.sot-solablock{margin:14px 0 18px;padding:12px 14px;border-left:3px solid var(--gold);background:rgba(var(--W),.03);border-radius:0 12px 12px 0}
+.sot-solablock .st,.sot-solablock .qt{white-space:pre-wrap;margin:.4em 0;font-family:"I.Ming","Noto Serif TC","Songti SC",serif;line-height:1.85}
+.sot-solablock .who{color:color-mix(in srgb,var(--mut),var(--dkc) var(--dk));font-size:.92rem}
+.ln{display:inline-block;min-width:1.2em;margin-right:.35em;font-size:.72em;color:var(--mut);vertical-align:super}
+.deck{margin:12px 0}
+.deck .pdfsrc{display:inline-block;margin:0 8px 0 0;padding:0 6px;border:1px solid rgba(var(--W),.14);border-radius:6px;font-size:.78rem;color:var(--mut)}
+.deck p{white-space:pre-wrap;margin:.55em 0}
+.deck h4{margin:1.2em 0 .4em}
+.vq{margin:.5em 0;padding:.4em 0}
+.vq cite{font-style:normal;font-weight:700;color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));margin-right:.4em}
+.cciq{margin:10px 0;padding:10px 14px;border-left:3px solid var(--g);background:rgba(var(--W),.03)}
+.cciq footer{margin-top:.35em;color:var(--mut);font-size:.86rem}
+.sot-matrix th:first-child,.sot-cmp td:first-child{white-space:nowrap}
+.childq-slot{padding:16px;border:1px dashed rgba(var(--W),.25);border-radius:14px;color:var(--mut)}
+.lec-crumb{margin:10px 0 0;font-size:.92rem}

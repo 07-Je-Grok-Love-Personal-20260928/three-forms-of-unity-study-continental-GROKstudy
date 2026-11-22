@@ -5,26 +5,27 @@ from core import *
 import core
 from c_common import *
 import pdf15,storymap
-import c_bible,c_hc,c_bc,c_dort,c_compare,c_west,c_mem,c_src,c_lec,libs
+import c_bible,c_hc,c_bc,c_dort,c_compare,c_west,c_mem,c_src,c_lec,c_sot,libs
 
 SITE="三项联合信条 · 欧陆改革宗深读"
 PAGES=[("index","index.html","首页","home"),("bible","bible.html","一 全本圣经","book"),("hc","hc.html","二 海德堡","heart"),("bc","bc.html","三 比利时信条","scroll"),
  ("dort","dort.html","四 多特信经","scale"),("compare","compare.html","五 比较与签署","link"),("westminster","westminster.html","六 威斯敏斯特","scale"),
  ("hct","hct.html","七 HC 原文","scroll"),("bct","bct.html","八 BC 原文","scroll"),("dtt","dtt.html","九 Dort 原文","scroll"),("creedsx","creedsx.html","十 三大信经","scroll"),
  ("memory","memory.html","十一 记忆自测","brain"),("sources","sources.html","十二 来源","library"),
- ("lec-hc","lec-hc.html","十三 HC讲座","heart"),("lec-dort","lec-dort.html","十四 Dort学习","scale"),("lec-bc","lec-bc.html","十五 BC释义","scroll")]
+ ("lec-hc","lec-hc.html","十三 HC讲座","heart"),("lec-dort","lec-dort.html","十四 Dort学习","scale"),("lec-bc","lec-bc.html","十五 BC释义","scroll"),
+ ("sot","sot.html","十六 救恩教义","cross"),("childq","childq.html","十七 儿童要理","users")]
 if "home" not in P: P["home"]=P["book"]
 PARTS={"bible":c_bible.part_bible,"hc":c_hc.part_hc,"bc":c_bc.part_bc,"dort":c_dort.part_dort,"compare":c_compare.part_compare,"westminster":c_west.part_westminster,
  "hct":libs.part_hct,"bct":libs.part_bct,"dtt":libs.part_dtt,"creedsx":libs.part_creedsx,"memory":c_mem.part_mem,
- "lec-hc":c_lec.part_lec_hc,"lec-dort":c_lec.part_lec_dort,"lec-bc":c_lec.part_lec_bc}
+ "lec-hc":c_lec.part_lec_hc,"lec-dort":c_lec.part_lec_dort,"lec-bc":c_lec.part_lec_bc,"sot":c_sot.part_sot,"childq":c_sot.part_childq}
 FILE={k:f for k,f,_,_ in PAGES}; LABEL={k:t for k,_,t,_ in PAGES}
 BODY={}
-L1N={"bible":1,"hc":2,"bc":3,"dort":4,"compare":5,"westminster":6,"hct":7,"bct":8,"dtt":9,"creedsx":10,"memory":11,"sources":12,"lec-hc":13,"lec-dort":14,"lec-bc":15}
+L1N={"bible":1,"hc":2,"bc":3,"dort":4,"compare":5,"westminster":6,"hct":7,"bct":8,"dtt":9,"creedsx":10,"memory":11,"sources":12,"lec-hc":13,"lec-dort":14,"lec-bc":15,"sot":16,"childq":17}
 for k,_,_,_ in PAGES[1:]:
     core.CUR["f"]=FILE[k]; core.CUR["n"]=L1N[k]; core.CUR["c2"]=0
     if k=="sources": BODY[k]=c_src.part_src(BODY)
     else: BODY[k]=PARTS[k]()
-for k,f,lab,ico,h in getattr(c_lec,"EXTRA",[]):
+for k,f,lab,ico,h in list(getattr(c_lec,"EXTRA",[]))+list(getattr(c_sot,"EXTRA",[])):
     FILE[k]=f; LABEL[k]=lab; BODY[k]=h
 TOC=core.TOC
 IDS={}
@@ -56,7 +57,7 @@ def toc_html(cur):
 def tabs(cur):
     return '<nav class="ptabs" aria-label="页面导航">'+"".join(f'<a href="{f}"{" class=on aria-current=page" if k==cur else ""}>{t}</a>' for k,f,t,_ in PAGES)+'</nav>'
 def pager(cur):
-    chain=getattr(c_lec,"CHAIN",{}).get(cur)
+    chain=(getattr(c_lec,"CHAIN",{})|getattr(c_sot,"CHAIN",{})).get(cur)
     if chain:
         prev,nxt,hub=chain
         out='<nav class="pager" aria-label="上一页下一页">'
@@ -89,19 +90,19 @@ def index_body():
     desc={"bible":"救恩史四幕、圣约框架、三份文件如何成为一个整体","hc":"52 主日 · 罪·救·谢 · 本质与应用 · 时间线与地图","bc":"37 条七群 · 德布利的故事 · 11 张深读卡","dort":"1618–19 · 4 项 · 34 条错谬反驳 · TULIP 术语说明",
       "compare":"体裁、问题、对照表、签署书与 BC 9","westminster":"WCF/WLC/WSC 十五个主题的对读","hct":"129 问逐字全文（CCI）","bct":"37 条逐字全文（CCI）","dtt":"63 个条目逐字全文（CCI）",
       "creedsx":"三大信经 CCI 原文附录","memory":"口诀、导图、翻卡、15 题自测、52 周计划","sources":"哪些逐字、哪些转述、哪些 CCI 没有",
-      "lec-hc":"中国改革宗圣经学院 53 讲全文逐字＋本站要点（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》全文逐字＋本站要点（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义全文逐字＋本站要点（释义材料，非 CCI 原文）"}
+      "lec-hc":"中国改革宗圣经学院 53 讲全文逐字＋本站要点（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》全文逐字＋本站要点（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义全文逐字＋本站要点（释义材料，非 CCI 原文）","sot":"五个唯独、救恩五要点辨惑、律法与福音、称义成圣与果子","childq":"儿童要理问答（待录入，不编造正文）"}
     icon={k:i for k,_,_,i in PAGES}
     steps="".join(f'<a class="step" href="{FILE[k]}" data-pg="{k}" style="--i:{n}"><span class="sno">{n+1}</span><span class="si">{ic(icon[k],"ic big")}</span><b>{LABEL[k]}</b><small>{desc[k]}</small><span class="bar"><i></i></span><em class="pc" data-pc="{k}">未读</em></a>' for n,(k,_,_,_) in enumerate(PAGES[1:]))
     hero=f'''<header class="hero"><div class="hin"><div class="badge">欧陆改革宗 · 三项联合信条</div><h1>三项联合信条<br><span>比利时信条 · 海德堡要理问答 · 多特信经</span></h1><p>先看整本圣经与圣约，再逐条深读。三项联合信条与所有引文<b>逐字取自 CCI《赞美手册》中文版</b>。</p>
 <div class="trio"><a href="bc.html" class="tri" style="--c:#5aa9e6"><i>{ic("scroll","ic big")}</i><b>比利时信条</b><small>1561 · 告白 · 37 条</small></a><a href="hc.html" class="tri" style="--c:#81b29a"><i>{ic("heart","ic big")}</i><b>海德堡要理问答</b><small>1563 · 问答 · 52 主日</small></a><a href="dort.html" class="tri" style="--c:#d4af37"><i>{ic("scale","ic big")}</i><b>多特信经</b><small>1618–19 · 裁决 · 4 项</small></a></div>
 <div class="stats"><div><b data-count="{bcn}">{bcn}</b><small>条比利时信条</small></div><div><b data-count="{nq}">{nq}</b><small>问海德堡要理问答</small></div><div><b data-count="{dn}">{dn}</b><small>个多特条目</small></div><div><b data-count="34">34</b><small>条错谬反驳</small></div></div>
 <div class="hbtn"><a class="btn" href="bible.html">开始阅读：全本圣经视角</a><a class="btn ghost" href="hc.html#hcd-struct">HC 三部分</a><a class="btn ghost" href="dort.html#dd-tulip">TULIP 与多特</a></div></div></header>'''
-    prog='''<section class="l1" id="path"><header class="l1h reveal"><span class="ico">'''+ic("map","ic big")+'''</span><div><div class="kick">学习路径</div><h2>十五站学习路径与进度</h2><p class="lead">建议顺序：圣经 → 三份深读 → 比较与对照 → 原文库、背诵与自测 → 讲座与释义精读。进度只存在本机浏览器，不上传。</p></div></header>
+    prog='''<section class="l1" id="path"><header class="l1h reveal"><span class="ico">'''+ic("map","ic big")+'''</span><div><div class="kick">学习路径</div><h2>十七站学习路径与进度</h2><p class="lead">建议顺序：圣经 → 三份深读 → 比较与对照 → 原文库、背诵与自测 → 讲座与释义精读 → 救恩教义专题 → 儿童要理问答。进度只存在本机浏览器，不上传。</p></div></header>
 <div class="progbox reveal"><div class="ring2" id="ringbox"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="rb"/><circle cx="60" cy="60" r="52" class="rf" id="ringf" pathLength="100" stroke-dasharray="0 100"/></svg><div class="rt"><b id="ringn">0%</b><small>已读小节</small></div></div><div class="pinfo"><p>已读 <b id="readn">0</b> / <b id="readt">0</b> 个小节（滚动到小节即记为已读）。自测最近得分：<b id="quizs">未做</b>。</p><p><button class="btn ghost" id="resetp" type="button">清除进度</button></p></div></div>
 <div class="steps">'''+steps+'''</div></section>'''
     vis=[("🗺️","SVG 地图与路线","海德堡、图尔奈、多德雷赫特与改革宗欧洲。","hc.html#hcd-geo"),("🧭","时间线","每份文件一条动画时间线。","bc.html#bcd-tl"),("🏗️","HC 三部分结构条","按问数画出罪·救·谢。","hc.html#hcd-struct"),
          ("🧩","BC 37 条地图","七群着色方块，点块跳到原文。","bc.html#bcd-map"),("🌷","TULIP ↔ 抗辩派五点","抗辩派与多特的分层对照。","dort.html#dd-tulip"),("📋","主题×文件对照表","十四个主题的链接矩阵。","compare.html#cp-xmap"),
-         ("📜","签署书","CCI 签署书原文与结构。","compare.html#cp-sub"),("🧠","导图 · 翻卡 · 自测","口诀、翻卡、自测、52 周计划。","memory.html#mem-mind"),("↔️","可拖宽的目录","拖右缘手柄调宽，宽度记在本机。","index.html#idx-vis"),("🔤","背诵版一条一行","三信经：一行一句；全显、首字、全遮、跟读。","creedsx.html#cr-ap"),("🔍","三信经深度对比","总表、流程、同异与为何是三份。","creedsx.html#cr-cmp"),("🌐","参考站互证","逐字引文与“有没有提”矩阵。","compare.html#cp-ref"),("⚖️","威斯敏斯特对照","十五个主题：“实质同／措辞异／强调异”。","westminster.html#wm-table"),("📖","讲座与释义精读","海德堡 53 讲、多特《靠主夸口》、比利时信条释义的逐字全文与本站要点；均注明页码，与 CCI 原文分开。","lec-hc.html")]
+         ("📜","签署书","CCI 签署书原文与结构。","compare.html#cp-sub"),("🧠","导图 · 翻卡 · 自测","口诀、翻卡、自测、52 周计划。","memory.html#mem-mind"),("↔️","可拖宽的目录","拖右缘手柄调宽，宽度记在本机。","index.html#idx-vis"),("🔤","背诵版一条一行","三信经：一行一句；全显、首字、全遮、跟读。","creedsx.html#cr-ap"),("🔍","三信经深度对比","总表、流程、同异与为何是三份。","creedsx.html#cr-cmp"),("🌐","参考站互证","逐字引文与“有没有提”矩阵。","compare.html#cp-ref"),("⚖️","威斯敏斯特对照","十五个主题：“实质同／措辞异／强调异”。","westminster.html#wm-table"),("📖","讲座与释义精读","海德堡 53 讲、多特《靠主夸口》、比利时信条释义的逐字全文与本站要点；均注明页码，与 CCI 原文分开。","lec-hc.html"),("✝️","救恩教义专题","五个唯独、多特五要点辨惑、律法与福音、称义成圣与果子；讲座与海报原文另标。","sot.html")]
     v="".join(f'<a class="card vcard" href="{u}" style="--c:#d4af37"><div class="ct"><span>{i}</span>{t}</div><p>{p}</p></a>' for i,t,p,u in vis)
     guide='''<section class="l2 reveal" id="idx-vis"><h3><span class="n">·</span>'''+ic("cross")+'''本站的视觉与互动工具</h3><div class="grid g3">'''+v+'''</div>
 '''+key("<b>读法：</b>深读页先给整本圣经的位置，再给逐条的局部。无脚本时内容仍全部可见。颜色：<span class=hl-f>蓝＝父</span>、<span class=hl-s>金＝子</span>、<span class=hl-g>绿＝圣灵</span>。")+note("原文来自 CCI；讲解与图表是本站学习材料。逐字／转述／缺项见"+'<a href="sources.html">第十二部分</a>。')+'</section>'

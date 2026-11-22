@@ -59,7 +59,7 @@ def apply(h, page, site):
         m = re.search(r'<link rel="stylesheet" href="assets/t112\.css\?v=([^"]+)">', h)
         if m:
             ver = m.group(1)
-            h = h.replace(m.group(0), m.group(0) + f'<link rel="stylesheet" href="assets/t114.css?v={ver}.t114r1">', 1)
+            h = h.replace(m.group(0), m.group(0) + f'<link rel="stylesheet" href="assets/t114.css?v={ver}.t114r2">', 1)
         else:
             print("t114 MISS exact t112 link", site, page)
     if 'data-chain="' in h and ",t114" not in h:
