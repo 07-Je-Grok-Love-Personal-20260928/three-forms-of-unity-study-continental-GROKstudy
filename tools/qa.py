@@ -237,12 +237,16 @@ JS_T118=r"""()=>{
   const root=document.documentElement;
   const prop=wide()?'--tw':'--twm';
   const prev=root.style.getPropertyValue(prop);
+  try{ window.scrollTo(0,0); }catch(e){}
   setDrawer(false);
+  try{ window.scrollTo(0,0); }catch(e){}
   run('closed');
   setDrawer(true);
+  try{ window.scrollTo(0,0); }catch(e){}
   run('open');
   const min=wide()?240:200;
   root.style.setProperty(prop, min+'px');
+  try{ window.scrollTo(0,0); }catch(e){}
   run('open-min'+min);
   if(prev) root.style.setProperty(prop, prev);
   else root.style.removeProperty(prop);
