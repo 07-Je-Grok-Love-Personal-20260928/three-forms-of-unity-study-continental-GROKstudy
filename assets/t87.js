@@ -1,5 +1,5 @@
 /* t87：主题切换 + 背诵版全部展开/收起 */
-(function(){var d=document,de=d.documentElement,K='ui.theme',C={night:'#0b1110',navy:'#0a1020',paper:'#f3ead8',celadon:'#e8f0ea',wisteria:'#efeaf4',charcoal:'#161314'},AL={dawn:'paper',jade:'navy',grape:'wisteria',sakura:'wisteria',ocean:'navy',amber:'charcoal',eye:'celadon'};
+(function(){var d=document,de=d.documentElement,K='ui.theme',C={night:'#0f1011',lights:'#000000',dim:'#15202b',paper:'#f0f2f5',warm:'#fbfbfa',mono:'#ffffff'},AL={dawn:'paper',jade:'dim',grape:'mono',sakura:'mono',ocean:'dim',amber:'lights',eye:'warm',navy:'dim',celadon:'warm',wisteria:'mono',charcoal:'lights'};
 var box=d.getElementById('thm'),btn=d.getElementById('thmb');
 function cur(){return de.getAttribute('data-theme')||'night'}
 function mark(){[].forEach.call(d.querySelectorAll('[data-theme-set]'),function(b){b.setAttribute('aria-checked',b.getAttribute('data-theme-set')===cur())})}

@@ -1,0 +1,435 @@
+/* t117: premium palettes, 2-dot dock + header TOC, breathing hairline */
+
+/* ========== 墨灰 (Linear-like graphite) — default, no data-theme ========== */
+:root{
+  --bg:#0f1011;--bg2:#141516;
+  --gl:rgba(var(--W),.05);--gb:rgba(var(--A),.28);
+  --gold:#8b93e8;--gold2:#b0b6f0;
+  --tx:#f7f8f8;--mut:#8a8f98;--hi:#ffffff;
+  --f:#7aa3f0;--s:#8b93e8;--g:#6db8a8;
+  --W:255,255,255;--D:15,16,17;--A:94,106,210;--A2:139,147,232;
+  --pnl:#191a1b;--pnl2:#202122;--dk:0%;--dkc:#000;
+  --qc:#c5c9f5;--ac:#f7f8f8;--qbg:rgba(94,106,210,.16);
+  --abg:rgba(255,255,255,.04);--abd:#6db8a8;--mkhl:rgba(94,106,210,.28);
+  --halo:#121314;--gtx:#b0b6f0;
+  --k1:#8b93e8;--k2:#6cb7f5;--k3:#6db8a8;--k4:#e08b7a;
+  --acc:#5e6ad2;--acc2:#8b93e8;--teal:#5ec4bc;--rose:#e8a0b0;--vio:#b8a8e8;
+  --sky:#6cb7f5;--leaf:#6db8a8;--coral:#e08b7a;
+  --c-god:#89b8f0;--c-chr:#d4b56a;--c-sp:#6fc9a8;--c-sal:#e89580;
+  --c-cov:#b8a4e8;--c-ch:#5ec4bc;--c-ref:#e0a86a;--c-hl:rgba(94,106,210,.4);--c-x:#e88890;
+  --violet:#b8a8e8;
+  --c1:#8b93e8;--c2:#6cb7f5;--c3:#5aa88a;--c4:#b8a4e8;--c5:#e07060;--c6:#e0a86a;--c7:#5ec4bc;
+  --mk-u:var(--gold);
+  color-scheme:dark;
+}
+body{--bgimg:var(--bg)}
+html[data-theme=night]{color-scheme:dark}
+
+/* 夜幕 — X Lights out */
+html[data-theme=lights]{
+  --bg:#000000;--bg2:#000000;
+  --gold:#4dabf5;--gold2:#79c0f8;
+  --tx:#e7e9ea;--mut:#8b9298;--hi:#ffffff;
+  --f:#4dabf5;--s:#4dabf5;--g:#6db8a8;
+  --W:255,255,255;--D:0,0,0;--A:29,155,240;--A2:77,171,245;
+  --pnl:#16181c;--pnl2:#1c1f24;--dk:0%;--dkc:#000;
+  --gb:rgba(29,155,240,.28);--qc:#79c0f8;--ac:#e7e9ea;--gtx:#79c0f8;
+  --qbg:rgba(29,155,240,.16);--abg:rgba(255,255,255,.04);--abd:#6db8a8;
+  --mkhl:rgba(29,155,240,.28);--halo:#0a0a0a;
+  --k1:#4dabf5;--k2:#4dabf5;--k3:#6db8a8;--k4:#e08b7a;
+  --acc:#1d9bf0;--acc2:#4dabf5;--sky:#4dabf5;--leaf:#6db8a8;
+  --c-god:#89b8f0;--c-chr:#d4b56a;--c-sp:#6fc9a8;--c-sal:#e89580;
+  --c-cov:#b8a4e8;--c-ch:#5ec4bc;--c-ref:#e0a86a;--c-hl:rgba(29,155,240,.4);--c-x:#e88890;
+  --c1:#4dabf5;--c2:#6cb7f5;--c3:#5aa88a;--c4:#b8a4e8;--c5:#e07060;--c6:#e0a86a;--c7:#5ec4bc;
+  --mk-u:var(--gold);color-scheme:dark;
+}
+html[data-theme=lights] body{--bgimg:#000}
+
+/* 暗蓝灰 — X Dim */
+html[data-theme=dim]{
+  --bg:#15202b;--bg2:#192734;
+  --gold:#4dabf5;--gold2:#7ec4f8;
+  --tx:#f7f9f9;--mut:#8b98a5;--hi:#ffffff;
+  --f:#4dabf5;--s:#4dabf5;--g:#6db8a8;
+  --W:255,255,255;--D:21,32,43;--A:29,155,240;--A2:77,171,245;
+  --pnl:#1e2732;--pnl2:#22303c;--dk:0%;--dkc:#000;
+  --gb:rgba(29,155,240,.28);--qc:#7ec4f8;--ac:#f7f9f9;--gtx:#7ec4f8;
+  --qbg:rgba(29,155,240,.16);--abg:rgba(255,255,255,.04);--abd:#6db8a8;
+  --mkhl:rgba(29,155,240,.28);--halo:#121a22;
+  --k1:#4dabf5;--k2:#4dabf5;--k3:#6db8a8;--k4:#e08b7a;
+  --acc:#1d9bf0;--acc2:#4dabf5;--sky:#4dabf5;--leaf:#6db8a8;
+  --c-god:#89b8f0;--c-chr:#d4b56a;--c-sp:#6fc9a8;--c-sal:#e89580;
+  --c-cov:#b8a4e8;--c-ch:#5ec4bc;--c-ref:#e0a86a;--c-hl:rgba(29,155,240,.4);--c-x:#e88890;
+  --c1:#4dabf5;--c2:#6cb7f5;--c3:#5aa88a;--c4:#b8a4e8;--c5:#e07060;--c6:#e0a86a;--c7:#5ec4bc;
+  --mk-u:var(--gold);color-scheme:dark;
+}
+html[data-theme=dim] body{--bgimg:#15202b}
+
+/* 雅白 — Facebook / X light */
+html[data-theme=paper]{
+  --bg:#f0f2f5;--bg2:#e8eaee;
+  --gold:#1558c0;--gold2:#0d5bd1;
+  --tx:#050505;--mut:#65676b;--hi:#000000;
+  --f:#1558c0;--s:#1558c0;--g:#1a6b4a;
+  --W:5,5,5;--D:255,255,255;--A:24,119,242;--A2:13,91,209;
+  --pnl:#ffffff;--pnl2:#f7f8fa;--dk:64%;--dkc:#050505;
+  --gb:rgba(24,119,242,.28);--qc:#0d4ea3;--ac:#050505;--gtx:#0d4ea3;
+  --qbg:rgba(24,119,242,.1);--abg:rgba(255,255,255,.92);--abd:#1a6b4a;
+  --mkhl:rgba(24,119,242,.18);--halo:#f5f6f8;
+  --k1:#1558c0;--k2:#1558c0;--k3:#1a6b4a;--k4:#a84430;
+  --acc:#1877f2;--acc2:#0d5bd1;--sky:#1558c0;--leaf:#1a6b4a;
+  --c-god:#1558c0;--c-chr:#7a4e00;--c-sp:#1a5c3a;--c-sal:#9a2a22;
+  --c-cov:#5a3a90;--c-ch:#0e6a64;--c-ref:#8a4a00;--c-hl:rgba(24,119,242,.28);--c-x:#9a1c28;
+  --violet:#5a3a90;
+  --c1:#1558c0;--c2:#1558c0;--c3:#1a6a3e;--c4:#5a3a90;--c5:#9a2010;--c6:#8a4a00;--c7:#0e6a6a;
+  --mk-u:#1558c0;color-scheme:light;
+}
+html[data-theme=paper] body{--bgimg:#f0f2f5}
+
+/* 素纸 — Notion / Apple warm paper */
+html[data-theme=warm]{
+  --bg:#fbfbfa;--bg2:#f4f4f1;
+  --gold:#0b6bc4;--gold2:#1869b8;
+  --tx:#37352f;--mut:#5c5b56;--hi:#191814;
+  --f:#0b6bc4;--s:#0b6bc4;--g:#1a6b4a;
+  --W:55,53,47;--D:255,255,255;--A:35,131,226;--A2:11,107,196;
+  --pnl:#ffffff;--pnl2:#f3f2ef;--dk:64%;--dkc:#191814;
+  --gb:rgba(35,131,226,.28);--qc:#0b5aa8;--ac:#37352f;--gtx:#0b5aa8;
+  --qbg:rgba(35,131,226,.1);--abg:rgba(255,255,255,.92);--abd:#1a6b4a;
+  --mkhl:rgba(35,131,226,.16);--halo:#f7f7f4;
+  --k1:#0b6bc4;--k2:#0b6bc4;--k3:#1a6b4a;--k4:#a84430;
+  --acc:#2383e2;--acc2:#1869b8;--sky:#0b6bc4;--leaf:#1a6b4a;
+  --c-god:#0b6bc4;--c-chr:#7a4e00;--c-sp:#1a5c3a;--c-sal:#9a2a22;
+  --c-cov:#5a3a90;--c-ch:#0e6a64;--c-ref:#8a4a00;--c-hl:rgba(35,131,226,.25);--c-x:#9a1c28;
+  --violet:#5a3a90;
+  --c1:#0b6bc4;--c2:#0b6bc4;--c3:#1a6a3e;--c4:#5a3a90;--c5:#9a2010;--c6:#8a4a00;--c7:#0e6a6a;
+  --mk-u:#0b6bc4;color-scheme:light;
+}
+html[data-theme=warm] body{--bgimg:#fbfbfa}
+
+/* 素净 — GitHub light */
+html[data-theme=mono]{
+  --bg:#ffffff;--bg2:#f6f8fa;
+  --gold:#0969da;--gold2:#0550ae;
+  --tx:#1f2328;--mut:#656d76;--hi:#0d1117;
+  --f:#0969da;--s:#0969da;--g:#1a6b4a;
+  --W:31,35,40;--D:255,255,255;--A:9,105,218;--A2:5,80,174;
+  --pnl:#ffffff;--pnl2:#f6f8fa;--dk:64%;--dkc:#0d1117;
+  --gb:rgba(9,105,218,.28);--qc:#0550ae;--ac:#1f2328;--gtx:#0550ae;
+  --qbg:rgba(9,105,218,.1);--abg:rgba(255,255,255,.92);--abd:#1a6b4a;
+  --mkhl:rgba(9,105,218,.16);--halo:#f6f8fa;
+  --k1:#0969da;--k2:#0969da;--k3:#1a6b4a;--k4:#a84430;
+  --acc:#0969da;--acc2:#0550ae;--sky:#0969da;--leaf:#1a6b4a;
+  --c-god:#0969da;--c-chr:#7a4e00;--c-sp:#1a5c3a;--c-sal:#9a2a22;
+  --c-cov:#5a3a90;--c-ch:#0e6a64;--c-ref:#8a4a00;--c-hl:rgba(9,105,218,.25);--c-x:#9a1c28;
+  --violet:#5a3a90;
+  --c1:#0969da;--c2:#0969da;--c3:#1a6a3e;--c4:#5a3a90;--c5:#9a2010;--c6:#8a4a00;--c7:#0e6a6a;
+  --mk-u:#0969da;color-scheme:light;
+}
+html[data-theme=mono] body{--bgimg:#ffffff}
+
+/* Flat, calm surfaces: kill the old radial body blobs; tame module fills */
+.l1h{background:color-mix(in srgb,var(--acc) 10%,var(--pnl));border:1px solid var(--gb)}
+#toc a.on{background:color-mix(in srgb,var(--acc) 16%,var(--pnl))!important}
+
+/* ---- light compensations (paper / warm / mono) ---- */
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) figure svg{filter:none}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .btn:not(.ghost){--dk:0%;color:#fff;background:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #toc a.on,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #toc a.on *{color:#050505!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #toc{box-shadow:1px 0 0 rgba(0,0,0,.08)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .fab{background:rgba(255,255,255,.92)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .mk-d{text-decoration-color:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cwc{color:color-mix(in srgb,var(--cc) 50%,#140d02)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .kchip,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .hchip{color:#1a160f}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .map stop:nth-child(-n+2){stop-color:#9cc3ea;stop-opacity:.5}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .map stop:nth-child(n+3),
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .map stop:last-child{stop-color:#c5d4ea;stop-opacity:.5}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .mk-core{background:linear-gradient(transparent 56%,color-mix(in srgb,var(--acc) 35%,#fff) 56%)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .core1{background:color-mix(in srgb,var(--acc) 10%,#fff)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .sno{color:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) main b[style="color:#5aa9e6"]{color:#1558c0!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) main b[style="color:#81b29a"]{color:#2f6b4f!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) main b[style="color:#d4af37"]{color:#7a4f00!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) main b[style="color:#e07a5f"]{color:#a8412a!important}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .rm-leg em{color:#7a4f00}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cmap .cml{fill:#2a2118}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cmap .cml.hl{fill:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cmap .ldr{stroke:rgba(42,33,24,.45)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .msteps b{color:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .hxy{color:color-mix(in srgb,var(--c) 42%,#1a1206)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]):not(.mkoff) .mk-ref{background:rgba(24,119,242,.12)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .core-n{background:var(--gold);color:#fff}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) main h1{background-image:none;color:var(--hi)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .lb,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .l3 .lb,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .l3 p.k .lb{
+  color:#1a160f;
+  background:color-mix(in srgb,var(--gold) 22%,#fff);
+}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .ychip{color:#1a160f}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .sot-poster .banner{color:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .l2 h3 .n{color:#fff;background:var(--gold)}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-q .cq-lab{color:#1a160f}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-a .cq-lab{color:#1a160f}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-ref{color:var(--gold)}
+
+/* dark 要问／答案 chips: lift muted ink to AA on the card */
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .aq small,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .aa small,
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .cq-a .cq-lab{color:color-mix(in srgb,var(--mut) 70%,#fff)}
+html:not([data-theme=paper]):not([data-theme=warm]):not([data-theme=mono]) .core-n{background:var(--gold);color:#0f1011}
+
+/* sticky bars: very subtle glass only */
+.ptabwrap{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);border-bottom:1px solid color-mix(in srgb,var(--gb) 50%,transparent)}
+
+/* ========== top-left TOC icon ========== */
+#tochd{
+  position:fixed;
+  z-index:70;
+  top:max(8px, env(safe-area-inset-top,0px));
+  left:max(8px, env(safe-area-inset-left,0px));
+  box-sizing:border-box;
+  width:36px;height:36px;margin:0;padding:0;
+  border-radius:10px;
+  display:grid;place-items:center;
+  cursor:pointer;user-select:none;
+  font-size:1.05rem;line-height:1;
+  color:var(--gtx,var(--gold2));
+  background:rgba(var(--D),.55);
+  border:1px solid rgba(var(--W),.14);
+  box-shadow:0 2px 10px rgba(0,0,0,.14);
+  opacity:.62;
+  transition:opacity .2s, background .2s, border-color .2s;
+}
+#tochd:hover,#tochd:focus-visible,body.tocopen #tochd,body:not(.tochide) #tochd{
+  opacity:1;
+  background:rgba(var(--D),.88);
+  border-color:rgba(var(--A),.45);
+}
+#tochd:focus-visible{outline:3px solid #f08a24;outline-offset:2px}
+.ptabwrap{padding-left:44px}
+@media (min-width:1100px){
+  body:not(.tochide) .ptabwrap{padding-left:8px}
+  body:not(.tochide) #tochd{left:10px}
+}
+html:not(.jsok) #tochd{display:none}
+@media print{#tochd{display:none!important}}
+
+/* ========== dock: 2-dot launcher + always-visible TOC ========== */
+#nvdock{
+  position:fixed;
+  right:calc(8px + env(safe-area-inset-right,0px));
+  bottom:calc(8px + env(safe-area-inset-bottom,0px));
+  z-index:56;
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:center;
+  gap:8px;
+  width:auto;
+  pointer-events:none;
+}
+#nvdock > *{pointer-events:auto}
+#nvdock #nvlaunch.nvlaunch{
+  position:static!important;
+  right:auto;bottom:auto;left:auto;top:auto;
+  width:auto;margin:0;
+}
+#nvdock #tocbtn.fab,
+#nvdock .nv-toc-fallback{
+  position:static!important;
+  inset:auto!important;
+  box-sizing:border-box;
+  width:36px!important;
+  height:36px!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:10px!important;
+  display:grid!important;
+  place-items:center!important;
+  gap:0!important;
+  font-size:1.05rem!important;
+  line-height:1!important;
+  color:var(--gtx,var(--gold2))!important;
+  background:rgba(var(--D),.55)!important;
+  border:1px solid rgba(var(--W),.14)!important;
+  box-shadow:0 2px 10px rgba(0,0,0,.14)!important;
+  opacity:.62;
+  text-decoration:none!important;
+  overflow:hidden!important;
+  white-space:nowrap;
+  transition:opacity .2s, background .2s, border-color .2s;
+}
+#nvdock #tocbtn.fab::after,
+#nvdock .nv-toc-fallback::after{content:none!important;display:none!important}
+#nvdock #tocbtn.fab:hover,
+#nvdock #tocbtn.fab:focus-visible,
+#nvdock .nv-toc-fallback:hover,
+#nvdock .nv-toc-fallback:focus-visible,
+body.tocopen #nvdock #tocbtn.fab{
+  opacity:1;
+  background:rgba(var(--D),.88)!important;
+  border-color:rgba(var(--A),.45)!important;
+}
+#nvdock #tocbtn.fab:focus-visible,
+#nvdock .nv-toc-fallback:focus-visible{outline:3px solid #f08a24;outline-offset:2px}
+
+#nvlaunch > summary.nvlaunch-btn{
+  width:36px;height:36px;
+  padding:0;
+  border-radius:10px;
+  font-size:0;line-height:0;color:transparent;
+  letter-spacing:0;
+  opacity:.42;
+  background:rgba(var(--D),.4);
+}
+#nvlaunch > summary.nvlaunch-btn .nv-dots{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  width:100%;height:100%;
+}
+#nvlaunch > summary.nvlaunch-btn .nv-dots i{
+  display:block;width:5px;height:5px;border-radius:50%;
+  background:var(--gtx,var(--tx));
+  opacity:.95;
+}
+#nvlaunch.dim:not([open]):not(:hover):not(:focus-within) > summary.nvlaunch-btn{opacity:.28}
+#nvdock.dim #tocbtn.fab{opacity:.32}
+
+/* icon-only popover: no Chinese labels, compact grid */
+#nvlaunch #navc [data-nv=back]::after,
+#nvlaunch #navc [data-nv=fwd]::after,
+#nvlaunch #navc [data-nv=top]::after,
+#nvlaunch #navc [data-nv=bot]::after,
+#nvlaunch #navc a[href="index.html"]::after,
+#nvlaunch #tocbtn.fab::after,
+#nvlaunch #thmb.fab2::after,
+#nvlaunch #navc [data-nv=mk]::after,
+#nvlaunch #navc [data-nv=leg]::after,
+html:not(.jsok) .nv-toc-fallback::after{content:none!important}
+
+#nvlaunch .nvlaunch-pop{
+  min-width:0;
+  width:max-content;
+  max-width:min(220px, calc(100vw - 16px));
+  padding:8px;
+}
+#nvlaunch #navc,
+#nvlaunch #navc .nv-l,
+#nvlaunch #navc .nv-dock,
+#nvlaunch #navc #thm{
+  flex-direction:row;
+  flex-wrap:wrap;
+  gap:6px;
+}
+#nvlaunch #navc button,
+#nvlaunch #navc a,
+#nvlaunch #navc #thmb.fab2{
+  width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+  justify-content:center!important;
+  gap:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  font-size:1.05rem!important;
+}
+/* theme list keeps names */
+#nvlaunch #thmm button{
+  width:auto!important;
+  height:auto!important;
+  min-height:32px!important;
+  justify-content:flex-start!important;
+  padding:4px 8px!important;
+  font-size:.82rem!important;
+  overflow:visible!important;
+}
+
+html.jsok #nvdock .nv-toc-fallback,
+html.jsok .nv-toc-fallback{display:none!important}
+html:not(.jsok) #nvdock #tocbtn{display:none!important}
+html:not(.jsok) #nvdock .nv-toc-fallback{display:grid!important;opacity:1}
+
+/* hide only the launcher when the drawer is open; TOC icon stays to close it */
+@media (max-width:1099px){
+  body.tocopen #nvlaunch{
+    opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+  }
+  body.tocopen #nvdock{opacity:1;visibility:visible;pointer-events:none}
+  body.tocopen #nvdock #tocbtn{pointer-events:auto;opacity:1}
+}
+
+/* full-bleed width stays; bottom padding lets the last lines clear the dock */
+#main{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+
+@media print{#nvdock{display:none!important}}
+
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #tochd,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #nvdock #tocbtn.fab,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) #nvlaunch > summary.nvlaunch-btn{
+  background:rgba(255,255,255,.86);
+  color:var(--gold);
+  border-color:rgba(0,0,0,.08);
+}
+
+/* ========== hidden top-tab hairline ========== */
+.ptab-handle{display:none!important}
+.ptabwrap.is-hide + .ptabline{
+  height:24px;
+  pointer-events:auto;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+.ptabwrap.is-hide + .ptabline .ptab-hair{
+  opacity:1;transform:none;pointer-events:auto;
+}
+.ptab-hair{
+  display:block;
+  position:relative;
+  width:min(46%, 480px);
+  height:24px;
+  margin:0 auto;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  box-shadow:none;
+  animation:none;
+  border-radius:0;
+}
+.ptab-hair::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  top:6px;
+  height:2.5px;
+  border-radius:999px;
+  background:linear-gradient(90deg,
+    color-mix(in srgb, var(--acc, var(--gold)) 15%, transparent) 0%,
+    color-mix(in srgb, var(--acc, var(--gold)) 85%, #7c6ae8) 22%,
+    color-mix(in srgb, #7c6ae8 70%, var(--acc, var(--gold))) 48%,
+    color-mix(in srgb, #3ec6e0 75%, var(--acc, var(--gold))) 74%,
+    color-mix(in srgb, var(--acc, var(--gold)) 15%, transparent) 100%);
+  background-size:220% 100%;
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--acc, var(--gold)) 50%, transparent),
+    0 0 16px color-mix(in srgb, #7c6ae8 28%, transparent);
+  animation:t117-drift 10s ease-in-out infinite, t117-breathe 4s ease-in-out infinite;
+  transform-origin:center;
+  pointer-events:none;
+}
+@keyframes t117-drift{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes t117-breathe{
+  0%,100%{opacity:.7;transform:scaleX(.9)}
+  50%{opacity:1;transform:scaleX(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .ptab-hair::after{animation:none;opacity:.9;transform:none;background-position:50% 50%}
+  .ptabwrap .ptabs,.ptabwrap .ptab-tog,.ptabline .ptab-hair,.ptabline .ptab-handle{transition:none}
+}
