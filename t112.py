@@ -30,7 +30,7 @@ def apply(h, page, site):
         if m:
             old = m.group(0)
             ver = m.group(1)
-            h = h.replace(old, old + f'<link rel="stylesheet" href="assets/t112.css?v={ver}.t112r1">', 1)
+            h = h.replace(old, old + f'<link rel="stylesheet" href="assets/t112.css?v={ver}.t112r2">', 1)
         else:
             print("t112 MISS exact t107 link", site, page)
     if 'data-chain="' in h and ",t112" not in h:

@@ -262,6 +262,8 @@ html:not(.jsok) #nvlaunch #thm,
 html:not(.jsok) #nvlaunch #tocbtn{
   display:none!important;
 }
+html.jsok #nvlaunch #navc .nv-toc-fallback,
+html.jsok #nvlaunch .nv-toc-fallback,
 html.jsok .nv-toc-fallback{display:none!important}
 html:not(.jsok) .nv-toc-fallback{
   display:flex!important;

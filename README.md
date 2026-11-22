@@ -1,23 +1,23 @@
 # 三项联合信条 · 欧陆改革宗深读
 
-**版本标签：three-forms-of-unity-study-continental-20261122-v22-GROKstudy**（页脚版本 v20261122-22a）
+**版本标签：three-forms-of-unity-study-continental-20261122-v23-GROKstudy**（页脚版本 v20261122-23）
 
 比利时信条（BC）、海德堡要理问答（HC）、多特信经（Dort）的中文多页学习站：先从整本圣经与圣约看，再逐条深读，并附比较、签署书、威斯敏斯特对照、背诵与自测。
 
 **三项联合信条与三大信经原文，以及全站中文引号引文，均逐字取自 [CCI《赞美手册》中文版](https://ccifellowship.org/books/book-of-praise)**（构建时由程序核对）。CCI 没有的内容，用《中国改革宗教会敬拜手册》2015 版（用户提供的 PDF）补充，逐字摘引并标明“出自《中国改革宗教会敬拜手册》2015 版 第 N 页”（tools/verify_pdf.py 核对）；两者都没有的（如多特信经的序言与结语）本站不补，见“来源”页。
 
-## 当前版本链接（v21）
+## 当前版本链接（v23）
 
 | 部署 | 地址 |
 |---|---|
 | GitHub Pages | https://07-je-grok-love-personal-20260928.github.io/three-forms-of-unity-study-continental-GROKstudy/ |
-| Netlify | https://three-forms-of-unity-study-continental-20261122-v22-grokstudy.netlify.app/ |
-| Surge | https://three-forms-of-unity-study-continental-20261122-v22-grokstudy.surge.sh/ |
+| Netlify | https://three-forms-of-unity-study-continental-20261122-v23-grokstudy.netlify.app/ |
+| Surge | https://three-forms-of-unity-study-continental-20261122-v23-grokstudy.surge.sh/ |
 | 代码仓库 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy |
 
 命名：仓库名只含主题（…-GROKstudy，以后不再改名）；Netlify / Surge 域名为“主题-日期-版本-grokstudy”（小写；t91 起后缀改回 grokstudy），每个版本一个新域名，旧域名继续在线。
 
-姊妹站（三大公教会信经）：https://three-ecumenical-creeds-continental-20261122-v25-grokstudy.surge.sh/
+姊妹站（三大公教会信经）：https://three-ecumenical-creeds-continental-20261122-v26-grokstudy.surge.sh/
 
 ## 发布（Releases）——随时恢复
 
@@ -25,6 +25,7 @@
 
 | 标签 | 说明 | 链接 |
 |---|---|---|
+| `v20261122-23` | v23 当前版本（2026-11-22 台北）：右下角三个悬浮按钮收成一枚低调的「⋯」启动器（约 36px，静止半透明，点开后在弹出层里保留后退／前进／到顶／到底／首页／主题／目录；无脚本时 details/summary 仍可到目录与首页）。取消为旧导航簇预留的右侧空条，手机正文左右贴边通栏（目标约 6–9px，≤12px）。全站（含讲座页）重叠／溢出复查：海德堡 52 主日罗盘中心「52」与「主日 · 129 问」不再重叠；启动器弹出层在 360px 仍完整落在屏内。CCI 原文不动（verify_exact 513/0）。不移动标签 v20261122-22 / v20261122-22a。域名 three-forms-of-unity-study-continental-20261122-v23-grokstudy。旧站 v22 与 v22a 的域保留为恢复点。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-23 |
 | `v20261122-22a` | v22a 补丁（2026-11-22 台北）：修正右下角目录按钮／导航簇压住正文的问题（悬浮簇在滚动时收起，静止时只给会发生重叠的块让出右下角，手机正文仍贴边 ≤12px；无脚本时右侧预留簇的位置）。清除讲座原文中 PDF 页眉（如多特「论人的败坏、向神归正及其方法」）误粘进段落的情况。讲座要点列表在手机上收紧缩进。不移动标签 v20261122-22。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-22a |
 | `v20261122-22` | v22 当前版本（2026-11-22 台北）：手机／平板正文进一步贴边通栏。7.1 等章节里的玻璃卡片、原文说明与 CCI 原文块不再层层加边距，正文到屏边约 9–10px（≤12px；原先左侧约 21px、右侧约 73px）；同类说明、问答、讲座块与表格同样压平。桌面两侧最大留白由 48px 收到 28px。CCI 原文与字号不动（verify_exact 513/0）。三份讲座／释义 PDF（海德堡 53 讲、《靠主夸口》、比利时信条释义）改为用户授权发布的逐字全文，每章先列本站整理要点，再列原文，并按书中目录拆成多页。对照 PDF 正文覆盖率：海德堡 100%、多特 99.96%、比利时信条释义 100%（此前约 99.41 / 97.74 / 97.69；余下窗口均为页眉页脚／脚注排位，不是缺文）。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261122-22 |
 | `v20261121-21` | v21（恢复点：t107 前的线上版本 15cce77）（2026-11-21 台北）：手机／平板正文改为通栏（左右仅 6–8px，不再为悬浮导航预留右侧空条；收起目录时不再露出左边线）。海德堡 52 主日图标记忆地图及同类卡片栅格改为约 11–12px 字体、紧凑内边距、自动列数（390px 上 4–5 列），标题最多两行，点按高度至少 32px，一屏可见全部 52 个主日。CCI 原文不动（verify_exact 513/0）。 窄屏标题、脚注、说明与来源对照表为右下角悬浮导航让出边距；无脚本时正文同样让出展开的导航簇，有脚本的手机仍通栏；对照表取消 560px 最小宽度，改为栏内横向滚动，以免压住按钮或溢出。 | https://github.com/07-Je-Grok-Love-Personal-20260928/three-forms-of-unity-study-continental-GROKstudy/releases/tag/v20261121-21 |
