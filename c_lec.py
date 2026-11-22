@@ -13,6 +13,15 @@ VER = {k: json.loads((_VDIR / f"{k}.json").read_text(encoding="utf-8"))
 EXTRA = []   # (key, filename, label, icon, html)
 CHAIN = {}   # key -> (prev_key|None, next_key|None, hub_key)
 
+def _cid(kind, it):
+    """Stable unique section id (Dort/BC both used p{page} and collided)."""
+    i = it["id"]
+    if kind == "hc":
+        return i
+    prefix = {"dort": "lecd-", "bc": "lecb-"}[kind]
+    return i if i.startswith(prefix) else prefix + i
+
+
 def _ok(s):
     s = (s or "").strip()
     if not s or len(s) < 8:
@@ -88,7 +97,8 @@ def _verbatim(ch):
     for b in ch.get("blocks") or []:
         typ, text, page = b.get("type"), b.get("text") or "", b.get("page")
         if typ == "pg":
-            out.append(f'<a class="lec-pg" id="{H.escape(str(ch["id"]))}-p{page}" href="#{H.escape(str(ch["id"]))}-p{page}">〔{page}〕</a>')
+            aid=H.escape(str(ch.get("aid") or ch["id"]))
+            out.append(f'<a class="lec-pg" id="{aid}-p{page}" href="#{aid}-p{page}">〔{page}〕</a>')
             continue
         esc = _fn_refs(H.escape(text))
         if typ == "h":
@@ -114,11 +124,11 @@ def _chapter_title(it):
         title = f'第{it["lecture"]}讲　{title}'
     return title
 
-def _sec_full(it, ch, icon="book"):
+def _sec_full(it, ch, icon="book", kind="hc"):
     rng = (f'第 {it["page_start"]}–{it["page_end"]} 页'
            if it["page_start"] != it["page_end"] else f'第 {it["page_start"]} 页')
     body = _summary(it) + _verbatim(ch)
-    return L3(it["id"], _chapter_title(it), body, icon=icon, tag=rng)
+    return L3(_cid(kind, it), _chapter_title(it), body, icon=icon, tag=rng)
 
 def _book_toc(kind, groups, items, vmap, files):
     """In-page multi-level expandable TOC."""
@@ -127,7 +137,7 @@ def _book_toc(kind, groups, items, vmap, files):
         kids = [it for it in items if pred(it)]
         out.append(f'<details open><summary>{H.escape(gtitle)}</summary><ol>')
         for it in kids:
-            href = f'{filename}#{it["id"]}'
+            href = f'{filename}#{_cid(kind, it)}'
             out.append(f'<li><a href="{href}">{H.escape(_chapter_title(it))}</a> '
                        f'<cite class="lec-cite">第 {it["page_start"]}–{it["page_end"]} 页</cite>')
             heads = [h for h in it.get("headings") or [] if h.get("text") and len(h["text"]) < 28 and "。" not in h["text"]]
@@ -154,9 +164,13 @@ def _register_groups(kind, hub, hub_num, groups, items, icon_default, vmap):
             continue
         key = filename.replace(".html", "")
         CUR["f"] = filename
-        chunk = "".join(_sec_full(it, vchap.get(it["id"], {"id": it["id"], "blocks": [],
-                           "page_start": it["page_start"], "page_end": it["page_end"],
-                           "source": it.get("source") or ""}), ico)
+        def _ch(it):
+            ch = dict(vchap.get(it["id"], {"id": it["id"], "blocks": [],
+                       "page_start": it["page_start"], "page_end": it["page_end"],
+                       "source": it.get("source") or ""}))
+            ch["aid"] = _cid(kind, it)
+            return ch
+        chunk = "".join(_sec_full(it, _ch(it), ico, kind=kind)
                         for it in kids)
         body = L2(gid, "", gtitle, chunk)
         # slim header for the chapter file (no second L1 — stays under the hub TOC)

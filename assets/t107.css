@@ -96,3 +96,18 @@ html{overflow-x:hidden}
     max-width:none!important;
   }
 }
+
+
+/* Gold left accents must not add to the text inset on phones/tablets. */
+@media (max-width:800px){
+  main .l3, main .art{
+    border-left-width:1px!important;
+    box-shadow:inset 3px 0 0 var(--gold,#d4af37);
+  }
+  main .l3.err, main .art.err{box-shadow:inset 3px 0 0 #e07a5f}
+  main .l3.ld, main .art.ld{box-shadow:inset 3px 0 0 #5aa9e6}
+  main .l3.ldc.p0{box-shadow:inset 3px 0 0 #d4af37}
+  main .l3.ldc.p1{box-shadow:inset 3px 0 0 #e07a5f}
+  main .l3.ldc.p2{box-shadow:inset 3px 0 0 #5aa9e6}
+  main .l3.ldc.p3{box-shadow:inset 3px 0 0 #81b29a}
+}
