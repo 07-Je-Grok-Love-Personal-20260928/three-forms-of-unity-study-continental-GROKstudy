@@ -19,7 +19,7 @@ def L2(id, num, title, body):
     else:
         CUR["c2"] += 1; num = f'{CUR["n"]}.{CUR["c2"]}'
     kids = PEND3[:]; PEND3.clear()
-    PEND.append((id, f"{num} {title}", kids))
+    PEND.append((id, f"{num} {title}", kids, CUR["f"]))
     cls = "l2 reveal"
     if id in SEC:
         cls += " sec"

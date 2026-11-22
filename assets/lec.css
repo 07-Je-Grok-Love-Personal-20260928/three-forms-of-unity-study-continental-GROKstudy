@@ -1,0 +1,41 @@
+/* Lecture typography: summaries vs verbatim text, page markers, footnotes. */
+.lec-banner.call{padding:10px 12px}
+.lec-flag{display:inline-flex;align-items:center;gap:.35em;font-weight:700;font-size:.82rem;letter-spacing:.02em;border-radius:999px;padding:.15em .7em;margin:0 0 .5rem}
+.lec-flag.sum{background:rgba(93,169,230,.16);color:color-mix(in srgb,#9fd0ff,var(--dkc) var(--dk))}
+.lec-flag.src{background:rgba(212,175,55,.16);color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk))}
+.lec-sum{margin:0 0 1rem;padding:0}
+.lec-sum .lec-k{margin:.4rem 0 .2rem;font-weight:700}
+.lec-sum ul{margin:.2rem 0 .6rem;padding-inline-start:1.15em}
+.lec-sum li{margin:.25rem 0;line-height:1.7}
+.lec-verbatim{margin:.2rem 0 1.2rem}
+.lec-verbatim p,.lec-verbatim li,.lec-verbatim blockquote{
+  font-size:1.05rem;line-height:1.85;text-wrap:pretty;overflow-wrap:anywhere;
+}
+.lec-verbatim h5{margin:1.1rem 0 .35rem;font-size:1.08rem;color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));font-weight:700}
+.lec-verbatim blockquote.lec-q{
+  margin:.6rem 0;padding:.15rem 0 .15rem .8rem;border-left:3px solid var(--gold);
+  background:transparent;font-size:1.05rem;
+}
+.lec-pg{display:inline-block;font-size:.75rem;font-weight:700;font-style:normal;
+  color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));
+  background:rgba(var(--A),.12);border-radius:999px;padding:.05em .55em;margin:0 .25em 0 0;
+  text-decoration:none;vertical-align:middle}
+.lec-fn{font-size:.92rem;color:color-mix(in srgb,var(--mut),var(--dkc) var(--dk));
+  margin:.4rem 0 .8rem;padding-left:8px;border-left:2px solid rgba(var(--W),.18);line-height:1.7}
+.lec-fnr{font-size:.7em;font-weight:700;color:color-mix(in srgb,var(--gold2),var(--dkc) var(--dk));margin:0 .05em}
+.lec-toc{margin:.4rem 0 1rem}
+.lec-toc details{border:1px solid rgba(var(--W),.1);border-radius:12px;margin:.35rem 0;background:rgba(var(--W),.03)}
+.lec-toc summary{cursor:pointer;padding:.55rem .8rem;font-weight:700;list-style:none}
+.lec-toc summary::-webkit-details-marker{display:none}
+.lec-toc summary::before{content:"▸ ";color:var(--gold)}
+.lec-toc details[open]>summary::before{content:"▾ "}
+.lec-toc ol{list-style:none;margin:0;padding:.1rem .8rem .6rem 1.4rem}
+.lec-toc li{margin:.2rem 0;line-height:1.55}
+.lec-toc a{text-decoration:none}
+.lec-crumb{font-size:.88rem;margin:0 0 .8rem;padding:0 8px}
+.lec-src{font-size:.86rem;color:color-mix(in srgb,var(--mut),var(--dkc) var(--dk))}
+@media (max-width:800px){
+  .lec-verbatim p,.lec-verbatim li,.lec-verbatim blockquote,.lec-sum li,.lec-fn,.lec-crumb,.lec-toc summary,.lec-toc li{
+    padding-left:8px;padding-right:8px;box-sizing:border-box
+  }
+}

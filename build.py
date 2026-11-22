@@ -24,6 +24,8 @@ for k,_,_,_ in PAGES[1:]:
     core.CUR["f"]=FILE[k]; core.CUR["n"]=L1N[k]; core.CUR["c2"]=0
     if k=="sources": BODY[k]=c_src.part_src(BODY)
     else: BODY[k]=PARTS[k]()
+for k,f,lab,ico,h in getattr(c_lec,"EXTRA",[]):
+    FILE[k]=f; LABEL[k]=lab; BODY[k]=h
 TOC=core.TOC
 IDS={}
 for k,h in BODY.items():
@@ -43,16 +45,30 @@ def toc_html(cur):
     for id,title,subs,f in TOC:
         page=[k for k,ff in FILE.items() if ff==f][0]
         def sub(s):
-            sid,st,kids=s
-            if not kids: return f'<li class="t2"><a href="{f}#{sid}">{st}</a></li>'
-            return (f'<li class="t2 has closed"><div class="t2r"><a href="{f}#{sid}">{st}</a><button class="tg2" type="button" aria-label="展开或收起三级标题" aria-expanded="false">▾</button></div><ol>'
-                    +"".join(f'<li class="t3"><a href="{f}#{i}">{tt}</a></li>' for i,tt in kids)+"</ol></li>")
+            if len(s)>=4: sid,st,kids,sf=s[0],s[1],s[2],s[3] or f
+            else: sid,st,kids=s; sf=f
+            href=f"{sf}#{sid}"
+            if not kids: return f'<li class="t2"><a href="{href}">{st}</a></li>'
+            return (f'<li class="t2 has closed"><div class="t2r"><a href="{href}">{st}</a><button class="tg2" type="button" aria-label="展开或收起三级标题" aria-expanded="false">▾</button></div><ol>'
+                    +"".join(f'<li class="t3"><a href="{sf}#{i}">{tt}</a></li>' for i,tt in kids)+"</ol></li>")
         t+=f'<li class="t1{" cur" if page==cur else " closed"}" data-page="{page}"><div class="t1r"><a href="{f}#{id}">{title}</a><button class="tg" type="button" aria-label="展开或收起" aria-expanded="{"true" if page==cur else "false"}">▾</button></div><ol>'+"".join(sub(s) for s in subs)+"</ol></li>"
     return t+"</ol></nav>"
 def tabs(cur):
     return '<nav class="ptabs" aria-label="页面导航">'+"".join(f'<a href="{f}"{" class=on aria-current=page" if k==cur else ""}>{t}</a>' for k,f,t,_ in PAGES)+'</nav>'
 def pager(cur):
-    ks=[k for k,_,_,_ in PAGES]; i=ks.index(cur); out='<nav class="pager" aria-label="上一页下一页">'
+    chain=getattr(c_lec,"CHAIN",{}).get(cur)
+    if chain:
+        prev,nxt,hub=chain
+        out='<nav class="pager" aria-label="上一页下一页">'
+        if prev: out+=f'<a class="pg prev" href="{FILE[prev]}"><small>← 上一章</small><b>{LABEL[prev]}</b></a>'
+        else: out+=f'<a class="pg prev" href="{FILE[hub]}"><small>← 返回</small><b>{LABEL[hub]}</b></a>'
+        if nxt: out+=f'<a class="pg next" href="{FILE[nxt]}"><small>下一章 →</small><b>{LABEL[nxt]}</b></a>'
+        else: out+=f'<a class="pg next" href="{FILE[hub]}"><small>返回目录 →</small><b>{LABEL[hub]}</b></a>'
+        return out+'</nav>'
+    ks=[k for k,_,_,_ in PAGES]
+    if cur not in ks:
+        return '<nav class="pager" aria-label="上一页下一页"></nav>'
+    i=ks.index(cur); out='<nav class="pager" aria-label="上一页下一页">'
     if i>0: out+=f'<a class="pg prev" href="{FILE[ks[i-1]]}"><small>← 上一页</small><b>{LABEL[ks[i-1]]}</b></a>'
     else: out+='<span></span>'
     if i<len(ks)-1: out+=f'<a class="pg next" href="{FILE[ks[i+1]]}"><small>下一页 →</small><b>{LABEL[ks[i+1]]}</b></a>'
@@ -73,7 +89,7 @@ def index_body():
     desc={"bible":"救恩史四幕、圣约框架、三份文件如何成为一个整体","hc":"52 主日 · 罪·救·谢 · 本质与应用 · 时间线与地图","bc":"37 条七群 · 德布利的故事 · 11 张深读卡","dort":"1618–19 · 4 项 · 34 条错谬反驳 · TULIP 术语说明",
       "compare":"体裁、问题、对照表、签署书与 BC 9","westminster":"WCF/WLC/WSC 十五个主题的对读","hct":"129 问逐字全文（CCI）","bct":"37 条逐字全文（CCI）","dtt":"63 个条目逐字全文（CCI）",
       "creedsx":"三大信经 CCI 原文附录","memory":"口诀、导图、翻卡、15 题自测、52 周计划","sources":"哪些逐字、哪些转述、哪些 CCI 没有",
-      "lec-hc":"中国改革宗圣经学院 53 讲精华（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》精华（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义精华（释义材料，非 CCI 原文）"}
+      "lec-hc":"中国改革宗圣经学院 53 讲全文逐字＋本站要点（讲座材料，非 CCI 原文）","lec-dort":"范·德尔登《靠主夸口》全文逐字＋本站要点（讲解材料，非 CCI 原文）","lec-bc":"鲍曼《比利时信条》释义全文逐字＋本站要点（释义材料，非 CCI 原文）"}
     icon={k:i for k,_,_,i in PAGES}
     steps="".join(f'<a class="step" href="{FILE[k]}" data-pg="{k}" style="--i:{n}"><span class="sno">{n+1}</span><span class="si">{ic(icon[k],"ic big")}</span><b>{LABEL[k]}</b><small>{desc[k]}</small><span class="bar"><i></i></span><em class="pc" data-pc="{k}">未读</em></a>' for n,(k,_,_,_) in enumerate(PAGES[1:]))
     hero=f'''<header class="hero"><div class="hin"><div class="badge">欧陆改革宗 · 三项联合信条</div><h1>三项联合信条<br><span>比利时信条 · 海德堡要理问答 · 多特信经</span></h1><p>先看整本圣经与圣约，再逐条深读。三项联合信条与所有引文<b>逐字取自 CCI《赞美手册》中文版</b>。</p>
@@ -85,7 +101,7 @@ def index_body():
 <div class="steps">'''+steps+'''</div></section>'''
     vis=[("🗺️","SVG 地图与路线","海德堡、图尔奈、多德雷赫特与改革宗欧洲。","hc.html#hcd-geo"),("🧭","时间线","每份文件一条动画时间线。","bc.html#bcd-tl"),("🏗️","HC 三部分结构条","按问数画出罪·救·谢。","hc.html#hcd-struct"),
          ("🧩","BC 37 条地图","七群着色方块，点块跳到原文。","bc.html#bcd-map"),("🌷","TULIP ↔ 抗辩派五点","抗辩派与多特的分层对照。","dort.html#dd-tulip"),("📋","主题×文件对照表","十四个主题的链接矩阵。","compare.html#cp-xmap"),
-         ("📜","签署书","CCI 签署书原文与结构。","compare.html#cp-sub"),("🧠","导图 · 翻卡 · 自测","口诀、翻卡、自测、52 周计划。","memory.html#mem-mind"),("↔️","可拖宽的目录","拖右缘手柄调宽，宽度记在本机。","index.html#idx-vis"),("🔤","背诵版一条一行","三信经：一行一句；全显、首字、全遮、跟读。","creedsx.html#cr-ap"),("🔍","三信经深度对比","总表、流程、同异与为何是三份。","creedsx.html#cr-cmp"),("🌐","参考站互证","逐字引文与“有没有提”矩阵。","compare.html#cp-ref"),("⚖️","威斯敏斯特对照","十五个主题：“实质同／措辞异／强调异”。","westminster.html#wm-table"),("📖","讲座与释义精读","海德堡 53 讲、多特《靠主夸口》、比利时信条释义；均注明页码，与 CCI 原文分开。","lec-hc.html")]
+         ("📜","签署书","CCI 签署书原文与结构。","compare.html#cp-sub"),("🧠","导图 · 翻卡 · 自测","口诀、翻卡、自测、52 周计划。","memory.html#mem-mind"),("↔️","可拖宽的目录","拖右缘手柄调宽，宽度记在本机。","index.html#idx-vis"),("🔤","背诵版一条一行","三信经：一行一句；全显、首字、全遮、跟读。","creedsx.html#cr-ap"),("🔍","三信经深度对比","总表、流程、同异与为何是三份。","creedsx.html#cr-cmp"),("🌐","参考站互证","逐字引文与“有没有提”矩阵。","compare.html#cp-ref"),("⚖️","威斯敏斯特对照","十五个主题：“实质同／措辞异／强调异”。","westminster.html#wm-table"),("📖","讲座与释义精读","海德堡 53 讲、多特《靠主夸口》、比利时信条释义的逐字全文与本站要点；均注明页码，与 CCI 原文分开。","lec-hc.html")]
     v="".join(f'<a class="card vcard" href="{u}" style="--c:#d4af37"><div class="ct"><span>{i}</span>{t}</div><p>{p}</p></a>' for i,t,p,u in vis)
     guide='''<section class="l2 reveal" id="idx-vis"><h3><span class="n">·</span>'''+ic("cross")+'''本站的视觉与互动工具</h3><div class="grid g3">'''+v+'''</div>
 '''+key("<b>读法：</b>深读页先给整本圣经的位置，再给逐条的局部。无脚本时内容仍全部可见。颜色：<span class=hl-f>蓝＝父</span>、<span class=hl-s>金＝子</span>、<span class=hl-g>绿＝圣灵</span>。")+note("原文来自 CCI；讲解与图表是本站学习材料。逐字／转述／缺项见"+'<a href="sources.html">第十二部分</a>。')+'</section>'
@@ -95,8 +111,10 @@ core.CUR["f"]="index.html"
 import own,t87
 import notes,trim
 DEEP={"bible","hc","bc","dort","compare","westminster","memory","lec-hc","lec-dort","lec-bc"}; RECITE={"creedsx"}
+DEEP |= {k for k in BODY if k.startswith("lec-")}
 MKS={};CUT={}
-for k,f,_,_ in PAGES:
+WRITE=[(k,f) for k,f,_,_ in PAGES]+[(k,FILE[k]) for k in BODY if k not in {x[0] for x in PAGES}]
+for k,f in WRITE:
     h=own.mark(rewrite(k,BODY[k]))
     h,c=trim.cut(k,h); CUT[k]=c
     out=page(k,h)
@@ -104,9 +122,11 @@ for k,f,_,_ in PAGES:
     out=t87.post(out,fold=k in {"hct","bct","dtt","creedsx"})
     out,_ny=t87.extras(out,k,"tfu")
     import t89; out,_nm=t89.apply(out,k,"tfu")
+    if k.startswith("lec"):
+        out=out.replace("</head>", f'<link rel="stylesheet" href="assets/lec.css?v={V}"></head>',1)
     open(f,"w",encoding="utf-8").write(out)
 trim.check()
 print("marks",{k:v for k,v in MKS.items() if v}); print("trim chars",CUT,sum(CUT.values()))
 own.check()
 if UNRES: print("WARN unresolved links:",sorted(set(UNRES))[:40],len(UNRES))
-print("built",[(f,round(len(open(f,encoding="utf-8").read())/1024)) for _,f,_,_ in PAGES])
+print("built",[(f,round(len(open(f,encoding="utf-8").read())/1024)) for _,f in WRITE])
