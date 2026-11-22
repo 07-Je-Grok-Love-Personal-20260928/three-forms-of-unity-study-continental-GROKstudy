@@ -48,7 +48,7 @@ def compass():
                    +(f'<text x="{lx:.1f}" y="{ly+5:.1f}" text-anchor="middle">{n}</text>' if n in (1,5,10,15,20,25,31,32,36,40,45,50) else '')+'</a>')
     leg="".join(f'<span class="lg {PCLS[k]}"><i></i>{lab} · 主日{lo}'+(f"–{hi}" if hi!=lo else "")+'</span>' for k,lab,lo,hi in PART_RANGE)
     return ('<div class="cmp reveal"><svg viewBox="-14 -14 368 368" role="img" aria-label="52 主日罗盘：点按任一主日跳到对应标题"><circle cx="170" cy="170" r="92" class="chub"/>'+"".join(out)
-            +'<text x="170" y="160" text-anchor="middle" class="cbig">52</text><text x="170" y="184" text-anchor="middle" class="csm">主日 · 129 问</text></svg>'
+            +'<text x="170" y="154" text-anchor="middle" class="cbig">52</text><text x="170" y="198" text-anchor="middle" class="csm">主日 · 129 问</text></svg>'
             f'<div class="cleg">{leg}<p class="cn">点按弧段跳到对应主日；弧段颜色＝所属部分。</p></div></div>')
 def part_hc():
     # 2.1 结构
