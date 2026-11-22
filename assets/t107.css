@@ -6,8 +6,8 @@ html{overflow-x:hidden}
 /* ---- Phones and tablets: screen→text inset ≈ 12px (≤14px) ---- */
 @media (max-width:800px){
   #main{
-    padding-left:max(4px, env(safe-area-inset-left,0px))!important;
-    padding-right:max(4px, env(safe-area-inset-right,0px))!important;
+    padding-left:max(0px, env(safe-area-inset-left,0px))!important;
+    padding-right:max(0px, env(safe-area-inset-right,0px))!important;
   }
 
   /* Drop the page-wide 52px nav reserve. The cluster stays a floating overlay. */
