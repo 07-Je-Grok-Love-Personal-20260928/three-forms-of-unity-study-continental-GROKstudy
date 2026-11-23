@@ -1,0 +1,257 @@
+/* t119 / t118u: Q/A badges in flow, full memory titles, reflow, about-page, no page chips */
+
+/* ---- Q / A badges in flow (never under the number) ---- */
+h4.qh.qq::before,
+p.ex.qa::before,
+p.qa::before{
+  content:none!important;
+  display:none!important;
+}
+h4.qh.qq,
+p.ex.qa{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto auto minmax(0,1fr);
+  column-gap:8px;
+  row-gap:2px;
+  align-items:start;
+  padding:9px 12px 9px 12px;
+}
+p.ex.qa,
+p.qa{
+  grid-template-columns:auto minmax(0,1fr);
+}
+h4.qh.qq .qa-badge{grid-column:1;grid-row:1}
+h4.qh.qq .qnum{grid-column:2;grid-row:1;font-weight:800;line-height:1.7rem;white-space:nowrap}
+h4.qh.qq .qa-text{grid-column:3;grid-row:1;min-width:0;overflow-wrap:anywhere}
+p.ex.qa .qa-badge,
+p.qa .qa-badge{grid-column:1;grid-row:1}
+p.ex.qa .qa-text,
+p.qa .qa-text{grid-column:2;grid-row:1;min-width:0;overflow-wrap:anywhere}
+.qa-badge{
+  flex:none;
+  display:grid;
+  place-items:center;
+  width:1.7rem;height:1.7rem;
+  border-radius:50%;
+  background:var(--gold,#d4af37);
+  color:#120c02;
+  font:800 .78rem/1 system-ui,sans-serif;
+  letter-spacing:0;
+  box-shadow:0 1px 4px rgba(0,0,0,.18);
+}
+.qa-badge.a{
+  background:var(--abd,var(--g,#2f9e44));
+  color:#06140a;
+}
+.sr-qa{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+  pointer-events:none!important;
+  opacity:0!important;
+}
+/* children's catechism: circular Q/A, number stays beside the badge */
+.cq-q,.cq-a{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  column-gap:8px;
+  align-items:start;
+}
+.cq-lab{
+  display:grid!important;
+  place-items:center;
+  width:1.7rem;height:1.7rem;
+  min-width:1.7rem;
+  margin:0!important;
+  padding:0!important;
+  border-radius:50%!important;
+  font-size:.72rem!important;
+  letter-spacing:0!important;
+  line-height:1;
+}
+.cq-q .cq-lab{
+  background:var(--gold,#d4af37)!important;
+  color:#120c02!important;
+}
+.cq-a .cq-lab{
+  background:var(--abd,var(--g,#2f9e44))!important;
+  color:#06140a!important;
+}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-q .cq-lab,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .qa-badge{
+  color:#120c02!important;
+}
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .cq-a .cq-lab,
+html:is([data-theme=paper],[data-theme=warm],[data-theme=mono]) .qa-badge.a{
+  color:#06140a!important;
+}
+
+/* ---- Memory / icon grids: full titles, wrap, auto-fit, equal rows ---- */
+.icm-g,
+.bct,
+.cq-grid.titles{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(10.75rem,1fr));
+  gap:10px 12px;
+  align-items:stretch;
+}
+.icm-t,
+a.bt{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  grid-template-rows:auto 1fr;
+  column-gap:8px;
+  row-gap:2px;
+  align-items:start;
+  align-content:start;
+  min-width:0;
+  min-height:100%;
+  height:auto;
+  padding:10px 12px;
+  border-radius:14px;
+  text-decoration:none;
+  background:color-mix(in srgb,var(--c,#d4af37) 9%,rgba(var(--W),.04));
+  border:1px solid color-mix(in srgb,var(--c,#d4af37) 28%,rgba(var(--W),.1));
+  border-top:3px solid var(--c,#d4af37);
+  box-sizing:border-box;
+}
+.icm-t::before{
+  grid-row:1 / span 2;
+  font-size:1.25rem;
+  line-height:1.2;
+  align-self:start;
+}
+.icm-t b,
+a.bt b{
+  grid-column:2;
+  font-size:.78rem;
+  line-height:1.3;
+  font-weight:800;
+  letter-spacing:.02em;
+  color:color-mix(in srgb,var(--c,#d4af37),var(--dkc,transparent) var(--dk,0%));
+}
+.icm-t small,
+a.bt small{
+  grid-column:2;
+  display:block!important;
+  -webkit-line-clamp:unset!important;
+  line-clamp:unset!important;
+  -webkit-box-orient:initial!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  max-height:none!important;
+  width:auto!important;
+  font-size:.82rem!important;
+  line-height:1.45!important;
+  overflow-wrap:anywhere;
+  color:var(--tx);
+}
+@media (max-width:519px){
+  .icm-g, .bct{
+    grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));
+    gap:8px;
+  }
+  .icm-t, a.bt{padding:8px 9px}
+}
+.icm-h>b{font-size:1rem;letter-spacing:.01em}
+.icm{padding:12px 10px 14px;border:1px solid rgba(var(--W),.08);border-radius:16px}
+
+/* ---- Reflow: never keep PDF/slide line breaks ---- */
+.sot-poster .st,
+.sot-poster .qt,
+.sot-poster .banner,
+.sot-poster h3,
+.sot-poster p,
+.deck p,
+.lec-verbatim p,
+.lec-verbatim li,
+.lec-verbatim blockquote,
+q.pdfq{
+  white-space:normal!important;
+}
+.sot-poster .ln,
+span.ln,
+cite.lec-cite,
+a.lec-pg,
+span.pdfsrc,
+.l3h .l3t{
+  display:none!important;
+}
+
+/* ---- Compact toolbar + end-of-page about block ---- */
+.pgtools{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px 8px;
+  margin:6px 0 12px;
+  padding:4px 0;
+}
+.pgtools .btn{
+  font-size:.8rem;
+  padding:4px 10px;
+}
+.pgtools .cq-recite{font-size:.88rem;font-weight:700}
+.about-page{
+  margin:28px 0 8px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--mut);
+  font-size:.82rem;
+  line-height:1.65;
+}
+.about-page>summary{
+  cursor:pointer;
+  list-style:none;
+  color:var(--mut);
+  font-weight:600;
+  font-size:.8rem;
+  letter-spacing:.02em;
+  padding:6px 0;
+  opacity:.8;
+}
+.about-page>summary::-webkit-details-marker{display:none}
+.about-page>summary::before{
+  content:"▸ ";
+  opacity:.7;
+}
+.about-page[open]>summary::before{content:"▾ "}
+.about-page .about-body{
+  padding:8px 10px 10px;
+  border:1px dashed rgba(var(--W),.14);
+  border-radius:10px;
+  background:rgba(var(--W),.03);
+}
+.about-page .about-body > *{margin:0 0 .6em}
+.about-page .about-body > *:last-child{margin-bottom:0}
+.about-page .mklegend,
+.about-page .secbar,
+.about-page .rxbar,
+.about-page .mkdefs,
+.about-page .call,
+.about-page .readchip{
+  font-size:.82rem;
+  padding:6px 8px;
+  margin:0 0 .6em;
+  border-radius:8px;
+  box-shadow:none;
+}
+.about-page .mkdefs[open],
+.about-page details.mkdefs{display:block}
+/* leading chrome that the hook missed: hide only if still at the very top? hook relocates them. */
+
+/* Poster typography: flowing paragraphs */
+.sot-poster{
+  font-family:"I.Ming","Noto Serif SC","Songti SC",serif;
+}
+.sot-poster h3,.sot-poster h4{letter-spacing:.04em}
+.sot-solablock .st,.sot-solablock .qt{margin:.55em 0;line-height:1.9}
+
+.sot-poster .pln{display:block;margin:0.15em 0;}

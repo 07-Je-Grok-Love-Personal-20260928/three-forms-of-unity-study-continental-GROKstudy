@@ -9,6 +9,13 @@ POSTER = json.loads((ROOT / "data/t114/five-solas-rtv.json").read_text(encoding=
 def pack(s):
     return re.sub(r"\s+", "", s)
 
+def t2s(s):
+    try:
+        from opencc import OpenCC
+        return OpenCC("t2s").convert(s)
+    except Exception:
+        return s
+
 def text_of(html):
     html = re.sub(r"<script[\s\S]*?</script>", "", html)
     html = re.sub(r"<style[\s\S]*?</style>", "", html)
@@ -41,12 +48,13 @@ def main():
     # drop the inserted slide labels before packing the whole deck
     src_deck = "".join(p["text"] for p in DECK["pages"])
     deck_html_for_pack = re.sub(r"幻灯片第\s*\d+\s*页", "", deck_html)
-    poster_lines = []
+    poster_lines = []  # filled below, then converted t2s
     for part in (POSTER["front"]["title"], POSTER["front"]["banner"], POSTER["front"]["lead"],
                  POSTER["close"]["exhortation"], POSTER["close"]["credit"]):
         poster_lines.extend(x["text"] for x in part)
     for s in POSTER["solas"]:
         poster_lines.extend(x["text"] for x in s["statement"] + s["quote"])
+    poster_lines = [t2s(ln) for ln in poster_lines]
     # also check each line individually (order may follow assembled blocks, not extract order)
     bad = 0
     coverage("sot-tulip.html", src_deck, deck_html_for_pack, "tulip-deck (contiguous, section titles may split)")
@@ -68,15 +76,15 @@ def main():
         bad += 1
     else:
         print(f"five-solas-poster: {len(poster_lines)}/{len(poster_lines)} lines present")
-    # all 160 slide markers
+    # slide page chips must be gone; compare deck as reflowed packed text
     marks = [f"幻灯片第 {n} 页" for n in range(1, 161)]
-    absent = [m for m in marks if m not in deck_html]
-    print(f"slide markers: {160-len(absent)}/160", ("missing "+str(absent[:5]) if absent else "ok"))
-    if absent:
+    present = [m for m in marks if m in deck_html]
+    print(f"slide markers removed: {160-len(present)}/160", ("leftover "+str(present[:5]) if present else "ok"))
+    if present:
         bad += 1
 
     # children's catechism: 130/130 exact packed coverage of each Q+A line
-    cq_path = ROOT / "data/t114/child-catechism-130.txt"
+    cq_path = ROOT / "data/t114/child-catechism-130-corrected.txt"
     cq_html = (ROOT / "childq.html").read_text(encoding="utf-8")
     cq_dst = pack(text_of(cq_html))
     book = r"(?:创|出|利|民|申|书|士|得|撒上|撒下|王上|王下|代上|代下|拉|尼|斯|伯|诗|箴|传|歌|赛|耶|哀|结|但|何|珥|摩|俄|拿|弥|鸿|哈|番|该|亚|玛|太|可|路|约|徒|罗|林前|林后|加|弗|腓|西|帖前|帖后|提前|提后|多|门|来|雅|彼前|彼后|约壹|约贰|约叁|犹|启)"

@@ -10,8 +10,8 @@ def _n(s): return re.sub(r"\s+","",s)
 def ptext(p,span=1): return _n("".join(PAGES.get(i,"") for i in range(p,p+span+1)))
 def PQ(p,phrase,span=0):
     assert _n(phrase) in ptext(p,span), f"PQ 未在 PDF 第{p}页找到：{phrase}"
-    return f'<q class="pdfq" data-p="{p}" data-span="{span}">{H.escape(phrase,quote=False)}</q><span class="pdfsrc">出自{BOOK} 第 {p} 页</span>'
-def label(p): return f'<span class="pdfsrc">出自{BOOK} 第 {p} 页</span>'
+    return f'<q class="pdfq" data-p="{p}" data-span="{span}">{H.escape(phrase,quote=False)}</q>'
+def label(p): return ""
 # ---------- HC 印刷小标题 ----------
 def hc_heads_table(link=lambda n:f"主日{n}"):
     rows=[]
@@ -28,7 +28,7 @@ def worship_block():
         return (f'<div class="wlane" style="--c:{c}"><div class="wl-h">{ic} {t}</div><ol class="wl-s">'
                 +"".join(f'<li class="reveal" style="--i:{i}"><b>{k}</b><span>{v}</span></li>' for i,(k,v) in enumerate(items))+'</ol></div>')
     return ('<div class="wflow">'+lane("上午聚会：律法在前","⚖️",am,"#5aa9e6")+lane("下午聚会：信经＋要理问答","📖",pm,"#d4af37")+'</div>'
-            +'<p class="pdfnote">节选自敬拜手册“敬拜流程”（第一种流程，第 139–140 页）。第二种流程把“诵读《海德堡要理问答》”放在下午聚会第 6 项，信仰告白放在讲道之后（第 141 页）。</p>')
+            +'<p class="pdfnote">节选自敬拜手册“敬拜流程”（第一种流程）。第二种流程把“诵读《海德堡要理问答》”放在下午聚会第 6 项，信仰告白放在讲道之后。</p>')
 # ---------- 差异 ----------
 NOTABLE=[  # (doc, CCI 片段关键字, 说明)
  ("creeds","非三位非受造者","亚他那修信经第 12 点。CCI 作“非三位非受造者”，与拉丁原文 non tres increati 一致；PDF 少一个“非”字，应是排印错误。"),
@@ -61,10 +61,10 @@ def diff_section():
     c=D["diff_counts"]; r=D["ratio"]
     stat="".join(f'<div class="dstat" style="--c:{col}"><b>{DOCN[d]}</b><span class="dn">{c[d].get("用词",0)}</span><small>处用词差异</small><small>另有 {c[d].get("写法",0)} 处写法差异 · 相似度 {r[d]*100:.1f}%</small></div>'
                  for d,col in [("creeds","#a78bfa"),("bc","#5aa9e6"),("hc","#81b29a"),("dort","#d4af37")])
-    rows="".join(f'<tr><td>{DOCN[d]} · {H.escape(_find(d,k)["label"])}</td><td>{_find(d,k)["page"]}</td><td class="dc">{H.escape(_find(d,k)["cci"])}</td><td class="dp">{H.escape(_find(d,k)["pdf"])}</td><td>{t}</td></tr>' for d,k,t in NOTABLE)
-    full="".join(f'<tr><td>{DOCN[g["doc"]]} · {H.escape(g["label"])}</td><td>{g["page"]}</td><td class="dc">{H.escape(g["cci"])}</td><td class="dp">{H.escape(g["pdf"])}</td></tr>' for g in D["diffs"] if g["kind"]=="用词")
-    return (f'<p>把敬拜手册 2015 版的印刷正文（第 5–138 页，已排除页码、经文脚注、读者批注）与本站使用的 CCI 文本逐字比对。<b>本站正文不改，仍以 CCI 为准。</b>下表片段已去空格、统一全角／半角标点，仅供比对，不作引文。</p>'
+    rows="".join(f'<tr><td>{DOCN[d]} · {H.escape(_find(d,k)["label"])}</td><td class="dc">{H.escape(_find(d,k)["cci"])}</td><td class="dp">{H.escape(_find(d,k)["pdf"])}</td><td>{t}</td></tr>' for d,k,t in NOTABLE)
+    full="".join(f'<tr><td>{DOCN[g["doc"]]} · {H.escape(g["label"])}</td><td class="dc">{H.escape(g["cci"])}</td><td class="dp">{H.escape(g["pdf"])}</td></tr>' for g in D["diffs"] if g["kind"]=="用词")
+    return (f'<p>把敬拜手册 2015 版的印刷正文（已排除页码、经文脚注、读者批注）与本站使用的 CCI 文本逐字比对。<b>本站正文不改，仍以 CCI 为准。</b>下表片段已去空格、统一全角／半角标点，仅供比对，不作引文。</p>'
             f'<div class="dstats">{stat}</div>'
-            '<div class="tw"><table class="cmp dtab"><thead><tr><th>位置</th><th>页</th><th>CCI</th><th>敬拜手册 2015</th><th>说明</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
-            f'<details class="rfd"><summary>展开全部 {sum(1 for g in D["diffs"] if g["kind"]=="用词")} 处用词差异</summary><div class="tw"><table class="cmp dtab"><thead><tr><th>位置</th><th>页</th><th>CCI</th><th>敬拜手册 2015</th></tr></thead><tbody>'+full+'</tbody></table></div></details>'
+            '<div class="tw"><table class="cmp dtab"><thead><tr><th>位置</th><th>CCI</th><th>敬拜手册 2015</th><th>说明</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+            f'<details class="rfd"><summary>展开全部 {sum(1 for g in D["diffs"] if g["kind"]=="用词")} 处用词差异</summary><div class="tw"><table class="cmp dtab"><thead><tr><th>位置</th><th>CCI</th><th>敬拜手册 2015</th></tr></thead><tbody>'+full+'</tbody></table></div></details>'
             f'<p class="pdfnote">没计入差异的：PDF 的书名与部分标题行 {D["diff_skipped"]["heading"]} 处、页边经文旁注 {D["diff_skipped"]["margin_ref"]} 处；“写法”指只在数字写法或标点上不同（如“400”与“四百”）。</p>')

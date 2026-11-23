@@ -17,10 +17,18 @@ def txt(k):
     if k not in _T: _T[k]=re.sub(r"\s+"," ",open(f"data/ref/{FILEOF.get(k,k)}.txt",encoding="utf-8").read())
     return _T[k]
 def R(site,phrase):
-    """逐字引用：phrase 必须是抓取页面文字的子串（空白归一）。"""
+    """逐字引用：phrase 必须是抓取页面文字的子串（空白归一）。
+    显示时把繁体引文转为简体（专名「韦斯敏斯德」从本站习惯作「威斯敏斯特」）。"""
     assert phrase in txt(site),f"R 未找到：{site}｜{phrase}"
     lang=SITES[site][2]
-    return f'<q class="xq" lang="{"en" if lang=="en" else "zh"}">{H.escape(phrase,quote=False)}</q>'
+    shown=phrase
+    if lang=="zh":
+        try:
+            from opencc import OpenCC
+            shown=OpenCC("t2s").convert(phrase).replace("韦斯敏斯德","威斯敏斯特")
+        except Exception:
+            shown=phrase
+    return f'<q class="xq" lang="{"en" if lang=="en" else "zh"}">{H.escape(shown,quote=False)}</q>'
 def has(site,rx): return re.search(rx,txt(site)) is not None
 def mark(b): return '<span class="mky">✓</span>' if b else '<span class="mkn">—</span>'
 def site_a(k): return f'<a href="{SITES[k][1]}" target="_blank" rel="noopener">{SITES[k][0]}</a>'

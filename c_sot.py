@@ -163,24 +163,50 @@ def svg_states():
     return "".join(s)
 
 
-def _lines(items):
-    out = []
+def _t2s(s):
+    try:
+        from opencc import OpenCC
+        return OpenCC("t2s").convert(s)
+    except Exception:
+        return s
+
+
+def _lines(items, slogans=False):
+    """Join mid-sentence PDF wraps into flowing text; keep short slogan lines apart."""
+    parts, buf = [], ""
     for it in items:
-        out.append(f'<span class="ln" title="提取行 {it["n"]}">{it["n"]}</span>{H.escape(it["text"])}')
-    return "\n".join(out)
+        t = _t2s(it["text"]).strip()
+        if not t:
+            continue
+        if not buf:
+            buf = t
+            continue
+        slogan_break = slogans and (
+            t.startswith("唯独") or buf.startswith("唯独") and len(buf) <= 16
+        )
+        if slogan_break or buf[-1] in "。！？":
+            parts.append(buf)
+            buf = t
+        else:
+            buf += t
+    if buf:
+        parts.append(buf)
+    if len(parts) <= 1:
+        return H.escape(parts[0] if parts else "")
+    return "".join(f'<span class="pln">{H.escape(x)}</span>' for x in parts)
 
 
 def poster_html():
     fr = POSTER["front"]
     cl = POSTER["close"]
-    b = [f'<section class="sot-poster" lang="zh-Hant" id="sot-poster-src">',
-         f'<p class="pdfsrc">海报原文 · {H.escape(POSTER["source"])}。以下按无歧义配对重排各条，逐字保留繁体，行号为提取行。</p>',
+    b = [f'<section class="sot-poster" lang="zh-Hans" id="sot-poster-src">',
+         f'<p class="pdfsrc">海报原文 · {H.escape(_t2s(POSTER["source"]).replace("（繁体）","（原件繁体，本页改为简体）"))}。</p>',
          f'<h3>{_lines(fr["title"])}</h3>',
          f'<p class="banner">{_lines(fr["banner"])}</p>',
-         f'<p class="st">{_lines(fr["lead"])}</p>']
+         f'<p class="st">{_lines(fr["lead"], slogans=True)}</p>']
     for s in POSTER["solas"]:
         b.append(f'<div class="sot-solablock" id="poster-{s["id"]}">')
-        b.append(f'<h4>{H.escape(s["name"])} <small>{H.escape(s["latin"])}</small></h4>')
+        b.append(f'<h4>{H.escape(_t2s(s["name"]))} <small>{H.escape(s["latin"])}</small></h4>')
         b.append(f'<p class="st">{_lines(s["statement"])}</p>')
         b.append(f'<p class="qt">{_lines(s["quote"])}</p>')
         b.append("</div>")
@@ -218,11 +244,10 @@ def deck_html():
         for p in block["pages"]:
             text = p["text"] or ""
             paras = text.split("\n\n") if text else [""]
-            first = True
             for para in paras:
-                mark = f'<span class="pdfsrc">幻灯片第 {p["n"]} 页</span>' if first else ""
-                first = False
-                out.append(f'<p>{mark}{H.escape(para)}</p>')
+                # join hard line breaks inside a slide into one flowing paragraph
+                para = "".join(ln.strip() for ln in para.splitlines())
+                out.append(f'<p>{H.escape(para)}</p>')
     out.append("</section>")
     return "".join(out)
 
@@ -271,7 +296,7 @@ def page_sola():
             body += blk(phrase, f"{title}（{link}）")
         body += hard(vswhat)
         parts.append(L3(f"sola-{sid}", f"{zh} · {lat}", body, icon=icos[sid]))
-    parts.append(L3("sola-poster", "海报原文《宗教改革的五個唯獨》", poster_html(), icon="scroll"))
+    parts.append(L3("sola-poster", "海报原文《宗教改革的五个唯独》", poster_html(), icon="scroll"))
     return "".join(parts)
 
 
@@ -480,7 +505,7 @@ def _sub(sid, filename, title, ico, builder):
     CUR["f"] = filename
     body = L2(sid, "", title, builder())
     html = (f'<p class="lec-crumb"><a href="sot.html">返回十六、救恩教义专题</a> · {H.escape(title)}</p>'
-            f'<p class="lead">本页是第十六部分的子页。信条摘引逐字取自 CCI；经文为和合本；讲座与海报原文另行标明。</p>'
+            f'<p class="lead">{H.escape(title)}。</p>'
             + body)
     EXTRA.append((sid, filename, f"十六 {title}", ico, html))
     CUR["f"] = saved_f
@@ -516,7 +541,7 @@ def part_sot():
 _CQ_BOOK = r"(?:创|出|利|民|申|书|士|得|撒上|撒下|王上|王下|代上|代下|拉|尼|斯|伯|诗|箴|传|歌|赛|耶|哀|结|但|何|珥|摩|俄|拿|弥|鸿|哈|番|该|亚|玛|太|可|路|约|徒|罗|林前|林后|加|弗|腓|西|帖前|帖后|提前|提后|多|门|来|雅|彼前|彼后|约壹|约贰|约叁|犹|启)"
 _CQ_REF1 = _CQ_BOOK + r"\d+：[0-9]+(?:-[0-9]+)?(?:、[0-9]+(?:-[0-9]+)?)*"
 _CQ_REFS = re.compile(r"(" + _CQ_REF1 + r"(?:、" + _CQ_REF1 + r")*)$")
-_CQ_SRC = ROOT / "data/t114/child-catechism-130.txt"
+_CQ_SRC = ROOT / "data/t114/child-catechism-130-corrected.txt"
 
 _CQ_SEC_ICO = [
     ("sun", "创造"),
@@ -599,8 +624,8 @@ def _cq_card(it, sec_i):
         site = f'<p class="cq-site"><b>本站注</b>（非原文）：{_CQ_LINKS[n]}</p>'
     return (
         f'<article class="cq" id="cq-{n}" data-n="{n}" data-sec="{sec_i}">'
-        f'<p class="cq-q"><span class="cq-lab">问</span>{H.escape(q)}</p>'
-        f'<p class="cq-a"><span class="cq-lab">答</span>{H.escape(a)}{ref_html}</p>'
+        f'<p class="cq-q"><span class="cq-lab">Q</span>{H.escape(q)}</p>'
+        f'<p class="cq-a"><span class="cq-lab">A</span>{H.escape(a)}{ref_html}</p>'
         f'{site}</article>'
     )
 
@@ -617,41 +642,24 @@ def _cq_grid(secs):
 
 
 def _cq_corrigenda():
-    rows = [
-        "第 91 问题号后无顿号，作「91 第二条…」。",
-        "第 49、72、78 问以句号「。」收束，不作问号。",
-        "第 114 问「什么是祷告」句末无问号。",
-        "第 56 问答文作「为为人」。",
-        "第 61 问答文作「十字架十字架」。",
-        "第 89 问答文作「除了我意外」。",
-        "第 95 问答文作「第四条第四条诫命吩咐」。",
-        "第 101 问答文作「敬爱爱」。",
-        "第 120 问正文作「在第二项祈求中」，而其前一条为第一项祈求；答文作「所有所有人」。",
-    ]
-    lis = "".join(f"<li>{H.escape(x)}</li>" for x in rows)
-    return (
-        '<div class="call note cq-corr"><b>本站校记</b>'
-        '<p>下列是转录稿里可见的笔误或体例不一，照原文收录，不在问答正文中改正。</p>'
-        f"<ul>{lis}</ul></div>"
-    )
+    # t118u: slips are corrected in the displayed text; one muted line goes in the end block.
+    return ""
 
 
 def part_childq():
     title, secs, items = parse_child_catechism()
     src_line = ("来源：改革宗出版社《信仰的基石》，Joseph P. Engles, "
-                "Catechism for Young Children（据用户提供的 PDF 转录，逐字照录）。")
+                "Catechism for Young Children（据用户提供的 PDF 转录；个别笔误已据上下文改正）。")
     toolbar = (
         '<div class="cq-toolbar">'
         '<label class="cq-recite"><input type="checkbox" id="cq-recite" name="cq-recite">'
         " 背诵模式</label>"
-        '<span class="cq-hint">背诵模式下隐藏经文出处与本站注；问答正文仍显示。此开关不需要脚本。</span>'
+        '<span class="cq-hint">背诵模式下隐藏经文出处与本站注；问答正文仍显示。</span>'
         "</div>"
     )
     intro = (
         f'<p class="cq-fulltitle">{H.escape(title)}</p>'
         f'<p class="src">{H.escape(src_line)}</p>'
-        + site("本页问答正文逐字取自转录稿。经文出处排成小标签，不改动文字。"
-               "下面的索引、校记与对照链接是本站编排，不是原书的一部分。")
         + toolbar
         + '<p class="lec-k">130 问索引</p>'
         + _cq_grid(secs)
@@ -666,6 +674,5 @@ def part_childq():
                 break
         cards_html = '<div class="cq-list">' + "".join(_cq_card(it, i) for it in s["items"]) + "</div>"
         blocks.append(_cq_l2(f"cq-s{i}", s["title"], ico, cards_html))
-    lead = ("改革宗出版社《信仰的基石》儿童要理问答，130 问、十二章，逐字收录。"
-            "不改正文中的笔误；校记另列。背诵模式可隐藏经文出处。")
+    lead = "改革宗出版社《信仰的基石》儿童要理问答，共 130 问、十二章。"
     return L1("childq", 17, "儿童要理问答", "users", lead, intro + "".join(blocks))

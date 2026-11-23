@@ -17,7 +17,7 @@ JS_OVER='''()=>{
  return {sw:document.documentElement.scrollWidth,vw:vw,over:out.slice(0,6),n:out.length};
 }'''
 JS_CLIP='''()=>{const out=[];document.querySelectorAll('main p,main li,main td,main th,main b,main a,main span,main h3,main h4,main small,main summary,main button').forEach(el=>{
- const cs=getComputedStyle(el); if(el.closest('svg')||el.closest('#toc')) return;
+ const cs=getComputedStyle(el); if(el.closest('svg')||el.closest('#toc')||el.closest('.sr-qa')) return;
  if(el.scrollWidth>el.clientWidth+2&&(cs.overflowX==='hidden'||cs.overflowX==='clip')&&el.clientWidth>0&&getComputedStyle(el).display!=='inline') out.push(el.tagName+'.'+el.className+':'+(el.textContent||'').slice(0,20));
  });return out.slice(0,5)}'''
 JS_VIS='''()=>{let n=0,bad=[];document.querySelectorAll('.reveal').forEach(e=>{const o=parseFloat(getComputedStyle(e).opacity);if(o<0.99){n++;if(bad.length<3)bad.push(e.className.slice(0,30))}});return {hidden:n,bad:bad,js:document.documentElement.classList.contains('js')}}'''
@@ -254,6 +254,144 @@ JS_T118=r"""()=>{
   return bad;
 }"""
 
+
+JS_T119=r"""()=>{
+  const bad=[];
+  const warn=[];
+  const vw=document.documentElement.clientWidth||window.innerWidth;
+  const vh=document.documentElement.clientHeight||window.innerHeight;
+  function vis(el){
+    if(!el) return false;
+    const r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+    if(!(r.width>2 && r.height>2 && cs.display!=='none' && cs.visibility!=='hidden' && +cs.opacity>=0.2 && cs.pointerEvents!=='none')) return false;
+    if(r.right<=2 || r.bottom<=2 || r.left>=vw-2 || r.top>=vh-2) return false;
+    return true;
+  }
+  function hits(a,b,pad){
+    pad = pad==null?0.6:pad;
+    return a.left+pad<b.right-pad && a.right-pad>b.left+pad && a.top+pad<b.bottom-pad && a.bottom-pad>b.top+pad;
+  }
+  function shortText(el){
+    const t=(el.innerText||el.textContent||'').replace(/\s+/g,' ').trim();
+    return t.slice(0,18);
+  }
+  try{ window.scrollTo(0,0); }catch(e){}
+
+  /* 1) badge / chip / abs decoration vs text glyph rects */
+  const decoSel=[
+    '.qa-badge','.cq-lab','.ln','cite.lec-cite','a.lec-pg','span.pdfsrc',
+    '.kchip','.hchip','.ychip','.chip','.qaleg i','.n3',
+    'main [style*="position:absolute"]','main [style*="position: absolute"]'
+  ].join(',');
+  const deco=[];
+  document.querySelectorAll(decoSel).forEach(el=>{
+    if(!vis(el)) return;
+    const cs=getComputedStyle(el);
+    if(cs.position==='fixed' || cs.position==='sticky') return;
+    if(el.closest('.sr-qa, .about-page, .pgtools, #toc, #ptabrow, #navc, #nvlaunch, #thm, footer, .foot')) return;
+    deco.push(el);
+  });
+  /* absolutely positioned decorations inside main (not chrome) */
+  document.querySelectorAll('main *').forEach(el=>{
+    if(!vis(el)) return;
+    const cs=getComputedStyle(el);
+    if(cs.position!=='absolute') return;
+    if(el.closest('.sr-qa, .about-page, #toc, #ptabrow, #navc, #nvlaunch, #thm, footer, .foot, svg, .mmap, .mm-b, .sl-st, .hx')) return;
+    if(deco.indexOf(el)<0) deco.push(el);
+  });
+  const glyph=[];
+  const walkRoot=document.getElementById('main')||document.body;
+  const tw=document.createTreeWalker(walkRoot, NodeFilter.SHOW_TEXT);
+  let node;
+  while((node=tw.nextNode())){
+    if(!node.data || !String(node.data).trim()) continue;
+    const el=node.parentElement; if(!el) continue;
+    if(el.closest('script,style,.sr-qa,[hidden],#toc,#ptabrow,#navc,#nvlaunch,#thm,footer,.foot,svg')) continue;
+    let cs;
+    try{ cs=getComputedStyle(el); }catch(e){ continue; }
+    if(!cs || cs.display==='none'||cs.visibility==='hidden'||+cs.opacity<0.2) continue;
+    if(cs.fontSize==='0px') continue;
+    const rng=document.createRange();
+    try{ rng.selectNodeContents(node); }catch(e){ continue; }
+    const list=rng.getClientRects();
+    for(let i=0;i<list.length;i++){
+      const b=list[i];
+      if(b.width>1 && b.height>1) glyph.push({r:b, n:node});
+    }
+  }
+  for(const el of deco){
+    const box=el.getBoundingClientRect();
+    for(const g of glyph){
+      if(el.contains(g.n) || (g.n.parentElement && el.contains(g.n.parentElement))) continue;
+      if(hits(box, g.r)){
+        bad.push('overlap '+ (el.className||el.tagName)+' x "'+shortText({innerText:g.n.data})+'"');
+        break;
+      }
+    }
+  }
+
+  /* 2) memory/icon grids must not truncate */
+  const cells=document.querySelectorAll('.icm-t, .icm-t small, a.bt, a.bt small, .cq-cell, .mi a, .mmap .mm-b h6, .mmap .mm-b li');
+  cells.forEach(el=>{
+    if(!vis(el)) return;
+    const cs=getComputedStyle(el);
+    const clamp=cs.webkitLineClamp || cs.lineClamp;
+    const clamped = clamp && clamp!=='none' && clamp!=='unset' && clamp!=='inherit' && clamp!=='initial' && String(clamp)!=='0';
+    const ellip = (cs.textOverflow==='ellipsis' || cs.textOverflow==='fade');
+    const hid = (cs.overflow==='hidden' || cs.overflowX==='hidden' || cs.overflowY==='hidden' || String(cs.overflow).indexOf('hidden')>=0);
+    if(clamped){
+      bad.push('line-clamp '+shortText(el));
+      return;
+    }
+    if(el.scrollWidth > el.clientWidth+1){
+      bad.push('truncate-x '+shortText(el)+' sw='+Math.round(el.scrollWidth)+' cw='+Math.round(el.clientWidth));
+    }
+    if(clamped && el.scrollHeight > el.clientHeight+1){
+      bad.push('truncate-y '+shortText(el));
+    }
+    if(ellip && hid && el.scrollWidth > el.clientWidth+1){
+      bad.push('ellipsis '+shortText(el));
+    }
+  });
+
+  /* 3) early-break heuristic (warning): last line well short, next sibling continues the sentence */
+  const END=/[。！？；…」』）]$|[.!?]$/;
+  const blocks=document.querySelectorAll('main p, main li, main h5, main blockquote, main .st, main .qt');
+  function lastEnd(el){
+    const rng=document.createRange();
+    try{ rng.selectNodeContents(el); }catch(e){ return null; }
+    const list=[...rng.getClientRects()].filter(b=>b.width>1 && b.height>1);
+    if(!list.length) return null;
+    return list[list.length-1];
+  }
+  function contentRight(el){
+    const box=el.getBoundingClientRect();
+    const cs=getComputedStyle(el);
+    return box.right - (parseFloat(cs.paddingRight)||0);
+  }
+  for(let i=0;i<blocks.length-1;i++){
+    const a=blocks[i], b=blocks[i+1];
+    if(a.parentElement!==b.parentElement) continue;
+    if(a.closest('.lec-crumb, header, nav, .lec-k, .lec-struct, .lec-flag, .pgtools, .about-page, .lead') ||
+       b.closest('.lec-crumb, header, nav, .lec-k, .lec-struct, .lec-flag, .pgtools, .about-page, .lead') ||
+       a.classList.contains('lead') || b.classList.contains('lead') ||
+       a.classList.contains('lec-crumb') || b.classList.contains('lec-crumb') ||
+       a.classList.contains('lec-k') || b.classList.contains('lec-k')) continue;
+    if(!vis(a)||!vis(b)) continue;
+    const ta=(a.innerText||'').replace(/\s+/g,' ').trim();
+    const tb=(b.innerText||'').replace(/\s+/g,' ').trim();
+    if(ta.length<4 || tb.length<2) continue;
+    if(END.test(ta)) continue;
+    const last=lastEnd(a);
+    if(!last) continue;
+    const right=contentRight(a);
+    if(right-last.right > 72){
+      warn.push('early-break "'+ta.slice(-16)+'" / "'+tb.slice(0,16)+'"');
+    }
+  }
+  return {bad, warn};
+}"""
+
 res=[];fail=0
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -277,6 +415,7 @@ with sync_playwright() as p:
             pg.evaluate("()=>{var el=document.getElementById('nvlaunch'); if(el) el.removeAttribute('open');}")
             t118=pg.evaluate(JS_T118) if not nojs else []
             if t118d: t118=list(t118)+['dockopen '+x for x in t118d]
+            t119=pg.evaluate(JS_T119)
             bad=[]
             if ov['sw']>ov['vw']+1: bad.append(f"页面横向溢出 sw={ov['sw']} vw={ov['vw']}")
             if ov['n']: bad.append(f"元素越界 {ov['n']}: {ov['over']}")
@@ -287,6 +426,8 @@ with sync_playwright() as p:
             if rm and vis['js']: bad.append("reduced-motion 却启用 reveal")
             if t100: bad.append("t100: "+str(t100))
             if t118: bad.append("t118: "+str(t118))
+            if t119 and t119.get('bad'): bad.append("t119: "+str(t119['bad'][:8]))
+            if t119 and t119.get('warn'): print("WARN early-break", f, w, t119['warn'][:6])
             if shots and w in (360,1280) and not nojs and not rm:
                 os.makedirs('_shots',exist_ok=True); pg.screenshot(path=f'_shots/{f[:-5]}_{w}.png',full_page=True)
             tag='FAIL' if bad else 'ok'

@@ -11,7 +11,7 @@ def bcmap():
     out='<div class="bcm reveal" role="group" aria-label="比利时信条37条地图"><div class="bcl">'+"".join(f'<span style="--c:{c}"><i></i>{g}</span>' for g,c,_ in GROUPS)+'</div><div class="bct">'
     for n in range(1,38):
         g,c=gof[n]; t=BCT[n]
-        out+=f'<a class="bt" href="#bc-{n}" style="--c:{c};--i:{n}" title="第{n}条 {t}：{BCE[n]}"><b>{n}</b><small>{t[:8]}</small></a>'
+        out+=f'<a class="bt" href="#bc-{n}" style="--c:{c};--i:{n}" title="第{n}条 {t}：{BCE[n]}"><b>{n}</b><small>{t}</small></a>'
     return out+'</div><p class="bcn">点任一方块跳到原文（本站已把 CCI 的 37 条按内容着色分群，这是本站的分组）。</p></div>'
 
 def _first(ref,txt):

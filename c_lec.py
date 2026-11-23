@@ -33,7 +33,7 @@ def _ok(s):
     return s
 
 def _cite(page):
-    return f'<cite class="lec-cite">第 {page} 页</cite>'
+    return ""
 
 def _pts(items, cls="lec-pts"):
     lis, seen = [], set()
@@ -66,7 +66,7 @@ def _banner(kind, full=True):
         f'<div class="lec-banner call note"><b>📚 {src["label"]}</b>'
         f'本页收录用户授权发布的讲座／释义 PDF 的<b>{kind_zh}</b>，并在每章之前附上本站整理的要点。'
         f'这不是信条原文，也不可代替 CCI《赞美手册》中文版。'
-        f'原文仅整理了断行、页眉页脚与页码，没有改写或删节。来源：{H.escape(src["full"])}。</div>'
+        f'来源：{H.escape(src["full"])}。</div>'
     )
 
 def _summary(it):
@@ -75,7 +75,7 @@ def _summary(it):
     hs = [h for h in it.get("headings") or [] if h.get("text") and len(h["text"]) < 36 and "。" not in h["text"]]
     if hs:
         body += '<p class="lec-struct">结构：' + " · ".join(
-            f'{H.escape(h["text"])}<cite class="lec-cite">{h["page"]}</cite>' for h in hs[:8]
+            f'{H.escape(h["text"])}' for h in hs[:8]
         ) + "</p>"
     if it.get("overview"):
         body += "<p class='lec-k'>📌 本段主线</p>" + _pts(it["overview"], "lec-ov")
@@ -98,23 +98,32 @@ def _verbatim(ch):
         typ, text, page = b.get("type"), b.get("text") or "", b.get("page")
         if typ == "pg":
             aid=H.escape(str(ch.get("aid") or ch["id"]))
-            out.append(f'<a class="lec-pg" id="{aid}-p{page}" href="#{aid}-p{page}">〔{page}〕</a>')
+            out.append(f'<span id="{aid}-p{page}" hidden></span>')
             continue
+        # join hard PDF line-breaks: no leftover newlines inside a block
+        text = "".join(ln.strip() for ln in text.splitlines())
         esc = _fn_refs(H.escape(text))
         if typ == "h":
             out.append(f'<h5>{esc}</h5>')
         elif typ == "q":
             out.append(f'<blockquote class="lec-q">{esc}</blockquote>')
         elif typ == "li":
-            # bare item; wrap each in its own list to avoid broken ol state
             out.append(f'<ul><li>{esc}</li></ul>')
         elif typ == "fn":
             out.append(f'<p class="lec-fn">📝 {esc}</p>')
         else:
+            # merge mid-sentence continuation into the previous <p>
+            if out and out[-1].startswith("<p>") and out[-1].endswith("</p>"):
+                prev = out[-1][3:-4]
+                end = prev.rstrip()[-1:] if prev.rstrip() else "。"
+                if end not in "。！？；…」』）":
+                    joiner = "" if (prev and esc and (ord(prev[-1])>127 or ord(esc[0])>127)) else " "
+                    out[-1] = f"<p>{prev}{joiner}{esc}</p>"
+                    continue
             out.append(f'<p>{esc}</p>')
-    rng = (f'第 {ch["page_start"]}–{ch["page_end"]} 页'
-           if ch["page_start"] != ch["page_end"] else f'第 {ch["page_start"]} 页')
-    out.append(f'<p class="lec-src">出处：{H.escape(ch.get("source") or "")} {rng}。</p>')
+    src = (ch.get("source") or "").strip()
+    if src:
+        out.append(f'<p class="lec-src">出处：{H.escape(src)}。</p>')
     out.append("</div>")
     return "".join(out)
 
@@ -128,7 +137,7 @@ def _sec_full(it, ch, icon="book", kind="hc"):
     rng = (f'第 {it["page_start"]}–{it["page_end"]} 页'
            if it["page_start"] != it["page_end"] else f'第 {it["page_start"]} 页')
     body = _summary(it) + _verbatim(ch)
-    return L3(_cid(kind, it), _chapter_title(it), body, icon=icon, tag=rng)
+    return L3(_cid(kind, it), _chapter_title(it), body, icon=icon)
 
 def _book_toc(kind, groups, items, vmap, files):
     """In-page multi-level expandable TOC."""
@@ -138,13 +147,12 @@ def _book_toc(kind, groups, items, vmap, files):
         out.append(f'<details open><summary>{H.escape(gtitle)}</summary><ol>')
         for it in kids:
             href = f'{filename}#{_cid(kind, it)}'
-            out.append(f'<li><a href="{href}">{H.escape(_chapter_title(it))}</a> '
-                       f'<cite class="lec-cite">第 {it["page_start"]}–{it["page_end"]} 页</cite>')
+            out.append(f'<li><a href="{href}">{H.escape(_chapter_title(it))}</a>')
             heads = [h for h in it.get("headings") or [] if h.get("text") and len(h["text"]) < 28 and "。" not in h["text"]]
             if heads:
                 out.append("<ol>")
                 for h in heads[:8]:
-                    out.append(f'<li>{H.escape(h["text"])} <cite class="lec-cite">{h["page"]}</cite></li>')
+                    out.append(f'<li>{H.escape(h["text"])}</li>')
                 out.append("</ol>")
             out.append("</li>")
         out.append("</ol></details>")
@@ -175,15 +183,14 @@ def _register_groups(kind, hub, hub_num, groups, items, icon_default, vmap):
         body = L2(gid, "", gtitle, chunk)
         # slim header for the chapter file (no second L1 — stays under the hub TOC)
         first, last = kids[0], kids[-1]
-        lead = (f'{DATA["sources"][kind]["label"]}本册分组：{gtitle}。'
-                f'印刷第 {first["page_start"]}–{last["page_end"]} 页。先读本站要点，再读逐字原文。')
+        lead = f'本册分组：{gtitle}。'
         html = (f'<p class="lec-crumb"><a href="{hub}.html">返回{hub_num}、目录</a> · {H.escape(gtitle)}</p>'
                 f'<p class="lead">{lead}</p>' + body)
         EXTRA.append((key, filename, f'{hub_num} {gtitle}', ico, html))
         file_keys.append(key)
         nch = len(kids)
         cards.append((ico, gtitle,
-                      f'{nch} 章 · 第 {first["page_start"]}–{last["page_end"]} 页',
+                      f'{nch} 章',
                       filename))
     CUR["f"], CUR["c2"] = saved_f, saved_c2
     for i, key in enumerate(file_keys):
@@ -236,10 +243,10 @@ def part_lec_hc():
         ("感恩", "主日 32–52　律法与主祷文", "#81b29a"),
     ])
     intro += key("抓住一条线：<b>用神所规定的方法敬拜神</b>，而不是按自己的方法；要理问答是教会用圣经教义牧养人的工具，不能代替圣经，却帮助人记住圣经的核心。对照 CCI 原文见" + '<a href="hct.html">第七部分</a>。')
-    intro += note("本页目录覆盖全部 53 讲（52 主日，另加「圣约」上下两讲）。每讲先给出本站整理要点，再给出讲座逐字原文，并标明印刷页码。")
+    intro += note("本页目录覆盖全部 53 讲（52 主日，另加「圣约」上下两讲）。每讲先给出本站整理要点，再给出讲座逐字原文。")
     intro += app('回到深读页：<a href="hc.html">二、海德堡要理问答深读</a> · 原文：<a href="hct.html">七、HC 原文</a>。')
     return _hub("hc", "lec-hc", "十三", "海德堡要理问答讲座", "heart",
-                "中国改革宗圣经学院 53 讲的逐字全文与本站要点（讲座材料，非 CCI 原文）；按愁苦—得救—感恩排列，并注明页码。",
+                "中国改革宗圣经学院 53 讲：按愁苦—得救—感恩排列。",
                 groups, items, intro)
 
 def _dort_group(it):
@@ -277,7 +284,7 @@ def part_lec_dort():
     intro += note("作者亚瑟·范·德尔登。每条先给出本站整理要点，再给出讲座逐字原文；信经正文仍以 CCI 逐字文本为准。")
     intro += app('回到深读页：<a href="dort.html">四、多特信经深读</a> · 原文：<a href="dtt.html">九、Dort 原文</a>。')
     return _hub("dort", "lec-dort", "十四", "靠主夸口：多特信经学习", "scale",
-                "亚瑟·范·德尔登《靠主夸口》的逐字全文与本站要点（讲解材料，非 CCI 原文）；按五项教义排列，并注明页码。",
+                "亚瑟·范·德尔登《靠主夸口》：按五项教义排列。",
                 groups, items, intro)
 
 def _bc_group(it):
@@ -326,5 +333,5 @@ def part_lec_bc():
     intro += note("作者克莱伦斯·鲍曼。37 条及两篇导论均收录逐字全文；每章先给出本站整理要点，再给出释义原文。")
     intro += app('回到深读页：<a href="bc.html">三、比利时信条深读</a> · 原文：<a href="bct.html">八、BC 原文</a>。')
     return _hub("bc", "lec-bc", "十五", "比利时信条释义", "scroll",
-                "克莱伦斯·鲍曼《比利时信条》释义的逐字全文与本站要点（释义材料，非 CCI 原文）；按 37 条排列，并注明页码。",
+                "克莱伦斯·鲍曼《比利时信条》释义：按 37 条排列。",
                 groups, items, intro)
