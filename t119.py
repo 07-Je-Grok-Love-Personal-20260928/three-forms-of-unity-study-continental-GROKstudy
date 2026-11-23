@@ -659,17 +659,22 @@ def _move_notices(h):
     if uniq_b:
         tools = '<div class="pgtools" role="toolbar" aria-label="本页工具">' + "".join(uniq_b) + "</div>"
 
+    # ids already used in the compact toolbar must not be repeated in the end block
+    used_ids = set(re.findall(r'\bid="([^"]+)"', tools))
+    def _strip_used_ids(block):
+        for i in used_ids:
+            block = re.sub(r'\s+id="%s"' % re.escape(i), "", block)
+        return block
+
     # about block (collapse; drop empty after page-cite strip)
     body_bits = []
     seen_c = set()
     for b in collected:
-        # skip a now-empty toolbar clone? keep prose (hints, legend)
         key = re.sub(r"\s+", "", b)
         if key in seen_c:
             continue
         seen_c.add(key)
-        # don't repeat buttons already in pgtools inside the collapsed block? keep full original for context
-        body_bits.append(b)
+        body_bits.append(_strip_used_ids(b))
     # one-line catechism note if this is childq and we dropped 校记
     if 'id="childq"' in h or 'id="cq-1"' in h:
         if not any("个别笔误" in x for x in body_bits):
@@ -708,6 +713,75 @@ def _move_notices(h):
     return h[:cursor] + keep + inject_about(rest)
 
 
+_SCOOP_HINTS = ("📌 说明", "以下为本站归纳", "原文说明", "本页目录覆盖", "来源与版权", "本站未改动一字")
+
+
+def _inside_about(h, pos):
+    a = h.rfind('class="about-page"', 0, pos)
+    if a < 0:
+        return False
+    ds = h.rfind("<details", 0, a)
+    if ds < 0:
+        return False
+    _, de = _cut_tag(h, ds, "details")
+    return ds <= pos < de
+
+
+def _scoop_meta(h):
+    """Move leftover 原文说明 / 📌 说明 blocks that still open a section into the end details."""
+    moved = []
+    guard = 0
+    while guard < 80:
+        guard += 1
+        hit = None
+        for m in re.finditer(
+            r'<(p|div)(?=[^>]*\bclass="[^"]*\b(?:exn|lec-banner|call\s+note)\b)[^>]*>',
+            h,
+        ):
+            if _inside_about(h, m.start()):
+                continue
+            tag = m.group(1)
+            s, e = _cut_tag(h, m.start(), tag)
+            if e <= s:
+                continue
+            block = h[s:e]
+            cls = re.search(r'\bclass="([^"]*)"', m.group(0))
+            classes = (cls.group(1) if cls else "").split()
+            if "exn" in classes or "lec-banner" in classes:
+                hit = (s, e, block)
+                break
+            if "call" in classes and "note" in classes:
+                if any(k in block for k in _SCOOP_HINTS):
+                    hit = (s, e, block)
+                    break
+        if not hit:
+            break
+        s, e, block = hit
+        moved.append(block)
+        h = h[:s] + h[e:]
+
+    if not moved:
+        return h
+
+    insertion = "".join(moved)
+    mark = '<div class="about-body">'
+    i = h.find(mark)
+    if i >= 0:
+        j = i + len(mark)
+        return h[:j] + insertion + h[j:]
+    about = (
+        '<details class="about-page">'
+        "<summary>关于本页 / 来源与说明</summary>"
+        f'<div class="about-body">{insertion}</div>'
+        "</details>"
+    )
+    for mk in ('<nav class="pager"', '<footer class="foot"', "</main>"):
+        k = h.find(mk)
+        if k >= 0:
+            return h[:k] + about + h[k:]
+    return h + about
+
+
 def apply(h, page, site):
     h = _assets(h, page, site)
     h = _qa(h)
@@ -715,6 +789,7 @@ def apply(h, page, site):
     h = _reflow(h)
     h = _clean_leads(h)
     h = _move_notices(h)
+    h = _scoop_meta(h)
     # Do not run OpenCC t2s over the whole page: it maps 藉→借 and would
     # alter already-simplified CCI / catechism wording. Poster text is
     # converted at render time in c_sot.poster_html.
