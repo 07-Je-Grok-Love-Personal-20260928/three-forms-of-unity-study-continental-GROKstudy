@@ -305,10 +305,13 @@ def _reflow_region(h, start_pat, end_pat=None):
     if start_pat.startswith("class="):
         cls = start_pat.split("=", 1)[1]
         out, last = [], 0
-        for m in re.finditer(rf'<([a-zA-Z0-9]+)([^>]*\bclass="[^"]*\b{re.escape(cls)}\b[^"]*"[^>]*)>', h):
+        for m in re.finditer(r'<([a-zA-Z0-9]+)([^>]*\bclass="([^"]*)"[^>]*)>', h):
+            classes = m.group(3).split()
+            if cls not in classes:
+                continue
             tag = m.group(1)
             s, e = _cut_tag(h, m.start(), tag)
-            if e <= s:
+            if e <= s or s < last:
                 continue
             # find inner
             gt = h.find(">", s) + 1
@@ -735,7 +738,7 @@ def _scoop_meta(h):
         guard += 1
         hit = None
         for m in re.finditer(
-            r'<(p|div)(?=[^>]*\bclass="[^"]*\b(?:exn|lec-banner|call\s+note)\b)[^>]*>',
+            r'<(p|div)(?=[^>]*\bclass="[^"]*\b(?:exn|lec-banner|pdfsrc|call\s+note)\b)[^>]*>',
             h,
         ):
             if _inside_about(h, m.start()):
@@ -747,7 +750,7 @@ def _scoop_meta(h):
             block = h[s:e]
             cls = re.search(r'\bclass="([^"]*)"', m.group(0))
             classes = (cls.group(1) if cls else "").split()
-            if "exn" in classes or "lec-banner" in classes:
+            if "exn" in classes or "lec-banner" in classes or "pdfsrc" in classes:
                 hit = (s, e, block)
                 break
             if "call" in classes and "note" in classes:

@@ -133,7 +133,7 @@ a.bt b{
   line-height:1.3;
   font-weight:800;
   letter-spacing:.02em;
-  color:color-mix(in srgb,var(--c,#d4af37),var(--dkc,transparent) var(--dk,0%));
+  color:color-mix(in srgb,var(--c,#d4af37) 40%,var(--tx));
 }
 .icm-t small,
 a.bt small{
@@ -255,3 +255,20 @@ span.pdfsrc,
 .sot-solablock .st,.sot-solablock .qt{margin:.55em 0;line-height:1.9}
 
 .sot-poster .pln{display:block;margin:0.15em 0;}
+
+/* deck / poster typography after reflow */
+.deck-kicker{font-weight:700;margin:0 0 .2em}
+.deck-en{color:var(--mut);margin:0 0 .8em}
+.deck p.deck-pt{margin:.25em 0;padding-left:.2em}
+.sot-poster .st:has(.pln){
+  display:flex;flex-wrap:wrap;gap:8px 10px;
+  background:transparent;border:0;padding:0;box-shadow:none;
+}
+.sot-poster .st .pln{
+  display:inline-block;
+  padding:.35em .7em;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--c,#1877f2) 10%,rgba(var(--W),.06));
+  border:1px solid color-mix(in srgb,var(--c,#1877f2) 25%,rgba(var(--W),.12));
+  font-weight:650;
+}

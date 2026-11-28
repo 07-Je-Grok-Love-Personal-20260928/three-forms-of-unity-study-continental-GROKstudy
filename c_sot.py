@@ -171,6 +171,45 @@ def _t2s(s):
         return s
 
 
+def _split_slogans(t):
+    """Keep each 唯独… phrase on its own chip, even if the source line jammed two together."""
+    bits = [b.strip() for b in re.split(r"(?=唯独)", t) if b.strip()]
+    return bits if bits else [t]
+
+
+def _space_cjk_lat(s):
+    s = re.sub(r"([\u4e00-\u9fff])([A-Za-z])", r"\1 \2", s)
+    s = re.sub(r"([A-Za-z.,;:])([\u4e00-\u9fff])", r"\1 \2", s)
+    s = re.sub(r"[ \t]{2,}", " ", s)
+    return s.strip()
+
+
+def _format_deck_para(para):
+    """Join mid-line wraps, but keep titles and 一/二/三 lists from being smashed."""
+    para = _space_cjk_lat("".join(ln.strip() for ln in para.splitlines()))
+    if not para:
+        return []
+    m = re.search(r"[一二三四五六七八九十][、，]", para)
+    if m and ("（" in para or "(" in para or para.count("，") + para.count("、") >= 2):
+        head, rest = para[:m.start()].strip(), para[m.start():]
+        items = [i.strip() for i in re.split(r"(?=[一二三四五六七八九十][、，])", rest) if i.strip()]
+        bits = []
+        if head:
+            bits += _format_deck_para(head)
+        bits += [f'<p class="deck-pt">{H.escape(i)}</p>' for i in items]
+        return bits
+    m = re.fullmatch(
+        r"([\u4e00-\u9fff《》「」：:、，]{2,24})\s+([A-Za-z][A-Za-z0-9 ,.\-’\']{2,80})",
+        para,
+    )
+    if m:
+        return [
+            f'<p class="deck-kicker">{H.escape(m.group(1))}</p>',
+            f'<p class="deck-en">{H.escape(m.group(2))}</p>',
+        ]
+    return [f"<p>{H.escape(para)}</p>"]
+
+
 def _lines(items, slogans=False):
     """Join mid-sentence PDF wraps into flowing text; keep short slogan lines apart."""
     parts, buf = [], ""
@@ -178,21 +217,25 @@ def _lines(items, slogans=False):
         t = _t2s(it["text"]).strip()
         if not t:
             continue
-        if not buf:
-            buf = t
-            continue
-        slogan_break = slogans and (
-            t.startswith("唯独") or buf.startswith("唯独") and len(buf) <= 16
-        )
-        if slogan_break or buf[-1] in "。！？":
-            parts.append(buf)
-            buf = t
-        else:
-            buf += t
+        chunks = _split_slogans(t) if (slogans or t.startswith("唯独")) else [t]
+        for chunk in chunks:
+            if not buf:
+                buf = chunk
+                continue
+            slogan_break = slogans and (
+                chunk.startswith("唯独") or (buf.startswith("唯独") and len(buf) <= 16)
+            )
+            if slogan_break or buf[-1] in "。！？；」" or chunk.startswith("「"):
+                parts.append(buf)
+                buf = chunk
+            else:
+                buf += chunk
     if buf:
         parts.append(buf)
-    if len(parts) <= 1:
-        return H.escape(parts[0] if parts else "")
+    if not parts:
+        return ""
+    if len(parts) == 1 and not slogans:
+        return H.escape(parts[0])
     return "".join(f'<span class="pln">{H.escape(x)}</span>' for x in parts)
 
 
@@ -210,7 +253,7 @@ def poster_html():
         b.append(f'<p class="st">{_lines(s["statement"])}</p>')
         b.append(f'<p class="qt">{_lines(s["quote"])}</p>')
         b.append("</div>")
-    b.append(f'<p class="st">{_lines(cl["exhortation"])}</p>')
+    b.append(f'<p class="st">{_lines(cl["exhortation"], slogans=True)}</p>')
     b.append(f'<p class="st">{_lines(cl["credit"])}</p></section>')
     return "".join(b)
 
@@ -238,16 +281,14 @@ def deck_html():
             ci += 1
             cur = cuts[ci]
         sec.setdefault(cur[1], {"title": cur[2], "pages": []})["pages"].append(p)
-    out = [f'<section class="deck" id="tulip-deck-src"><p class="pdfsrc">讲座幻灯片原文 · {H.escape(DECK["source"])}。偏旁字形已按规则还原，断行已并成段落，其余字符不改。不是信条原文。</p>']
+    out = [f'<section class="deck" id="tulip-deck-src"><p class="pdfsrc">讲座幻灯片原文 · {H.escape(re.sub(r"[，,]\s*\d+\s*页", "", DECK["source"]))}。偏旁字形已按规则还原，断行已并成段落，其余字符不改。不是信条原文。</p>']
     for key, block in sec.items():
         out.append(f'<h4 id="deck-{key}">{H.escape(block["title"])}</h4>')
         for p in block["pages"]:
             text = p["text"] or ""
             paras = text.split("\n\n") if text else [""]
             for para in paras:
-                # join hard line breaks inside a slide into one flowing paragraph
-                para = "".join(ln.strip() for ln in para.splitlines())
-                out.append(f'<p>{H.escape(para)}</p>')
+                out.extend(_format_deck_para(para))
     out.append("</section>")
     return "".join(out)
 
