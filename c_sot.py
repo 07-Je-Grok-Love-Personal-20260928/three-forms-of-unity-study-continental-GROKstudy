@@ -214,7 +214,7 @@ def _lines(items, slogans=False):
     """Join mid-sentence PDF wraps into flowing text; keep short slogan lines apart."""
     parts, buf = [], ""
     for it in items:
-        t = _t2s(it["text"]).strip()
+        t = _t2s(it["text"]).replace("\u0336", "——").strip()
         if not t:
             continue
         chunks = _split_slogans(t) if (slogans or t.startswith("唯独")) else [t]

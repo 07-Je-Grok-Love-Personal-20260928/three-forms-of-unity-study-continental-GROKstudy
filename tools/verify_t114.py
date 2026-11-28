@@ -54,7 +54,7 @@ def main():
         poster_lines.extend(x["text"] for x in part)
     for s in POSTER["solas"]:
         poster_lines.extend(x["text"] for x in s["statement"] + s["quote"])
-    poster_lines = [t2s(ln) for ln in poster_lines]
+    poster_lines = [t2s(ln).replace("\u0336", "——") for ln in poster_lines]
     # also check each line individually (order may follow assembled blocks, not extract order)
     bad = 0
     coverage("sot-tulip.html", src_deck, deck_html_for_pack, "tulip-deck (contiguous, section titles may split)")
